@@ -14,7 +14,7 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
-//    加文章分类
+//    加文章分类。。。
     @PostMapping("/addCategory")
     public Result addCategory(@RequestBody @Validated(Category.Add.class) Category category){
         categoryService.addCategory(category);
