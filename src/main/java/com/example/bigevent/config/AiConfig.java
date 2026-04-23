@@ -25,6 +25,16 @@ import java.util.Map;
 
 @Configuration
 public class AiConfig {
+    
+    /**
+     * AI Service 说明：
+     * 
+     * 1. RagAiService - RAG专用，不使用tools（通过@AiService自动创建）
+     * 2. AiArticleService - 文章管理，使用tools（通过articleToolExecutors关联）
+     * 3. Aiservice - 通用AI服务
+     * 4. FluxAiservice - 流式输出AI服务
+     */
+    
     @Autowired
     private RedisChatMemoryStore redisChatMemoryStore;
 
@@ -75,14 +85,17 @@ public class AiConfig {
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(redisEmbeddingStore)
                 .embeddingModel(embeddingModel)
-                .maxResults(3)
-                .minScore(0.5)
+                .maxResults(2)
+                .minScore(0.6)
                 .build();
     }
 
     /**
      * 配置文章管理工具
      * 将ArticleTools中的@Tool方法注册为AI可调用的工具
+     * 
+     * 注意：这个Bean会自动关联到AiArticleService（通过命名约定）
+     * RagAiService不会使用这些tools，保持轻量级
      */
     @Bean
     public Map<String, ToolExecutor> articleToolExecutors() {
