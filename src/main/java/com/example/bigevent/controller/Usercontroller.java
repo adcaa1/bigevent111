@@ -4,6 +4,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.bigevent.domain.Result;
 import com.example.bigevent.domain.User;
 import com.example.bigevent.service.Userservice;
+import com.example.bigevent.util.BloomFilterUtil;
 import com.example.bigevent.util.JwtUtil;
 import com.example.bigevent.util.Md5Util;
 import com.example.bigevent.util.ThreadLocalUtil;
@@ -25,8 +26,14 @@ public class Usercontroller {
     private Userservice userservice1;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private BloomFilterUtil bloomFilterUtil;
     @RequestMapping("/find")
     public Result find(String username) {
+        // 布隆过滤器判断：不存在则肯定不存在，直接返回
+        if (!bloomFilterUtil.mightContainUsername(username)) {
+            return Result.error("查找失败");
+        }
         User user = userservice1.findid(username);
         if (user != null) {
             return Result.success();
@@ -44,10 +51,20 @@ public class Usercontroller {
     //如果插入的数据不符合要求，可以插入一个全局处理器，免得返回的是错误页面，还没写，在课里面
     @PostMapping("/add")
     public Result add(String username, String password) {
+        // 布隆过滤器判断用户名是否可能存在
+        if (bloomFilterUtil.mightContainUsername(username)) {
+            // 可能存在，回查数据库确认
+            User existUser = userservice1.findid(username);
+            if (existUser != null) {
+                return Result.error("用户名已存在");
+            }
+        }
         // 加密
         password = Md5Util.getMD5String(password);
         int i = userservice1.add(username, password);
         if (i > 0) {
+            // 同步到布隆过滤器
+            bloomFilterUtil.addUsername(username);
             return Result.success();
         }
         return Result.error("插入失败");

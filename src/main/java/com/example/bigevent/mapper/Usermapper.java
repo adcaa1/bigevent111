@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface Usermapper {
     @Select("select * from user where username=#{username} ")
@@ -19,4 +21,7 @@ public interface Usermapper {
     void updatetx(String txurl,Integer id);
    @Update("update user set password=#{newpwd},update_time=now() where id=#{id}")
     void updatepwd(String newpwd,Integer id);
+
+    @Select("select username from user")
+    List<String> findAllUsernames();
 }
