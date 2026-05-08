@@ -33,5 +33,8 @@ public class BloomFilterUtil {
         RBloomFilter<String> bloomFilter = redissonClient.getBloomFilter(USERNAME_BLOOM_FILTER);
         return bloomFilter.contains(username);
     }
-
+    public boolean isUsernameFilterExists() {
+        RBloomFilter<String> bloomFilter = redissonClient.getBloomFilter(USERNAME_BLOOM_FILTER);
+        return bloomFilter.isExists() && bloomFilter.count() > 0;
+    }
 }

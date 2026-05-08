@@ -19,6 +19,11 @@ public class BloomFilterInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        // 如果布隆过滤器里已经有数据，说明Redis持久化还在，直接跳过
+        if (bloomFilterUtil.isUsernameFilterExists()) {
+            System.out.println("[BloomFilter] 已有数据，跳过预热");
+            return;
+        }
         // 预热用户名
         List<String> usernames = usermapper.findAllUsernames();
         if (usernames != null && !usernames.isEmpty()) {
