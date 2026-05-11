@@ -17,6 +17,9 @@ public class User {
     @NonNull
     @Pattern(regexp = "^.{1,10}$")
     private String nickname;//昵称
+    private String intro;//个人简介
+    private Integer fansVisible;       // 粉丝列表是否公开 1-公开 0-私密
+    private Integer followingVisible;  // 关注列表是否公开 1-公开 0-私密
     @NonNull
     private String email;//邮箱
     private String userPic;//用户头像地址

@@ -3,6 +3,7 @@ package com.example.bigevent.controller;
 import com.example.bigevent.domain.Article;
 import com.example.bigevent.domain.PageBean;
 import com.example.bigevent.domain.Result;
+import com.example.bigevent.domain.vo.ArticleVO;
 import com.example.bigevent.service.ArticleService;
 import com.example.bigevent.util.JwtUtil;
 import org.apache.ibatis.annotations.Delete;
@@ -50,6 +51,18 @@ public class Articlecontroller {
     public Result findarticle() {
         List<Article>  article = articleservice.findarticle();
         return Result.success(article);
+    }
+
+    /**
+     * 根据ID查询文章详情
+     */
+    @GetMapping("/{id}")
+    public Result<ArticleVO> findArticleById(@PathVariable Integer id) {
+        ArticleVO articleVO = articleservice.findById(id);
+        if (articleVO == null) {
+            return Result.error("文章不存在");
+        }
+        return Result.success(articleVO);
     }
 //    实现后端的分页查询，要用到pagehepler，这个很难，可以到时候再看看
 //    重要

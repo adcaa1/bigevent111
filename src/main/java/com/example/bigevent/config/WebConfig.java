@@ -15,7 +15,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         @Override
         public void addInterceptors(InterceptorRegistry registry) {
             //登录接口和注册接口不拦截
-            registry.addInterceptor(loginInterceptor).excludePathPatterns("/login","/add");
+            registry.addInterceptor(loginInterceptor).excludePathPatterns(
+                "/login","/add"       // 登录、注册
+        );
         }
     }
 

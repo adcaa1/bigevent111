@@ -1,8 +1,12 @@
 package com.example.bigevent.controller;
 
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.bigevent.domain.Article;
 import com.example.bigevent.domain.Result;
 import com.example.bigevent.domain.User;
+import com.example.bigevent.domain.vo.UserProfileVO;
+import com.example.bigevent.service.ArticleService;
+import com.example.bigevent.service.FollowService;
 import com.example.bigevent.service.Userservice;
 import com.example.bigevent.util.BloomFilterUtil;
 import com.example.bigevent.util.JwtUtil;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +33,10 @@ public class Usercontroller {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private BloomFilterUtil bloomFilterUtil;
+    @Autowired
+    private FollowService followService;     // 关注关系Service
+    @Autowired
+    private ArticleService articleService;   // 文章Service（用户主页用）
     @RequestMapping("/find")
     public Result find(String username) {
         // 布隆过滤器判断：不存在则肯定不存在，直接返回
@@ -90,6 +99,9 @@ public class Usercontroller {
         return Result.error("登录失败");
     }
 //    改nickname和 email
+    /**
+     * 修改用户信息（昵称、邮箱、简介）
+     */
     @PutMapping("/update")
     public Result update(@RequestBody @Valid User user) {
         userservice1.update(user);
@@ -119,7 +131,26 @@ public class Usercontroller {
     operations.getOperations().delete(token);
     return Result.success();
    }
-
-
+/**
+ * 获取用户信息
+ */
+    @GetMapping("/user/{userId}/profile")
+    public Result<UserProfileVO> getUserProfile(@PathVariable Integer userId) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer currentUserId = claims != null ? (Integer) claims.get("id") : null;
+        UserProfileVO profile = followService.getUserProfile(userId, currentUserId);
+        if (profile == null) {
+            return Result.error("用户不存在");
+        }
+        return Result.success(profile);
+    }
+/**
+     * 获取用户文章
+     */
+    @GetMapping("/user/{userId}/articles")
+    public Result<List<Article>> getUserArticles(@PathVariable Integer userId) {
+        List<Article> articles = articleService.findPublishedByUserId(userId);
+        return Result.success(articles);
+    }
 
 }

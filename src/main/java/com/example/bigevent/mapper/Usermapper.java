@@ -12,16 +12,30 @@ import java.util.List;
 public interface Usermapper {
     @Select("select * from user where username=#{username} ")
     public User findid(String username);
+
+    /**
+     * 查询所有用户（广场用）
+     */
+    @Select("select * from user")
+    List<User> findAll();
+
+    /**
+     * 根据ID查询用户
+     */
+    @Select("select * from user where id = #{id}")
+    User findById(Integer id);
     @Insert("insert into user(username,password,create_time,update_time)" +
             "values (#{username},#{password},now(),now())")
     public int add(String username,String password);
-     @Update("update user set nickname=#{nickname},email=#{email},update_time=now() where id=#{id}")
+     @Update("update user set nickname=#{nickname},email=#{email},intro=#{intro},fans_visible=#{fansVisible},following_visible=#{followingVisible},update_time=now() where id=#{id}")
     void update(User user);
     @Update("update user set user_pic=#{txurl},update_time=now() where id=#{id}")
     void updatetx(String txurl,Integer id);
    @Update("update user set password=#{newpwd},update_time=now() where id=#{id}")
     void updatepwd(String newpwd,Integer id);
-
+    /**
+     * 查询所有用户名（布隆过滤器预热用）
+     */
     @Select("select username from user")
     List<String> findAllUsernames();
 }

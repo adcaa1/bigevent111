@@ -2,9 +2,13 @@ package com.example.bigevent.service.Impl;
 
 import com.example.bigevent.domain.Article;
 import com.example.bigevent.domain.PageBean;
+import com.example.bigevent.domain.User;
+import com.example.bigevent.domain.vo.ArticleVO;
 import com.example.bigevent.mapper.ArticleMapper;
+import com.example.bigevent.mapper.Usermapper;
 import com.example.bigevent.service.ArticleService;
 import com.example.bigevent.util.ThreadLocalUtil;
+import org.springframework.beans.BeanUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,8 @@ import java.util.Map;
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleMapper articleMapper;
+    @Autowired
+    private Usermapper usermapper;
     @Override
     public void addarticle(Article article) {
 //        添加文章肯定在用户登录时，所以可以获得用户id来插入文章
@@ -66,5 +72,32 @@ public class ArticleServiceImpl implements ArticleService {
         articleMapper.updatearticle(article);
     }
 
+    /**
+     * 根据ID查询文章详情
+     */
+    @Override
+    public ArticleVO findById(Integer id) {
+        Article article = articleMapper.findById(id);
+        if (article == null) {
+            return null;
+        }
+        ArticleVO vo = new ArticleVO();
+        BeanUtils.copyProperties(article, vo);
+        // 查询作者信息
+        User user = usermapper.findById(article.getCreateUser());
+        if (user != null) {
+            vo.setNickname(user.getNickname());
+            vo.setUserPic(user.getUserPic());
+        }
+        return vo;
+    }
+
+    /**
+     * 查询某用户的已发布文章（用户主页用）
+     */
+    @Override
+    public List<Article> findPublishedByUserId(Integer userId) {
+        return articleMapper.findPublishedByUserId(userId);
+    }
 
 }
