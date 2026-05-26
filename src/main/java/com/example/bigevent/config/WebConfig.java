@@ -16,7 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         public void addInterceptors(InterceptorRegistry registry) {
             //登录接口和注册接口不拦截
             registry.addInterceptor(loginInterceptor).excludePathPatterns(
-                "/login","/add"       // 登录、注册
+                "/login","/add",      // 登录、注册
+                "/ws/chat"            // WebSocket 端点（握手时自行校验token）
         );
         }
     }

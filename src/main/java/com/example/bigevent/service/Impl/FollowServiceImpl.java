@@ -7,6 +7,8 @@ import com.example.bigevent.mapper.FollowMapper;
 import com.example.bigevent.mapper.Usermapper;
 import com.example.bigevent.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class FollowServiceImpl implements FollowService {
      * 不能关注自己，不能重复关注
      */
     @Override
+    @CacheEvict(value = {"squareUsers", "userProfile"}, allEntries = true)
     public void follow(Integer userId, Integer followUserId) {
         if (userId.equals(followUserId)) {
             throw new RuntimeException("不能关注自己");
@@ -43,6 +46,7 @@ public class FollowServiceImpl implements FollowService {
      * 取消关注
      */
     @Override
+    @CacheEvict(value = {"squareUsers", "userProfile"}, allEntries = true)
     public void unfollow(Integer userId, Integer followUserId) {
         followMapper.deleteFollow(userId, followUserId);
     }
@@ -91,6 +95,7 @@ public class FollowServiceImpl implements FollowService {
      * 获取广场用户列表
      */
     @Override
+    @Cacheable(value = "squareUsers", key = "#currentUserId != null ? 'login:' + #currentUserId : 'all'", unless = "#result == null")
     public List<UserSquareVO> getSquareUsers(Integer currentUserId) {
         List<User> allUsers = usermapper.findAll();
         List<UserSquareVO> voList = new ArrayList<>();
@@ -120,6 +125,7 @@ public class FollowServiceImpl implements FollowService {
      * 获取用户主页信息
      */
     @Override
+    @Cacheable(value = "userProfile", key = "#userId + ':' + (#currentUserId != null ? #currentUserId : '0')", unless = "#result == null")
     public UserProfileVO getUserProfile(Integer userId, Integer currentUserId) {
         User user = usermapper.findById(userId);
         if (user == null) {

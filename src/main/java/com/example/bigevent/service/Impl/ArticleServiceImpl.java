@@ -12,6 +12,8 @@ import org.springframework.beans.BeanUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,11 +65,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @CacheEvict(value = "article", key = "#id")
     public void deletearticle(Integer id) {
         articleMapper.deletearticle(id);
     }
 
     @Override
+    @CacheEvict(value = "article", key = "#article.id")
     public void updatearticle(Article article) {
         articleMapper.updatearticle(article);
     }
@@ -76,6 +80,7 @@ public class ArticleServiceImpl implements ArticleService {
      * 根据ID查询文章详情
      */
     @Override
+    @Cacheable(value = "article", key = "#id", unless = "#result == null")
     public ArticleVO findById(Integer id) {
         Article article = articleMapper.findById(id);
         if (article == null) {
