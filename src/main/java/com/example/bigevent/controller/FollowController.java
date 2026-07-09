@@ -90,7 +90,7 @@ public class FollowController {
 
         // 查该用户的隐私设置
         User targetUser = usermapper.findById(userId);
-        if (targetUser == null) {
+        if (targetUser == null || (targetUser.getDeleted() != null && targetUser.getDeleted() == 1)) {
             return Result.error("用户不存在");
         }
 
@@ -115,7 +115,7 @@ public class FollowController {
 
         // 查该用户的隐私设置
         User targetUser = usermapper.findById(userId);
-        if (targetUser == null) {
+        if (targetUser == null || (targetUser.getDeleted() != null && targetUser.getDeleted() == 1)) {
             return Result.error("用户不存在");
         }
 

@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * WebSocket 聊天服务端
@@ -97,8 +98,9 @@ public class ChatWebSocketServer {
         session.getUserProperties().put("userId", userId);
         wsSessionManager.addSession(userId, session);
 
-        // Redis 标记在线
-        stringRedisTemplate.opsForHash().put("websocket:online", String.valueOf(userId), session.getId());
+        // Redis 标记在线（60 秒自动过期，断网后自动清除）
+        String onlineKey = "user:online:" + userId;
+        stringRedisTemplate.opsForValue().set(onlineKey, session.getId(), 60, TimeUnit.SECONDS);
 
         System.out.println("WebSocket 连接成功: userId=" + userId + ", 当前在线=" + wsSessionManager.getOnlineCount());
     }
@@ -120,7 +122,8 @@ public class ChatWebSocketServer {
             System.out.println("[WebSocket] 解析消息: type=" + dto.getType() + ", senderId=" + senderId);
 
             if ("ping".equals(dto.getType())) {
-                // 心跳响应
+                // 心跳响应，同时刷新在线状态 TTL
+                stringRedisTemplate.expire("user:online:" + senderId, 60, TimeUnit.SECONDS);
                 session.getBasicRemote().sendText("{\"type\":\"pong\"}");
                 return;
             }
@@ -148,7 +151,7 @@ public class ChatWebSocketServer {
         Integer userId = (Integer) session.getUserProperties().get("userId");
         wsSessionManager.removeSession(session);
         if (userId != null) {
-            stringRedisTemplate.opsForHash().delete("websocket:online", String.valueOf(userId));
+            stringRedisTemplate.delete("user:online:" + userId);
         }
         System.out.println("WebSocket 断开: userId=" + userId + ", 当前在线=" + wsSessionManager.getOnlineCount());
     }

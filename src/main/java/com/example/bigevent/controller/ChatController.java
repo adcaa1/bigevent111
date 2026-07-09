@@ -6,11 +6,14 @@ import com.example.bigevent.service.FluxAiservice;
 import com.example.bigevent.service.RagService;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 
 @RestController
@@ -30,22 +33,28 @@ public class ChatController {
     //    AI文章管理服务（支持工具调用）
     @Autowired
     private AiArticleService aiArticleService;
-//    自带的ai
+
+    // AI 专用线程池，避免阻塞 Tomcat 主线程
+    @Autowired
+    @Qualifier("aiExecutor")
+    private Executor aiExecutor;
+
+//    自带的ai（异步，不阻塞 Tomcat 线程）
     @GetMapping("/chat")
-    public String chat(@RequestParam String message) {
-        return openAiChatModel.chat( message);
+    public CompletableFuture<String> chat(@RequestParam String message) {
+        return CompletableFuture.supplyAsync(() -> openAiChatModel.chat(message), aiExecutor);
     }
-//    等待输出
+//    等待输出（异步）
     @GetMapping("/chat1")
-    public String chat1(@RequestParam String message) {
-        return aiservice.chat( message);
+    public CompletableFuture<String> chat1(@RequestParam String message) {
+        return CompletableFuture.supplyAsync(() -> aiservice.chat(message), aiExecutor);
     }
 //    流式输出
     @GetMapping(value = "/chat/stream", produces = "text/plain;charset=utf-8")
     public Flux<String> streamChat(@RequestParam Long userId,@RequestParam String message) {
         return fluxAiservice.chat(userId,message);
     }
-    //加文件 - 支持文本和文件上传
+    //加文件 - 支持文本和文件上传（文件解析改为后台异步处理）
     @PostMapping("/rag/add")
     public Result<String> addKnowledge(
             @RequestParam(required = false) String text,
@@ -55,30 +64,35 @@ public class ChatController {
                 // 检查文件大小（5MB = 5 * 1024 * 1024 bytes）
                 long maxSize = 5 * 1024 * 1024;
                 if (file.getSize() > maxSize) {
-                    return Result.error("上传文件过大，文件大小不能超过5MB，当前文件大小: " + 
+                    return Result.error("上传文件过大，文件大小不能超过5MB，当前文件大小: " +
                             String.format("%.2f", file.getSize() / 1024.0 / 1024.0) + "MB。请上传较小的文件");
                 }
-                
-                // 处理文件上传
-                ragService.addKnowledgeFromFile(file);
-                return Result.success("文件知识添加成功: " + file.getOriginalFilename());
+
+                // 文件解析耗时，放到线程池异步处理，立即返回提示
+                String fileName = file.getOriginalFilename();
+                aiExecutor.execute(() -> {
+                    try {
+                        ragService.addKnowledgeFromFile(file);
+                    } catch (IOException e) {
+                        throw new RuntimeException("文件解析失败: " + e.getMessage(), e);
+                    }
+                });
+                return Result.success("文件已提交后台处理: " + fileName + "，请稍后查询知识库");
             } else if (text != null && !text.isEmpty()) {
-                // 处理文本输入
+                // 文本处理较快，直接同步处理
                 ragService.addKnowledge(text);
                 return Result.success("文本知识添加成功");
             } else {
                 return Result.error("请提供文本内容或上传文件");
             }
-        } catch (IOException e) {
-            return Result.error("文件处理失败: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             return Result.error(e.getMessage());
         }
     }
-//    rag功能
+//    rag功能（异步）
     @GetMapping("/rag/chat")
-    public String ragChat(@RequestParam String question) {
-        return ragService.ragChat(question);
+    public CompletableFuture<String> ragChat(@RequestParam String question) {
+        return CompletableFuture.supplyAsync(() -> ragService.ragChat(question), aiExecutor);
     }
     
     /**

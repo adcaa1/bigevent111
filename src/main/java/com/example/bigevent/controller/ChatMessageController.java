@@ -5,6 +5,7 @@ import com.example.bigevent.domain.Result;
 import com.example.bigevent.domain.vo.ChatGroupMemberVO;
 import com.example.bigevent.domain.vo.ChatGroupVO;
 import com.example.bigevent.domain.vo.ChatMessageVO;
+import com.example.bigevent.domain.vo.ConversationVO;
 import com.example.bigevent.service.ChatService;
 import com.example.bigevent.util.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +26,25 @@ public class ChatMessageController {
     private ChatService chatService;
 
     /**
-     * 获取与某用户的聊天记录
+     * 获取与某用户的聊天记录（分页）
      */
     @GetMapping("/history/{userId}")
-    public Result<List<ChatMessageVO>> getPrivateHistory(@PathVariable Integer userId) {
+    public Result<List<ChatMessageVO>> getPrivateHistory(@PathVariable Integer userId,
+                                                         @RequestParam(defaultValue = "1") int page,
+                                                         @RequestParam(defaultValue = "20") int pageSize) {
         Map<String, Object> claims = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) claims.get("id");
-        List<ChatMessageVO> list = chatService.getPrivateHistory(currentUserId, userId);
+        List<ChatMessageVO> list = chatService.getPrivateHistoryPage(currentUserId, userId, page, pageSize);
         return Result.success(list);
     }
 
     /**
-     * 获取群聊历史记录
+     * 获取群聊历史记录（分页）
      */
     @GetMapping("/history/group/{groupId}")
-    public Result<List<ChatMessageVO>> getGroupHistory(@PathVariable Integer groupId) {
+    public Result<List<ChatMessageVO>> getGroupHistory(@PathVariable Integer groupId,
+                                                       @RequestParam(defaultValue = "1") int page,
+                                                       @RequestParam(defaultValue = "20") int pageSize) {
         Map<String, Object> claims = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) claims.get("id");
 
@@ -47,7 +52,7 @@ public class ChatMessageController {
         if (!chatService.isGroupMember(groupId, currentUserId)) {
             return Result.error("您不在该群中");
         }
-        List<ChatMessageVO> list = chatService.getGroupHistory(groupId);
+        List<ChatMessageVO> list = chatService.getGroupHistoryPage(groupId, page, pageSize);
         return Result.success(list);
     }
 
@@ -82,6 +87,17 @@ public class ChatMessageController {
         Integer currentUserId = (Integer) claims.get("id");
         long count = chatService.countUnread(currentUserId, userId);
         return Result.success(count);
+    }
+
+    /**
+     * 获取会话列表（每个对话对方的最新消息 + 未读数）
+     */
+    @GetMapping("/conversations")
+    public Result<List<ConversationVO>> getConversations() {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) claims.get("id");
+        List<ConversationVO> list = chatService.getConversations(currentUserId);
+        return Result.success(list);
     }
 
     // ==================== 群聊管理 ====================

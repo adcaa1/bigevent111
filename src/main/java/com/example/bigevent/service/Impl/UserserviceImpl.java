@@ -4,7 +4,10 @@ import com.example.bigevent.domain.User;
 import com.example.bigevent.mapper.Usermapper;
 import com.example.bigevent.service.Userservice;
 import com.example.bigevent.util.ThreadLocalUtil;
+import com.example.bigevent.websocket.WsSessionManager;
+import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -14,6 +17,11 @@ public class UserserviceImpl implements Userservice {
 
     @Autowired
     private Usermapper usermapper;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private WsSessionManager wsSessionManager;
+
     @Override
     public User findid(String username) {
         return usermapper.findid(username);
@@ -43,4 +51,37 @@ public class UserserviceImpl implements Userservice {
         usermapper.updatepwd(newpwd, id);
     }
 
+    @Override
+    public void deleteAccount(Integer userId, String token) {
+        // 1. 查当前用户信息（获取原用户名）
+        User user = usermapper.findById(userId);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        if (user.getDeleted() != null && user.getDeleted() == 1) {
+            throw new RuntimeException("账号已注销");
+        }
+
+        // 2. 软删除 + 释放用户名：deleted_{userId}_{原用户名}
+        String newUsername = "deleted_" + userId + "_" + user.getUsername();
+        usermapper.softDeleteAndRename(userId, newUsername);
+
+        // 3. 删除 Redis token，强制下线
+        stringRedisTemplate.delete(token);
+
+        // 4. 断开 WebSocket 连接
+        Session session = wsSessionManager.getSession(userId);
+        if (session != null && session.isOpen()) {
+            wsSessionManager.sendMessage(userId, "{\"type\":\"logout\",\"msg\":\"账号已注销\"}");
+            wsSessionManager.removeSession(session);
+            try {
+                session.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 5. 删除 websocket:online 中的在线标记
+        stringRedisTemplate.opsForHash().delete("websocket:online", String.valueOf(userId));
+    }
 }

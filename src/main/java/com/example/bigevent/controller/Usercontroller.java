@@ -62,7 +62,7 @@ public class Usercontroller {
     public Result add(String username, String password) {
         // 布隆过滤器判断用户名是否可能存在
         if (bloomFilterUtil.mightContainUsername(username)) {
-            // 可能存在，回查数据库确认
+            // 可能存在，回查数据库确认（已注销的用户改了名，查不到，不影响注册）
             User existUser = userservice1.findid(username);
             if (existUser != null) {
                 return Result.error("用户名已存在");
@@ -85,6 +85,10 @@ public class Usercontroller {
         password = Md5Util.getMD5String(password);
         User user = userservice1.findid(username);
         if (user != null && user.getPassword().equals(password)) {
+            // 检查是否已注销
+            if (user.getDeleted() != null && user.getDeleted() == 1) {
+                return Result.error("账号已注销，无法登录");
+            }
             //如果后面的操作需要在登录之后，可以设置一个jwt令牌，在之后的操作中，需要携带这个令牌，
             Map<String, Object> map = new HashMap<>();
             map.put("id", user.getId());
@@ -151,6 +155,17 @@ public class Usercontroller {
     public Result<List<Article>> getUserArticles(@PathVariable Integer userId) {
         List<Article> articles = articleService.findPublishedByUserId(userId);
         return Result.success(articles);
+    }
+
+    /**
+     * 注销账号（软删除 + 释放用户名）
+     */
+    @DeleteMapping("/user/delete")
+    public Result deleteAccount(@RequestHeader("Authorization") String token) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer userId = (Integer) claims.get("id");
+        userservice1.deleteAccount(userId, token);
+        return Result.success("账号已注销");
     }
 
 }

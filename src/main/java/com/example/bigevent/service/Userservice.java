@@ -12,4 +12,6 @@ public interface Userservice {
     void updatetx(String txurl);
 
     void updatepwd(String newpwd1);
+
+    void deleteAccount(Integer userId, String token);
 }

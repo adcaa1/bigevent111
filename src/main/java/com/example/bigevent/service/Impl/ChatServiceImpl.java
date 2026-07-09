@@ -7,6 +7,7 @@ import com.example.bigevent.domain.User;
 import com.example.bigevent.domain.vo.ChatGroupMemberVO;
 import com.example.bigevent.domain.vo.ChatGroupVO;
 import com.example.bigevent.domain.vo.ChatMessageVO;
+import com.example.bigevent.domain.vo.ConversationVO;
 import com.example.bigevent.mapper.ChatGroupMapper;
 import com.example.bigevent.mapper.ChatMessageMapper;
 import com.example.bigevent.mapper.Usermapper;
@@ -35,26 +36,30 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     @Transactional
-    public ChatMessage savePrivateMessage(Integer senderId, Integer receiverId, String content) {
+    public ChatMessage savePrivateMessage(Integer senderId, Integer receiverId, String content, String tempId) {
         ChatMessage message = new ChatMessage();
         message.setSenderId(senderId);
         message.setReceiverId(receiverId);
         message.setContent(content);
         message.setType(0);
         message.setIsRead(0);
+        message.setTempId(tempId);
+        message.setCreateTime(java.time.LocalDateTime.now());
         chatMessageMapper.insert(message);
         return message;
     }
 
     @Override
     @Transactional
-    public ChatMessage saveGroupMessage(Integer senderId, Integer groupId, String content) {
+    public ChatMessage saveGroupMessage(Integer senderId, Integer groupId, String content, String tempId) {
         ChatMessage message = new ChatMessage();
         message.setSenderId(senderId);
         message.setGroupId(groupId);
         message.setContent(content);
         message.setType(1);
         message.setIsRead(0);
+        message.setTempId(tempId);
+        message.setCreateTime(java.time.LocalDateTime.now());
         chatMessageMapper.insert(message);
         return message;
     }
@@ -70,6 +75,25 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
+    public List<ChatMessageVO> getPrivateHistoryPage(Integer userId, Integer friendId, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        // 查出来的结果是 DESC（最新的在前面），需要反转成 ASC（最旧的在前面）
+        List<ChatMessage> messages = chatMessageMapper.findPrivateMessagesPage(userId, friendId, offset, pageSize);
+        List<ChatMessageVO> voList = new ArrayList<>();
+        for (ChatMessage msg : messages) {
+            voList.add(convertToVO(msg));
+        }
+        // 反转，使最新的在最后面，这样前端直接 v-for 显示就是从上到下时间递增
+        java.util.Collections.reverse(voList);
+        return voList;
+    }
+
+    @Override
+    public long countPrivateMessages(Integer userId, Integer friendId) {
+        return chatMessageMapper.countPrivateMessages(userId, friendId);
+    }
+
+    @Override
     public List<ChatMessageVO> getGroupHistory(Integer groupId) {
         List<ChatMessage> messages = chatMessageMapper.findGroupMessages(groupId);
         List<ChatMessageVO> voList = new ArrayList<>();
@@ -77,6 +101,28 @@ public class ChatServiceImpl implements ChatService {
             voList.add(convertToVO(msg));
         }
         return voList;
+    }
+
+    @Override
+    public List<ChatMessageVO> getGroupHistoryPage(Integer groupId, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<ChatMessage> messages = chatMessageMapper.findGroupMessagesPage(groupId, offset, pageSize);
+        List<ChatMessageVO> voList = new ArrayList<>();
+        for (ChatMessage msg : messages) {
+            voList.add(convertToVO(msg));
+        }
+        java.util.Collections.reverse(voList);
+        return voList;
+    }
+
+    @Override
+    public long countGroupMessages(Integer groupId) {
+        return chatMessageMapper.countGroupMessages(groupId);
+    }
+
+    @Override
+    public List<ConversationVO> getConversations(Integer userId) {
+        return chatMessageMapper.findConversations(userId);
     }
 
     @Override
@@ -205,6 +251,11 @@ public class ChatServiceImpl implements ChatService {
         return chatGroupMapper.findById(groupId);
     }
 
+    @Override
+    public ChatMessage getMessageBySenderAndTempId(Integer senderId, String tempId) {
+        return chatMessageMapper.findBySenderAndTempId(senderId, tempId);
+    }
+
     /**
      * 转换为消息VO
      */
@@ -222,7 +273,11 @@ public class ChatServiceImpl implements ChatService {
         // 填充发送者信息
         User sender = usermapper.findById(msg.getSenderId());
         if (sender != null) {
-            vo.setSenderNickname(sender.getNickname());
+            if (sender.getDeleted() != null && sender.getDeleted() == 1) {
+                vo.setSenderNickname("已注销用户");
+            } else {
+                vo.setSenderNickname(sender.getNickname());
+            }
             vo.setSenderAvatar(sender.getUserPic());
         }
 

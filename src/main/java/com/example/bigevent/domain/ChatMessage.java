@@ -16,5 +16,6 @@ public class ChatMessage {
     private String content;
     private Integer type;       // 0-单聊 1-群聊
     private Integer isRead;     // 0-未读 1-已读
+    private String tempId;      // 客户端临时ID（用于幂等去重）
     private LocalDateTime createTime;
 }

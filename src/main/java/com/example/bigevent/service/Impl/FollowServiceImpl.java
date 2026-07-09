@@ -36,6 +36,11 @@ public class FollowServiceImpl implements FollowService {
         if (userId.equals(followUserId)) {
             throw new RuntimeException("不能关注自己");
         }
+        // 检查被关注用户是否存在且未注销
+        User targetUser = usermapper.findById(followUserId);
+        if (targetUser == null || (targetUser.getDeleted() != null && targetUser.getDeleted() == 1)) {
+            throw new RuntimeException("用户不存在");
+        }
         if (followMapper.isFollowed(userId, followUserId) > 0) {
             throw new RuntimeException("已关注该用户");
         }
@@ -100,6 +105,10 @@ public class FollowServiceImpl implements FollowService {
         List<User> allUsers = usermapper.findAll();
         List<UserSquareVO> voList = new ArrayList<>();
         for (User user : allUsers) {
+            // 跳过已注销用户
+            if (user.getDeleted() != null && user.getDeleted() == 1) {
+                continue;
+            }
             // 广场不展示当前登录用户自己
             if (currentUserId != null && user.getId().equals(currentUserId)) {
                 continue;
@@ -128,7 +137,7 @@ public class FollowServiceImpl implements FollowService {
     @Cacheable(value = "userProfile", key = "#userId + ':' + (#currentUserId != null ? #currentUserId : '0')", unless = "#result == null")
     public UserProfileVO getUserProfile(Integer userId, Integer currentUserId) {
         User user = usermapper.findById(userId);
-        if (user == null) {
+        if (user == null || (user.getDeleted() != null && user.getDeleted() == 1)) {
             return null;
         }
         UserProfileVO vo = new UserProfileVO();

@@ -32,30 +32,34 @@ public interface FollowMapper {
     int isFollowed(@Param("userId") Integer userId, @Param("followUserId") Integer followUserId);
 
     /**
-     * 统计某用户的粉丝数量
+     * 统计某用户的粉丝数量（不含已注销用户）
      */
-    @Select("SELECT COUNT(*) FROM follow WHERE follow_user_id = #{userId}")
+    @Select("SELECT COUNT(*) FROM follow f " +
+            "INNER JOIN user u ON f.user_id = u.id " +
+            "WHERE f.follow_user_id = #{userId} AND u.deleted = 0")
     long countFans(@Param("userId") Integer userId);
 
     /**
-     * 统计某用户关注了多少人
+     * 统计某用户关注了多少人（不含已注销用户）
      */
-    @Select("SELECT COUNT(*) FROM follow WHERE user_id = #{userId}")
+    @Select("SELECT COUNT(*) FROM follow f " +
+            "INNER JOIN user u ON f.follow_user_id = u.id " +
+            "WHERE f.user_id = #{userId} AND u.deleted = 0")
     long countFollowing(@Param("userId") Integer userId);
 
     /**
-     * 查询某用户的粉丝列表
+     * 查询某用户的粉丝列表（不含已注销用户）
      */
     @Select("SELECT u.id, u.username, u.nickname, u.user_pic " +
             "FROM user u INNER JOIN follow f ON u.id = f.user_id " +
-            "WHERE f.follow_user_id = #{userId}")
+            "WHERE f.follow_user_id = #{userId} AND u.deleted = 0")
     List<User> findFans(@Param("userId") Integer userId);
 
     /**
-     * 查询某用户关注的人列表
+     * 查询某用户关注的人列表（不含已注销用户）
      */
     @Select("SELECT u.id, u.username, u.nickname, u.user_pic " +
             "FROM user u INNER JOIN follow f ON u.id = f.follow_user_id " +
-            "WHERE f.user_id = #{userId}")
+            "WHERE f.user_id = #{userId} AND u.deleted = 0")
     List<User> findFollowing(@Param("userId") Integer userId);
 }
