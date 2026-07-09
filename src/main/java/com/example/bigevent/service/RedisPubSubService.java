@@ -1,6 +1,7 @@
 package com.example.bigevent.service;
 
 import com.example.bigevent.config.RedisPubSubConfig;
+import com.example.bigevent.domain.dto.chat.RedisChatMessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -21,43 +22,12 @@ public class RedisPubSubService {
     /**
      * 发布消息到广播频道
      */
-    public void publish(RedisChatMessage message) {
+    public void publish(RedisChatMessageDTO message) {
         try {
             String json = objectMapper.writeValueAsString(message);
             stringRedisTemplate.convertAndSend(RedisPubSubConfig.CHAT_BROADCAST_CHANNEL, json);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Redis 广播消息对象
-     */
-    public static class RedisChatMessage {
-        private Integer targetUserId;   // 目标用户ID
-        private String jsonMessage;     // 要推送的 WebSocket 消息 JSON
-
-        public RedisChatMessage() {}
-
-        public RedisChatMessage(Integer targetUserId, String jsonMessage) {
-            this.targetUserId = targetUserId;
-            this.jsonMessage = jsonMessage;
-        }
-
-        public Integer getTargetUserId() {
-            return targetUserId;
-        }
-
-        public void setTargetUserId(Integer targetUserId) {
-            this.targetUserId = targetUserId;
-        }
-
-        public String getJsonMessage() {
-            return jsonMessage;
-        }
-
-        public void setJsonMessage(String jsonMessage) {
-            this.jsonMessage = jsonMessage;
         }
     }
 }

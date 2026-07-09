@@ -1,5 +1,6 @@
 package com.example.bigevent.service;
 
+import com.example.bigevent.domain.dto.chat.RedisChatMessageDTO;
 import com.example.bigevent.websocket.WsSessionManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class RedisMessageSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             String body = new String(message.getBody());
-            RedisPubSubService.RedisChatMessage chatMessage =
-                    objectMapper.readValue(body, RedisPubSubService.RedisChatMessage.class);
+            RedisChatMessageDTO chatMessage =
+                    objectMapper.readValue(body, RedisChatMessageDTO.class);
 
             // 尝试推送给本地连接的客户端
             if (chatMessage.getTargetUserId() != null) {

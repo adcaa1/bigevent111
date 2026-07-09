@@ -5,6 +5,7 @@ import com.example.bigevent.domain.ChatGroupMember;
 import com.example.bigevent.domain.ChatMessage;
 import com.example.bigevent.domain.ChatMessageEvent;
 import com.example.bigevent.domain.vo.WsMessageVO;
+import com.example.bigevent.domain.dto.chat.RedisChatMessageDTO;
 import com.example.bigevent.mapper.ChatGroupMapper;
 import com.example.bigevent.websocket.ChatWebSocketServer;
 import com.example.bigevent.websocket.WsSessionManager;
@@ -70,7 +71,7 @@ public class ChatMessageConsumer {
                 // 不在本机，Redis 广播给集群其他机器
                 System.out.println("[RabbitMQ Consumer] 接收者不在本机，通过Redis广播");
                 redisPubSubService.publish(
-                        new RedisPubSubService.RedisChatMessage(event.getReceiverId(), json));
+                        new RedisChatMessageDTO(event.getReceiverId(), json));
             } else {
                 System.out.println("[RabbitMQ Consumer] 消息已推送给接收者: " + event.getReceiverId());
             }
@@ -134,7 +135,7 @@ public class ChatMessageConsumer {
                         if (!pushed) {
                             System.out.println("[RabbitMQ Consumer] 群组成员 " + member.getUserId() + " 不在本机，通过Redis广播");
                             redisPubSubService.publish(
-                                    new RedisPubSubService.RedisChatMessage(member.getUserId(), messageJson));
+                                    new RedisChatMessageDTO(member.getUserId(), messageJson));
                         } else {
                             System.out.println("[RabbitMQ Consumer] 消息已推送给群组成员: " + member.getUserId());
                         }
@@ -160,7 +161,7 @@ public class ChatMessageConsumer {
                             boolean pushed = wsSessionManager.sendMessage(member.getUserId(), messageJson);
                             if (!pushed) {
                                 redisPubSubService.publish(
-                                        new RedisPubSubService.RedisChatMessage(member.getUserId(), messageJson));
+                                        new RedisChatMessageDTO(member.getUserId(), messageJson));
                             }
                         }, taskExecutor))
                         .toList();

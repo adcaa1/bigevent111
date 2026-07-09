@@ -4,6 +4,7 @@ package com.example.bigevent.config;
 import com.example.bigevent.repository.RedisChatMemoryStore;
 import com.example.bigevent.service.ArticleTools;
 import dev.langchain4j.community.store.embedding.redis.RedisEmbeddingStore;
+import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
@@ -88,6 +89,11 @@ public class AiConfig {
                 .maxResults(2)
                 .minScore(0.6)
                 .build();
+    }
+
+    @Bean
+    public DocumentSplitter documentSplitter() {
+        return DocumentSplitters.recursive(500, 100);
     }
 
     /**
