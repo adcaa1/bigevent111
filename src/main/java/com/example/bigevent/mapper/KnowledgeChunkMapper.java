@@ -8,8 +8,8 @@ import java.util.List;
 @Mapper
 public interface KnowledgeChunkMapper {
 
-    @Insert("insert into knowledge_chunk(doc_id, book_id, content, chunk_index, page_num, word_count, vector_key, create_time) " +
-            "values(#{docId}, #{bookId}, #{content}, #{chunkIndex}, #{pageNum}, #{wordCount}, #{vectorKey}, now())")
+    @Insert("insert into knowledge_chunk(doc_id, book_id, content, chunk_index, page_num, word_count, es_doc_id, vector_key, create_time) " +
+            "values(#{docId}, #{bookId}, #{content}, #{chunkIndex}, #{pageNum}, #{wordCount}, #{esDocId}, #{vectorKey}, now())")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(KnowledgeChunk chunk);
 
@@ -25,14 +25,6 @@ public interface KnowledgeChunkMapper {
     @Delete("delete from knowledge_chunk where book_id = #{bookId}")
     void deleteByBookId(Long bookId);
 
-    @Update("update knowledge_chunk set vector_key = #{vectorKey} where id = #{id}")
-    void updateVectorKey(@Param("id") Long id, @Param("vectorKey") String vectorKey);
-
-    /**
-     * 关键词检索：按内容模糊匹配
-     */
-    @Select("select * from knowledge_chunk where book_id = #{bookId} and content like concat('%', #{keyword}, '%') limit #{limit}")
-    List<KnowledgeChunk> searchByKeyword(@Param("bookId") Long bookId,
-                                         @Param("keyword") String keyword,
-                                         @Param("limit") Integer limit);
+    @Update("update knowledge_chunk set vector_key = #{vectorKey}, es_doc_id = #{esDocId} where id = #{id}")
+    void updateVectorAndEsInfo(@Param("id") Long id, @Param("vectorKey") String vectorKey, @Param("esDocId") String esDocId);
 }

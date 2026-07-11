@@ -43,6 +43,11 @@ public class KnowledgeChunk {
     private Integer wordCount;
 
     /**
+     * ES 中文档 _id，便于精确删除
+     */
+    private String esDocId;
+
+    /**
      * Redis 向量 key 的后缀
      */
     private String vectorKey;

@@ -3,10 +3,10 @@ package com.example.bigevent.domain.vo.rag;
 import lombok.Data;
 
 /**
- * RAG 向量检索结果 VO
+ * 多路召回结果 VO
  */
 @Data
-public class SearchResultVO {
+public class HybridResultVO {
 
     private Long chunkId;
     private Long docId;
@@ -16,5 +16,9 @@ public class SearchResultVO {
     private String content;
     private Integer chunkIndex;
     private Integer pageNum;
-    private Float score;
+
+    /**
+     * 融合排序分数，不参与持久化
+     */
+    private double score;
 }

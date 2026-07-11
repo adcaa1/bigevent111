@@ -1,5 +1,6 @@
 package com.example.bigevent.service;
 
+import com.example.bigevent.constant.KnowledgeConstants;
 import com.example.bigevent.domain.dto.rag.ChunkEmbeddingDTO;
 import com.example.bigevent.domain.vo.rag.SearchResultVO;
 import dev.langchain4j.data.document.Metadata;
@@ -34,13 +35,19 @@ public class VectorStoreService {
     public static final String META_CHUNK_ID = "chunkId";
     public static final String META_DOC_ID = "docId";
     public static final String META_BOOK_ID = "bookId";
+    public static final String META_USER_ID = "userId";
+    public static final String META_VISIBILITY = "visibility";
+    public static final String META_TITLE = "title";
+    public static final String META_CHUNK_INDEX = "chunkIndex";
+    public static final String META_PAGE_NUM = "pageNum";
 
     /**
      * 保存 chunk 向量到 RedisSearch
      */
-    public void saveChunk(Long chunkId, Long docId, Long bookId,
-                          String content, Embedding embedding, Integer pageNum) {
-        Metadata metadata = buildMetadata(chunkId, docId, bookId, pageNum);
+    public void saveChunk(Long chunkId, Long docId, Long bookId, Integer userId, Integer visibility,
+                          String title, String content, Embedding embedding,
+                          Integer chunkIndex, Integer pageNum) {
+        Metadata metadata = buildMetadata(chunkId, docId, bookId, userId, visibility, title, chunkIndex, pageNum);
         TextSegment segment = TextSegment.from(content, metadata);
         embeddingStore.add(embedding, segment);
     }
@@ -52,7 +59,9 @@ public class VectorStoreService {
         List<TextSegment> segments = chunks.stream()
                 .map(chunk -> {
                     Metadata metadata = buildMetadata(
-                            chunk.getChunkId(), chunk.getDocId(), chunk.getBookId(), chunk.getPageNum());
+                            chunk.getChunkId(), chunk.getDocId(), chunk.getBookId(),
+                            chunk.getUserId(), chunk.getVisibility(), chunk.getTitle(),
+                            chunk.getChunkIndex(), chunk.getPageNum());
                     return TextSegment.from(chunk.getContent(), metadata);
                 })
                 .collect(Collectors.toList());
@@ -65,14 +74,16 @@ public class VectorStoreService {
     }
 
     /**
-     * 向量检索：基于 RedisSearch ANN 搜索
+     * 向量检索：基于 RedisSearch ANN 搜索，支持用户隔离过滤
      *
+     * @param userId   当前用户ID，null 时只查公共知识
      * @param bookId   图书ID，为 null 时搜索全部
+     * @param docId    文档ID，为 null 时搜索全部
      * @param question 用户问题
      * @param topK     返回数量
      * @param minScore 最小相似度阈值
      */
-    public List<SearchResultVO> search(Long bookId, String question, int topK, double minScore) {
+    public List<SearchResultVO> search(Integer userId, Long bookId, Long docId, String question, int topK, double minScore) {
         Embedding queryEmbedding = embeddingModel.embed(question).content();
 
         EmbeddingSearchRequest.EmbeddingSearchRequestBuilder requestBuilder = EmbeddingSearchRequest.builder()
@@ -80,9 +91,8 @@ public class VectorStoreService {
                 .maxResults(topK)
                 .minScore(minScore);
 
-        // 如果指定了 bookId，加上过滤条件
-        if (bookId != null) {
-            Filter filter = metadataKey(META_BOOK_ID).isEqualTo(String.valueOf(bookId));
+        Filter filter = buildFilter(userId, bookId, docId);
+        if (filter != null) {
             requestBuilder.filter(filter);
         }
 
@@ -119,12 +129,56 @@ public class VectorStoreService {
         log.info("已删除 bookId={} 的向量", bookId);
     }
 
-    private Metadata buildMetadata(Long chunkId, Long docId, Long bookId, Integer pageNum) {
+    /**
+     * 删除某个用户下的所有向量
+     */
+    public void deleteByUserId(Integer userId) {
+        Filter filter = metadataKey(META_USER_ID).isEqualTo(String.valueOf(userId));
+        embeddingStore.removeAll(filter);
+        log.info("已删除 userId={} 的向量", userId);
+    }
+
+    private Filter buildFilter(Integer userId, Long bookId, Long docId) {
+        Filter filter = buildAuthFilter(userId);
+
+        if (bookId != null) {
+            Filter bookFilter = metadataKey(META_BOOK_ID).isEqualTo(String.valueOf(bookId));
+            filter = filter == null ? bookFilter : filter.and(bookFilter);
+        }
+
+        if (docId != null) {
+            Filter docFilter = metadataKey(META_DOC_ID).isEqualTo(String.valueOf(docId));
+            filter = filter == null ? docFilter : filter.and(docFilter);
+        }
+
+        return filter;
+    }
+
+    private Filter buildAuthFilter(Integer userId) {
+        // 匿名用户：只看公共知识
+        if (userId == null) {
+            return metadataKey(META_VISIBILITY).isEqualTo(String.valueOf(2));
+        }
+
+        // 登录用户：自己的 + 团队的 + 公共的
+        Filter ownFilter = metadataKey(META_USER_ID).isEqualTo(String.valueOf(userId));
+        Filter teamFilter = metadataKey(META_VISIBILITY).isEqualTo(String.valueOf(1));
+        Filter publicFilter = metadataKey(META_VISIBILITY).isEqualTo(String.valueOf(2));
+
+        return ownFilter.or(teamFilter).or(publicFilter);
+    }
+
+    private Metadata buildMetadata(Long chunkId, Long docId, Long bookId, Integer userId,
+                                   Integer visibility, String title, Integer chunkIndex, Integer pageNum) {
         Metadata metadata = new Metadata();
         metadata.put(META_CHUNK_ID, String.valueOf(chunkId));
         metadata.put(META_DOC_ID, String.valueOf(docId));
         metadata.put(META_BOOK_ID, String.valueOf(bookId));
-        metadata.put("pageNum", String.valueOf(pageNum));
+        metadata.put(META_USER_ID, String.valueOf(userId));
+        metadata.put(META_VISIBILITY, String.valueOf(visibility == null ? KnowledgeConstants.Visibility.PRIVATE : visibility));
+        metadata.put(META_TITLE, title == null ? "" : title);
+        metadata.put(META_CHUNK_INDEX, String.valueOf(chunkIndex));
+        metadata.put(META_PAGE_NUM, String.valueOf(pageNum));
         return metadata;
     }
 
@@ -137,8 +191,11 @@ public class VectorStoreService {
         searchResult.setChunkId(parseLong(metadata.getString(META_CHUNK_ID)));
         searchResult.setDocId(parseLong(metadata.getString(META_DOC_ID)));
         searchResult.setBookId(parseLong(metadata.getString(META_BOOK_ID)));
-        searchResult.setPageNum(parseInt(metadata.getString("pageNum")));
+        searchResult.setUserId(parseInt(metadata.getString(META_USER_ID)));
+        searchResult.setTitle(metadata.getString(META_TITLE));
         searchResult.setContent(segment.text());
+        searchResult.setChunkIndex(parseInt(metadata.getString(META_CHUNK_INDEX)));
+        searchResult.setPageNum(parseInt(metadata.getString(META_PAGE_NUM)));
         searchResult.setScore((float) match.score().doubleValue());
         return searchResult;
     }
