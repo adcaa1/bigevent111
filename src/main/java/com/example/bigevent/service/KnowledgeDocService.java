@@ -53,10 +53,10 @@ public class KnowledgeDocService {
      * 计算 MD5 → 查重 → 保存文件 → 解析
      * 由于我用的是spring自带的文件处理，进入不了线程，所以这个代码就只能先弃用了
      *
-     * @param visibility 可见性：0-私有 1-团队 2-公共
+     * @param visibility 可见性：0-私有 1-部门 2-公共
      */
     @Transactional
-    public KnowledgeDoc uploadAndProcess(MultipartFile file, Long bookId, Integer createUser, Integer visibility) throws IOException {
+    public KnowledgeDoc uploadAndProcess(MultipartFile file, Long bookId, Integer createUser, Integer visibility, Integer departmentId) throws IOException {
         validateFile(file);
 
         String fileName = file.getOriginalFilename();
@@ -70,7 +70,7 @@ public class KnowledgeDocService {
         }
 
         String relativePath = documentStorageService.store(file);
-        return processStoredFile(relativePath, fileName, fileType, file.getSize(), fileMd5, bookId, createUser, visibility);
+        return processStoredFile(relativePath, fileName, fileType, file.getSize(), fileMd5, bookId, createUser, visibility, departmentId);
     }
 
     /**
@@ -78,11 +78,11 @@ public class KnowledgeDocService {
      * <p>
      * 适用于 Controller 先同步落盘、再异步解析的场景，避免 MultipartFile 在异步线程中失效。
      *
-     * @param visibility 可见性：0-私有 1-团队 2-公共
+     * @param visibility 可见性：0-私有 1-部门 2-公共
      */
     public KnowledgeDoc processStoredFile(String relativePath, String fileName, String fileType,
                                           long fileSize, String fileMd5, Long bookId, Integer createUser,
-                                          Integer visibility) throws IOException {
+                                          Integer visibility, Integer departmentId) throws IOException {
         KnowledgeDoc doc = new KnowledgeDoc();
         doc.setBookId(bookId);
         doc.setCreateUser(createUser);
@@ -93,6 +93,7 @@ public class KnowledgeDocService {
         doc.setFileMd5(fileMd5);
         doc.setStatus(KnowledgeConstants.DocStatus.PROCESSING);
         doc.setVisibility(visibility == null ? KnowledgeConstants.Visibility.PUBLIC : visibility);
+        doc.setDepartmentId(departmentId);
         knowledgeDocMapper.insert(doc);
 
         try (InputStream is = documentStorageService.load(relativePath)) {
@@ -113,7 +114,7 @@ public class KnowledgeDocService {
      * 统一文本知识与文件知识的入口，都会生成 KnowledgeDoc 和 KnowledgeChunk 记录。
      */
     @Transactional
-    public KnowledgeDoc createAndProcessTextDoc(String text, Long bookId, Integer createUser, Integer visibility) {
+    public KnowledgeDoc createAndProcessTextDoc(String text, Long bookId, Integer createUser, Integer visibility, Integer departmentId) {
         String fileName = "文本知识_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + ".txt";
 
         // 文本内容按 MD5 查重
@@ -134,6 +135,7 @@ public class KnowledgeDocService {
         doc.setContent(text);
         doc.setStatus(KnowledgeConstants.DocStatus.PROCESSING);
         doc.setVisibility(visibility == null ? KnowledgeConstants.Visibility.PUBLIC : visibility);
+        doc.setDepartmentId(departmentId);
         knowledgeDocMapper.insert(doc);
 
         return processDocContent(doc, text, fileName);
@@ -192,6 +194,7 @@ public class KnowledgeDocService {
                     dto.setBookId(bookId);
                     dto.setUserId(userId);
                     dto.setVisibility(doc.getVisibility());
+                    dto.setDepartmentId(doc.getDepartmentId());
                     dto.setTitle(title);
                     dto.setContent(segment.text());
                     dto.setEmbedding(embeddings.get(i));
@@ -265,20 +268,21 @@ public class KnowledgeDocService {
     /**
      * 查询当前用户有权限查看的文档列表。
      * <p>
-     * 可见范围：自己上传的 + visibility=1（团队） + visibility=2（公共）
+     * 可见范围：自己上传的 + 同部门(departmentId匹配) + 公共
      *
      * @param currentUserId 当前登录用户 ID
+     * @param departmentId  当前用户部门ID
      * @param bookId        图书 ID，为 null 时查询通用知识库
      * @return 有权限的文档列表
      */
-    public List<KnowledgeDoc> findAuthorizedDocs(Integer currentUserId, Long bookId) {
+    public List<KnowledgeDoc> findAuthorizedDocs(Integer currentUserId, Integer departmentId, Long bookId) {
         if (currentUserId == null) {
             throw new IllegalArgumentException("currentUserId 不能为空");
         }
         if (bookId == null) {
-            return knowledgeDocMapper.findAuthorizedAll(currentUserId);
+            return knowledgeDocMapper.findAuthorizedAll(currentUserId, departmentId);
         }
-        return knowledgeDocMapper.findAuthorizedByBookId(bookId, currentUserId);
+        return knowledgeDocMapper.findAuthorizedByBookId(bookId, currentUserId, departmentId);
     }
 
     /**

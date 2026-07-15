@@ -31,8 +31,8 @@ public class UserserviceImpl implements Userservice {
     }
 
     @Override
-    public int add(String username, String password) {
-        return usermapper.add(username,password);
+    public int add(String username, String password, Integer departmentId) {
+        return usermapper.add(username, password, departmentId);
     }
 
     /**

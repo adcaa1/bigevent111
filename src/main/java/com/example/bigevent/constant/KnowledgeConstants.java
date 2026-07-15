@@ -34,7 +34,7 @@ public final class KnowledgeConstants {
         }
 
         public static final int PRIVATE = 0;
-        public static final int TEAM = 1;
+        public static final int DEPARTMENT = 1;
         public static final int PUBLIC = 2;
     }
 }

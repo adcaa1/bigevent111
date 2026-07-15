@@ -59,7 +59,7 @@ public class Usercontroller {
     }
     //如果插入的数据不符合要求，可以插入一个全局处理器，免得返回的是错误页面，还没写，在课里面
     @PostMapping("/add")
-    public Result add(String username, String password) {
+    public Result add(String username, String password, @RequestParam(required = false) Integer departmentId) {
         // 布隆过滤器判断用户名是否可能存在
         if (bloomFilterUtil.mightContainUsername(username)) {
             // 可能存在，回查数据库确认（已注销的用户改了名，查不到，不影响注册）
@@ -70,7 +70,7 @@ public class Usercontroller {
         }
         // 加密
         password = Md5Util.getMD5String(password);
-        int i = userservice1.add(username, password);
+        int i = userservice1.add(username, password, departmentId);
         if (i > 0) {
             // 同步到布隆过滤器
             bloomFilterUtil.addUsername(username);

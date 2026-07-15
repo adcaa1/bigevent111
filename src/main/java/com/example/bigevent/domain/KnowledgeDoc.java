@@ -63,9 +63,14 @@ public class KnowledgeDoc {
     private Integer status;
 
     /**
-     * 可见性：0-私有 1-团队 2-公共
+     * 可见性：0-私有 1-部门 2-公共
      */
     private Integer visibility;
+
+    /**
+     * 所属部门ID（visibility=1时有效）
+     */
+    private Integer departmentId;
 
     /**
      * 失败原因

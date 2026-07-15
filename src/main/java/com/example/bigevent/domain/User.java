@@ -26,4 +26,5 @@ public class User {
     private LocalDateTime createTime;//创建时间
     private LocalDateTime updateTime;//更新时间
     private Integer deleted;//0-正常 1-已注销
+    private Integer departmentId;//所属部门ID
 }

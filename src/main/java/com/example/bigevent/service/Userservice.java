@@ -5,7 +5,7 @@ import com.example.bigevent.domain.User;
 public interface Userservice {
     User findid(String username);
 
-    int add(String username, String password);
+    int add(String username, String password, Integer departmentId);
 
     void update(User user);
 

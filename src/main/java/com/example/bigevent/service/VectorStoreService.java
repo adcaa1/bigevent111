@@ -37,6 +37,7 @@ public class VectorStoreService {
     public static final String META_BOOK_ID = "bookId";
     public static final String META_USER_ID = "userId";
     public static final String META_VISIBILITY = "visibility";
+    public static final String META_DEPARTMENT_ID = "departmentId";
     public static final String META_TITLE = "title";
     public static final String META_CHUNK_INDEX = "chunkIndex";
     public static final String META_PAGE_NUM = "pageNum";
@@ -44,10 +45,10 @@ public class VectorStoreService {
     /**
      * 保存 chunk 向量到 RedisSearch
      */
-    public void saveChunk(Long chunkId, Long docId, Long bookId, Integer userId, Integer visibility,
+    public void saveChunk(Long chunkId, Long docId, Long bookId, Integer userId, Integer visibility, Integer departmentId,
                           String title, String content, Embedding embedding,
                           Integer chunkIndex, Integer pageNum) {
-        Metadata metadata = buildMetadata(chunkId, docId, bookId, userId, visibility, title, chunkIndex, pageNum);
+        Metadata metadata = buildMetadata(chunkId, docId, bookId, userId, visibility, departmentId, title, chunkIndex, pageNum);
         TextSegment segment = TextSegment.from(content, metadata);
         embeddingStore.add(embedding, segment);
     }
@@ -60,7 +61,7 @@ public class VectorStoreService {
                 .map(chunk -> {
                     Metadata metadata = buildMetadata(
                             chunk.getChunkId(), chunk.getDocId(), chunk.getBookId(),
-                            chunk.getUserId(), chunk.getVisibility(), chunk.getTitle(),
+                            chunk.getUserId(), chunk.getVisibility(), chunk.getDepartmentId(), chunk.getTitle(),
                             chunk.getChunkIndex(), chunk.getPageNum());
                     return TextSegment.from(chunk.getContent(), metadata);
                 })
@@ -74,16 +75,17 @@ public class VectorStoreService {
     }
 
     /**
-     * 向量检索：基于 RedisSearch ANN 搜索，支持用户隔离过滤
+     * 向量检索：基于 RedisSearch ANN 搜索，支持用户隔离与部门过滤
      *
-     * @param userId   当前用户ID，null 时只查公共知识
-     * @param bookId   图书ID，为 null 时搜索全部
-     * @param docId    文档ID，为 null 时搜索全部
-     * @param question 用户问题
-     * @param topK     返回数量
-     * @param minScore 最小相似度阈值
+     * @param userId       当前用户ID，null 时只查公共知识
+     * @param departmentId 当前用户部门ID，用于部门级可见性判断
+     * @param bookId       图书ID，为 null 时搜索全部
+     * @param docId        文档ID，为 null 时搜索全部
+     * @param question     用户问题
+     * @param topK         返回数量
+     * @param minScore     最小相似度阈值
      */
-    public List<SearchResultVO> search(Integer userId, Long bookId, Long docId, String question, int topK, double minScore) {
+    public List<SearchResultVO> search(Integer userId, Integer departmentId, Long bookId, Long docId, String question, int topK, double minScore) {
         Embedding queryEmbedding = embeddingModel.embed(question).content();
 
         EmbeddingSearchRequest.EmbeddingSearchRequestBuilder requestBuilder = EmbeddingSearchRequest.builder()
@@ -91,7 +93,7 @@ public class VectorStoreService {
                 .maxResults(topK)
                 .minScore(minScore);
 
-        Filter filter = buildFilter(userId, bookId, docId);
+        Filter filter = buildFilter(userId, departmentId, bookId, docId);
         if (filter != null) {
             requestBuilder.filter(filter);
         }
@@ -138,8 +140,8 @@ public class VectorStoreService {
         log.info("已删除 userId={} 的向量", userId);
     }
 
-    private Filter buildFilter(Integer userId, Long bookId, Long docId) {
-        Filter filter = buildAuthFilter(userId);
+    private Filter buildFilter(Integer userId, Integer departmentId, Long bookId, Long docId) {
+        Filter filter = buildAuthFilter(userId, departmentId);
 
         if (bookId != null) {
             Filter bookFilter = metadataKey(META_BOOK_ID).isEqualTo(String.valueOf(bookId));
@@ -154,28 +156,34 @@ public class VectorStoreService {
         return filter;
     }
 
-    private Filter buildAuthFilter(Integer userId) {
+    private Filter buildAuthFilter(Integer userId, Integer departmentId) {
         // 匿名用户：只看公共知识
         if (userId == null) {
             return metadataKey(META_VISIBILITY).isEqualTo(String.valueOf(2));
         }
 
-        // 登录用户：自己的 + 团队的 + 公共的
+        // 登录用户：自己的 + 同部门的 + 公共的
         Filter ownFilter = metadataKey(META_USER_ID).isEqualTo(String.valueOf(userId));
-        Filter teamFilter = metadataKey(META_VISIBILITY).isEqualTo(String.valueOf(1));
         Filter publicFilter = metadataKey(META_VISIBILITY).isEqualTo(String.valueOf(2));
 
-        return ownFilter.or(teamFilter).or(publicFilter);
+        if (departmentId != null) {
+            Filter deptVisibilityFilter = metadataKey(META_VISIBILITY).isEqualTo(String.valueOf(1));
+            Filter deptIdFilter = metadataKey(META_DEPARTMENT_ID).isEqualTo(String.valueOf(departmentId));
+            return ownFilter.or(deptVisibilityFilter.and(deptIdFilter)).or(publicFilter);
+        }
+
+        return ownFilter.or(publicFilter);
     }
 
     private Metadata buildMetadata(Long chunkId, Long docId, Long bookId, Integer userId,
-                                   Integer visibility, String title, Integer chunkIndex, Integer pageNum) {
+                                   Integer visibility, Integer departmentId, String title, Integer chunkIndex, Integer pageNum) {
         Metadata metadata = new Metadata();
         metadata.put(META_CHUNK_ID, String.valueOf(chunkId));
         metadata.put(META_DOC_ID, String.valueOf(docId));
         metadata.put(META_BOOK_ID, String.valueOf(bookId));
         metadata.put(META_USER_ID, String.valueOf(userId));
         metadata.put(META_VISIBILITY, String.valueOf(visibility == null ? KnowledgeConstants.Visibility.PRIVATE : visibility));
+        metadata.put(META_DEPARTMENT_ID, String.valueOf(departmentId));
         metadata.put(META_TITLE, title == null ? "" : title);
         metadata.put(META_CHUNK_INDEX, String.valueOf(chunkIndex));
         metadata.put(META_PAGE_NUM, String.valueOf(pageNum));

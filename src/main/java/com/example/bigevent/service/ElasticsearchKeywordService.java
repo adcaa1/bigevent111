@@ -72,6 +72,7 @@ public class ElasticsearchKeywordService {
         doc.put("bookId", chunk.getBookId() == null ? 0 : chunk.getBookId());
         doc.put("userId", chunk.getUserId() == null ? 0 : chunk.getUserId());
         doc.put("visibility", chunk.getVisibility() == null ? 2 : chunk.getVisibility());
+        doc.put("departmentId", chunk.getDepartmentId() == null ? 0 : chunk.getDepartmentId());
         doc.put("title", chunk.getTitle() == null ? "" : chunk.getTitle());
         doc.put("content", chunk.getContent());
         doc.put("pageNum", chunk.getPageNum() == null ? 0 : chunk.getPageNum());
@@ -82,15 +83,16 @@ public class ElasticsearchKeywordService {
     }
 
     /**
-     * 关键词检索，支持用户隔离过滤
+     * 关键词检索，支持用户隔离与部门过滤
      *
-     * @param userId 当前用户ID，null 时只查公共知识
+     * @param userId       当前用户ID，null 时只查公共知识
+     * @param departmentId 当前用户部门ID，用于部门级可见性判断
      * @param bookId 图书 ID，null 时不限制
      * @param docId  文档 ID，null 时不限制
      * @param keyword 用户问题
      * @param topK   返回条数
      */
-    public List<HybridResultVO> search(Integer userId, Long bookId, Long docId, String keyword, int topK) {
+    public List<HybridResultVO> search(Integer userId, Integer departmentId, Long bookId, Long docId, String keyword, int topK) {
         try {
             SearchResponse<Map> response = client.search(s -> s
                             .index(RagElasticsearchIndexInitializer.RAG_INDEX)
@@ -99,7 +101,7 @@ public class ElasticsearchKeywordService {
                                         b.must(m -> m.multiMatch(mt -> mt
                                                 .fields("title^2", "content")
                                                 .query(keyword)));
-                                        b.filter(f -> buildAuthFilter(f, userId));
+                                        b.filter(f -> buildAuthFilter(f, userId, departmentId));
                                         if (bookId != null) {
                                             b.filter(f -> f.term(t -> t.field("bookId").value(bookId)));
                                         }
@@ -125,19 +127,28 @@ public class ElasticsearchKeywordService {
 
     private co.elastic.clients.util.ObjectBuilder<co.elastic.clients.elasticsearch._types.query_dsl.Query> buildAuthFilter(
             co.elastic.clients.elasticsearch._types.query_dsl.Query.Builder builder,
-            Integer userId) {
+            Integer userId, Integer departmentId) {
         // 匿名用户：只看公共知识
         if (userId == null) {
             return builder.term(t -> t.field("visibility").value(2));
         }
 
-        // 登录用户：自己的 + 团队的 + 公共的
-        return builder.bool(b -> b
-                .should(s -> s.term(t -> t.field("userId").value(userId)))
-                .should(s -> s.term(t -> t.field("visibility").value(1)))
-                .should(s -> s.term(t -> t.field("visibility").value(2)))
-                .minimumShouldMatch("1")
-        );
+        // 登录用户：自己的 + 同部门的 + 公共的
+        var boolBuilder = builder.bool(b -> {
+            b.should(s -> s.term(t -> t.field("userId").value(userId)));
+            b.should(s -> s.term(t -> t.field("visibility").value(2)));
+
+            if (departmentId != null) {
+                b.should(s -> s.bool(sb -> sb
+                        .must(m -> m.term(t -> t.field("visibility").value(1)))
+                        .must(m -> m.term(t -> t.field("departmentId").value(departmentId)))
+                ));
+            }
+
+            b.minimumShouldMatch("1");
+            return b;
+        });
+        return boolBuilder;
     }
 
     /**

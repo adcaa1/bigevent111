@@ -4,6 +4,7 @@ import com.example.bigevent.constant.KnowledgeConstants;
 import com.example.bigevent.domain.AiConversation;
 import com.example.bigevent.domain.KnowledgeDoc;
 import com.example.bigevent.domain.Result;
+import com.example.bigevent.domain.User;
 import com.example.bigevent.domain.vo.rag.RagAnswerVO;
 import com.example.bigevent.service.*;
 import com.example.bigevent.util.ThreadLocalUtil;
@@ -46,6 +47,9 @@ public class ChatController {
     //    本地文档存储
     @Autowired
     private DocumentStorageService documentStorageService;
+    //    用户服务（获取部门信息）
+    @Autowired
+    private Userservice userservice;
 
     // AI 专用线程池，避免阻塞 Tomcat 主线程
     @Autowired
@@ -55,6 +59,18 @@ public class ChatController {
     private Integer getCurrentUserId() {
         Map<String, Object> claims = ThreadLocalUtil.get();
         return claims == null ? null : (Integer) claims.get("id");
+    }
+
+    /**
+     * 获取当前用户所属部门ID
+     */
+    private Integer getCurrentUserDepartmentId() {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        if (claims == null) return null;
+        String username = (String) claims.get("username");
+        if (username == null) return null;
+        User user = userservice.findid(username);
+        return user != null ? user.getDepartmentId() : null;
     }
 
     private String getFileType(String fileName) {
@@ -105,7 +121,7 @@ public class ChatController {
      * @param text       文本内容
      * @param file       上传文件
      * @param bookId     关联图书ID，为空表示通用知识库
-     * @param visibility 可见性：0-私有 1-团队 2-公共，默认私有
+     * @param visibility 可见性：0-私有 1-部门 2-公共，默认私有
      */
     @PostMapping("/rag/add")
     public Result<String> addKnowledge(
@@ -115,6 +131,7 @@ public class ChatController {
             @RequestParam(required = false, defaultValue = "0") Integer visibility) {
         try {
             Integer currentUserId = getCurrentUserId();
+            Integer departmentId = getCurrentUserDepartmentId();
 
             if (file != null && !file.isEmpty()) {
                 if (file.getSize() > KnowledgeConstants.MAX_FILE_SIZE) {
@@ -148,18 +165,19 @@ public class ChatController {
                     return Result.error("文件保存失败: " + e.getMessage());
                 }
 
+                final Integer finalDepartmentId = departmentId;
                 // 文件解析耗时，放到线程池异步处理，立即返回提示
                 aiExecutor.execute(() -> {
                     try {
                         ragService.processUploadedFile(relativePath, fileName, fileType,
-                                file.getSize(), fileMd5, bookId, currentUserId, visibility);
+                                file.getSize(), fileMd5, bookId, currentUserId, visibility, finalDepartmentId);
                     } catch (Exception e) {
                         log.error("文件解析失败: {}", fileName, e);
                     }
                 });
                 return Result.success("文件已提交后台处理: " + fileName + "，请稍后查询知识库");
             } else if (text != null && !text.isEmpty()) {
-                ragService.addKnowledge(text, bookId, currentUserId, visibility);
+                ragService.addKnowledge(text, bookId, currentUserId, visibility, departmentId);
                 return Result.success("文本知识添加成功");
             } else {
                 return Result.error("请提供文本内容或上传文件");
@@ -183,7 +201,8 @@ public class ChatController {
                                                   @RequestParam(required = false) Long docId,
                                                   @RequestParam(required = false) String conversationId) {
         Integer currentUserId = getCurrentUserId();
-        return CompletableFuture.supplyAsync(() -> ragService.ragChat(question, currentUserId, bookId, docId, conversationId), aiExecutor);
+        Integer departmentId = getCurrentUserDepartmentId();
+        return CompletableFuture.supplyAsync(() -> ragService.ragChat(question, currentUserId, departmentId, bookId, docId, conversationId), aiExecutor);
     }
 
     /**
@@ -220,14 +239,15 @@ public class ChatController {
         if (currentUserId == null) {
             return Flux.error(new IllegalArgumentException("请先登录"));
         }
-        return ragService.ragChatStream(question, currentUserId, bookId, docId, conversationId)
+        Integer departmentId = getCurrentUserDepartmentId();
+        return ragService.ragChatStream(question, currentUserId, departmentId, bookId, docId, conversationId)
                 .subscribeOn(reactor.core.scheduler.Schedulers.fromExecutor(aiExecutor));
     }
 
     /**
      * 查询某本书/通用知识库下的文档列表。
      * <p>
-     * 只返回当前用户有权限查看的文档：自己上传的 + 团队可见 + 公共可见。
+     * 只返回当前用户有权限查看的文档：自己上传的 + 同部门可见 + 公共可见。
      *
      * @param bookId 图书 ID，为空时查询通用知识库
      */
@@ -237,7 +257,8 @@ public class ChatController {
         if (currentUserId == null) {
             return Result.error("请先登录");
         }
-        List<KnowledgeDoc> docs = knowledgeDocService.findAuthorizedDocs(currentUserId, bookId);
+        Integer departmentId = getCurrentUserDepartmentId();
+        List<KnowledgeDoc> docs = knowledgeDocService.findAuthorizedDocs(currentUserId, departmentId, bookId);
         return Result.success(docs);
     }
 
