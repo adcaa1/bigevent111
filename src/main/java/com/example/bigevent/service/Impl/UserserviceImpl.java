@@ -2,6 +2,7 @@ package com.example.bigevent.service.Impl;
 
 import com.example.bigevent.domain.User;
 import com.example.bigevent.mapper.Usermapper;
+import com.example.bigevent.service.UserFactService;
 import com.example.bigevent.service.Userservice;
 import com.example.bigevent.util.ThreadLocalUtil;
 import com.example.bigevent.websocket.WsSessionManager;
@@ -21,6 +22,8 @@ public class UserserviceImpl implements Userservice {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private WsSessionManager wsSessionManager;
+    @Autowired
+    private UserFactService userFactService;
 
     @Override
     public User findid(String username) {
@@ -32,9 +35,19 @@ public class UserserviceImpl implements Userservice {
         return usermapper.add(username,password);
     }
 
+    /**
+     * 更新用户信息，并在昵称发生变化时同步更新长期业务记忆。
+     * <p>
+     * 这样即使更换会话，AI 仍然能记住用户的昵称。
+     *
+     * @param user 待更新的用户实体
+     */
     @Override
     public void update(User user) {
         usermapper.update(user);
+        if (user.getNickname() != null && !user.getNickname().isBlank()) {
+            userFactService.saveOrUpdateFact(user.getId(), "nickname", user.getNickname());
+        }
     }
 
     @Override

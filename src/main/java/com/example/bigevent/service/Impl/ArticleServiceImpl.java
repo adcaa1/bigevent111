@@ -7,6 +7,7 @@ import com.example.bigevent.domain.vo.ArticleVO;
 import com.example.bigevent.mapper.ArticleMapper;
 import com.example.bigevent.mapper.Usermapper;
 import com.example.bigevent.service.ArticleService;
+import com.example.bigevent.service.UserFactService;
 import com.example.bigevent.util.ThreadLocalUtil;
 import org.springframework.beans.BeanUtils;
 import com.github.pagehelper.Page;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -25,6 +27,15 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
     @Autowired
     private Usermapper usermapper;
+    @Autowired
+    private UserFactService userFactService;
+    /**
+     * 添加文章，并在成功后刷新用户的"最近文章"长期业务记忆。
+     * <p>
+     * 这样 AI 在后续对话中可以引用用户最近添加的文章。
+     *
+     * @param article 待添加的文章实体
+     */
     @Override
     public void addarticle(Article article) {
 //        添加文章肯定在用户登录时，所以可以获得用户id来插入文章
@@ -32,7 +43,28 @@ public class ArticleServiceImpl implements ArticleService {
         Integer id = (Integer) claims.get("id");
         article.setCreateUser(id);
         articleMapper.addarticle(article);
+// 刷新用户的"最近文章"长期业务记忆
+        refreshLatestArticles(id);
+    }
 
+    /**
+     * 刷新用户最近添加的文章列表到长期业务记忆。
+     * <p>
+     * 取该用户最新的 5 篇文章标题，以逗号分隔存入 user_fact.latest_articles。
+     *
+     * @param userId 用户 ID
+     */
+    private void refreshLatestArticles(Integer userId) {
+        List<Article> articles = articleMapper.findarticle(userId);
+        if (articles == null || articles.isEmpty()) {
+            return;
+        }
+        String latest = articles.stream()
+                .sorted((a, b) -> b.getCreateTime().compareTo(a.getCreateTime()))
+                .limit(5)
+                .map(Article::getTitle)
+                .collect(Collectors.joining(","));
+        userFactService.saveOrUpdateFact(userId, "latest_articles", latest);
     }
 
     @Override
