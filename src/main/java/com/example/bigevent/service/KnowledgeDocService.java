@@ -27,6 +27,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * 知识库文档服务：负责文档解析、分块、向量化、持久化
@@ -43,13 +46,17 @@ public class KnowledgeDocService {
     private final DocumentStorageService documentStorageService;
     private final DocumentSplitter documentSplitter;
     private final EmbeddingModel embeddingModel;
+    private final PlatformTransactionManager transactionManager;
 
     /**
      * 上传并处理文档（同步存储文件后处理）
      * 计算 MD5 → 查重 → 保存文件 → 解析
+     * 由于我用的是spring自带的文件处理，进入不了线程，所以这个代码就只能先弃用了
+     *
+     * @param visibility 可见性：0-私有 1-团队 2-公共
      */
     @Transactional
-    public KnowledgeDoc uploadAndProcess(MultipartFile file, Long bookId, Integer createUser) throws IOException {
+    public KnowledgeDoc uploadAndProcess(MultipartFile file, Long bookId, Integer createUser, Integer visibility) throws IOException {
         validateFile(file);
 
         String fileName = file.getOriginalFilename();
@@ -63,17 +70,19 @@ public class KnowledgeDocService {
         }
 
         String relativePath = documentStorageService.store(file);
-        return processStoredFile(relativePath, fileName, fileType, file.getSize(), fileMd5, bookId, createUser);
+        return processStoredFile(relativePath, fileName, fileType, file.getSize(), fileMd5, bookId, createUser, visibility);
     }
 
     /**
      * 处理已存储的本地文件
      * <p>
      * 适用于 Controller 先同步落盘、再异步解析的场景，避免 MultipartFile 在异步线程中失效。
+     *
+     * @param visibility 可见性：0-私有 1-团队 2-公共
      */
-    @Transactional
     public KnowledgeDoc processStoredFile(String relativePath, String fileName, String fileType,
-                                          long fileSize, String fileMd5, Long bookId, Integer createUser) throws IOException {
+                                          long fileSize, String fileMd5, Long bookId, Integer createUser,
+                                          Integer visibility) throws IOException {
         KnowledgeDoc doc = new KnowledgeDoc();
         doc.setBookId(bookId);
         doc.setCreateUser(createUser);
@@ -83,12 +92,18 @@ public class KnowledgeDocService {
         doc.setFileSize(fileSize);
         doc.setFileMd5(fileMd5);
         doc.setStatus(KnowledgeConstants.DocStatus.PROCESSING);
-        doc.setVisibility(KnowledgeConstants.Visibility.PRIVATE);
+        doc.setVisibility(visibility == null ? KnowledgeConstants.Visibility.PUBLIC : visibility);
         knowledgeDocMapper.insert(doc);
 
         try (InputStream is = documentStorageService.load(relativePath)) {
             String content = parseContent(fileType, is);
             return processDocContent(doc, content, fileName);
+        } catch (Exception e) {
+            log.error("文件处理失败: {}", fileName, e);
+            doc.setStatus(KnowledgeConstants.DocStatus.FAILED);
+            doc.setFailReason("文件处理失败: " + e.getMessage());
+            knowledgeDocMapper.update(doc);
+            return doc;
         }
     }
 
@@ -118,7 +133,7 @@ public class KnowledgeDocService {
         doc.setFileMd5(fileMd5);
         doc.setContent(text);
         doc.setStatus(KnowledgeConstants.DocStatus.PROCESSING);
-        doc.setVisibility(visibility == null ? KnowledgeConstants.Visibility.PRIVATE : visibility);
+        doc.setVisibility(visibility == null ? KnowledgeConstants.Visibility.PUBLIC : visibility);
         knowledgeDocMapper.insert(doc);
 
         return processDocContent(doc, text, fileName);
@@ -135,7 +150,6 @@ public class KnowledgeDocService {
      * <p>
      * 若 Redis/ES 写入成功后 MySQL 事务回滚，会清理 Redis/ES 残留数据，避免孤儿向量。
      */
-    @Transactional
     public KnowledgeDoc processDocContent(KnowledgeDoc doc, String content, String title) {
         Long bookId = doc.getBookId();
         Integer userId = doc.getCreateUser();
@@ -155,34 +169,39 @@ public class KnowledgeDocService {
         boolean esWritten = false;
 
         try {
-            for (int i = 0; i < segments.size(); i++) {
-                TextSegment segment = segments.get(i);
-                String esDocId = "doc_" + doc.getId() + "_chunk_" + i;
+            TransactionTemplate txTemplate = new TransactionTemplate(transactionManager);
+            txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+            txTemplate.execute(status -> {
+                for (int i = 0; i < segments.size(); i++) {
+                    TextSegment segment = segments.get(i);
+                    String esDocId = "doc_" + doc.getId() + "_chunk_" + i;
 
-                KnowledgeChunk chunk = new KnowledgeChunk();
-                chunk.setDocId(doc.getId());
-                chunk.setBookId(bookId);
-                chunk.setContent(segment.text());
-                chunk.setChunkIndex(i);
-                chunk.setPageNum(extractPageNum(segment));
-                chunk.setWordCount(segment.text().length());
-                chunk.setEsDocId(esDocId);
-                knowledgeChunkMapper.insert(chunk);
+                    KnowledgeChunk chunk = new KnowledgeChunk();
+                    chunk.setDocId(doc.getId());
+                    chunk.setBookId(bookId);
+                    chunk.setContent(segment.text());
+                    chunk.setChunkIndex(i);
+                    chunk.setPageNum(extractPageNum(segment));
+                    chunk.setWordCount(segment.text().length());
+                    chunk.setEsDocId(esDocId);
+                    knowledgeChunkMapper.insert(chunk);
 
-                ChunkEmbeddingDTO dto = new ChunkEmbeddingDTO();
-                dto.setChunkId(chunk.getId());
-                dto.setDocId(doc.getId());
-                dto.setBookId(bookId);
-                dto.setUserId(userId);
-                dto.setVisibility(doc.getVisibility());
-                dto.setTitle(title);
-                dto.setContent(segment.text());
-                dto.setEmbedding(embeddings.get(i));
-                dto.setChunkIndex(i);
-                dto.setPageNum(chunk.getPageNum());
-                dto.setEsDocId(esDocId);
-                chunkEmbeddings.add(dto);
-            }
+                    ChunkEmbeddingDTO dto = new ChunkEmbeddingDTO();
+                    dto.setChunkId(chunk.getId());
+                    dto.setDocId(doc.getId());
+                    dto.setBookId(bookId);
+                    dto.setUserId(userId);
+                    dto.setVisibility(doc.getVisibility());
+                    dto.setTitle(title);
+                    dto.setContent(segment.text());
+                    dto.setEmbedding(embeddings.get(i));
+                    dto.setChunkIndex(i);
+                    dto.setPageNum(chunk.getPageNum());
+                    dto.setEsDocId(esDocId);
+                    chunkEmbeddings.add(dto);
+                }
+                return null;
+            });
 
             if (!chunkEmbeddings.isEmpty()) {
                 vectorStoreService.saveChunks(chunkEmbeddings);
@@ -213,7 +232,11 @@ public class KnowledgeDocService {
                 elasticsearchKeywordService.deleteByDocId(doc.getId());
             }
 
-            throw new RuntimeException("文档处理失败: " + e.getMessage(), e);
+            doc.setStatus(KnowledgeConstants.DocStatus.FAILED);
+            doc.setFailReason("文档处理失败: " + e.getMessage());
+            knowledgeDocMapper.update(doc);
+
+            return doc;
         }
     }
 
@@ -221,10 +244,13 @@ public class KnowledgeDocService {
      * 删除文档，同时清理 MySQL、RedisSearch、Elasticsearch 和本地文件
      */
     @Transactional
-    public void deleteDoc(Long docId) {
+    public void deleteDoc(Long docId, Integer userId) {
         KnowledgeDoc doc = knowledgeDocMapper.findById(docId);
         if (doc == null) {
             throw new IllegalArgumentException("文档不存在: " + docId);
+        }
+        if (!doc.getCreateUser().equals(userId)) {
+            throw new IllegalArgumentException("无权删除该文档");
         }
 
         vectorStoreService.deleteByDocId(docId);
@@ -237,17 +263,22 @@ public class KnowledgeDocService {
     }
 
     /**
-     * 查询某本书下的所有文档
+     * 查询当前用户有权限查看的文档列表。
+     * <p>
+     * 可见范围：自己上传的 + visibility=1（团队） + visibility=2（公共）
+     *
+     * @param currentUserId 当前登录用户 ID
+     * @param bookId        图书 ID，为 null 时查询通用知识库
+     * @return 有权限的文档列表
      */
-    public List<KnowledgeDoc> findDocsByBookId(Long bookId) {
-        return knowledgeDocMapper.findByBookId(bookId);
-    }
-
-    /**
-     * 查询所有文档
-     */
-    public List<KnowledgeDoc> findAllDocs() {
-        return knowledgeDocMapper.findAll();
+    public List<KnowledgeDoc> findAuthorizedDocs(Integer currentUserId, Long bookId) {
+        if (currentUserId == null) {
+            throw new IllegalArgumentException("currentUserId 不能为空");
+        }
+        if (bookId == null) {
+            return knowledgeDocMapper.findAuthorizedAll(currentUserId);
+        }
+        return knowledgeDocMapper.findAuthorizedByBookId(bookId, currentUserId);
     }
 
     /**
@@ -265,7 +296,7 @@ public class KnowledgeDocService {
      * <p>
      * 每篇文档独立事务处理，避免单篇失败导致整批回滚。
      */
-    public void reprocessBook(Long bookId) {
+    public void reprocessBook(Long bookId, Integer userId) {
         List<KnowledgeDoc> docs = knowledgeDocMapper.findByBookId(bookId);
         if (docs == null || docs.isEmpty()) {
             return;
@@ -273,7 +304,11 @@ public class KnowledgeDocService {
 
         for (KnowledgeDoc doc : docs) {
             try {
-                reprocessDoc(doc.getId());
+                if (!doc.getCreateUser().equals(userId)) {
+                    log.warn("用户 {} 无权重新处理文档 {}", userId, doc.getId());
+                    continue;
+                }
+                reprocessDoc(doc.getId(), userId);
             } catch (Exception e) {
                 log.error("重新处理文档失败, docId={}: {}", doc.getId(), e.getMessage(), e);
             }
@@ -284,10 +319,13 @@ public class KnowledgeDocService {
      * 重新处理单篇文档
      */
     @Transactional
-    public void reprocessDoc(Long docId) {
+    public void reprocessDoc(Long docId, Integer userId) {
         KnowledgeDoc doc = knowledgeDocMapper.findById(docId);
         if (doc == null) {
             throw new IllegalArgumentException("文档不存在: " + docId);
+        }
+        if (!doc.getCreateUser().equals(userId)) {
+            throw new IllegalArgumentException("无权重新处理该文档");
         }
         reprocessSingleDoc(doc);
     }
@@ -332,7 +370,7 @@ public class KnowledgeDocService {
         }
         if (file.getSize() > KnowledgeConstants.MAX_FILE_SIZE) {
             throw new IllegalArgumentException(
-                String.format("文件大小不能超过 5MB，当前: %.2fMB", file.getSize() / 1024.0 / 1024.0)
+                String.format("文件大小不能超过 10MB，当前: %.2fMB", file.getSize() / 1024.0 / 1024.0)
             );
         }
     }

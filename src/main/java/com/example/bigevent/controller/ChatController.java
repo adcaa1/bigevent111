@@ -1,8 +1,10 @@
 package com.example.bigevent.controller;
 
 import com.example.bigevent.constant.KnowledgeConstants;
+import com.example.bigevent.domain.AiConversation;
 import com.example.bigevent.domain.KnowledgeDoc;
 import com.example.bigevent.domain.Result;
+import com.example.bigevent.domain.vo.rag.RagAnswerVO;
 import com.example.bigevent.service.*;
 import com.example.bigevent.util.ThreadLocalUtil;
 import dev.langchain4j.model.openai.OpenAiChatModel;
@@ -74,10 +76,27 @@ public class ChatController {
         return CompletableFuture.supplyAsync(() -> aiservice.chat(message), aiExecutor);
     }
 
-    //    流式输出
+    @Autowired
+    private AiChatOrchestratorService aiChatOrchestratorService;
+
+    @Autowired
+    private AiConversationService aiConversationService;
+
+    /**
+     * 通用 AI 流式聊天。
+     * <p>
+     * 未传 conversationId 时会自动创建新会话；传入有效 conversationId 时复用已有会话。
+     *
+     * @param userId         用户 ID
+     * @param conversationId 可选的会话 ID
+     * @param message        用户问题
+     * @return 流式 AI 回复
+     */
     @GetMapping(value = "/chat/stream", produces = "text/plain;charset=utf-8")
-    public Flux<String> streamChat(@RequestParam Long userId, @RequestParam String message) {
-        return fluxAiservice.chat(userId, message);
+    public Flux<String> streamChat(@RequestParam Integer userId,
+                                   @RequestParam(required = false) String conversationId,
+                                   @RequestParam String message) {
+        return aiChatOrchestratorService.chatStream(userId, conversationId, message);
     }
 
     /**
@@ -99,7 +118,7 @@ public class ChatController {
 
             if (file != null && !file.isEmpty()) {
                 if (file.getSize() > KnowledgeConstants.MAX_FILE_SIZE) {
-                    return Result.error("上传文件过大，文件大小不能超过5MB，当前文件大小: " +
+                    return Result.error("上传文件过大，文件大小不能超过10MB，当前文件大小: " +
                             String.format("%.2f", file.getSize() / 1024.0 / 1024.0) + "MB。请上传较小的文件");
                 }
 
@@ -133,9 +152,9 @@ public class ChatController {
                 aiExecutor.execute(() -> {
                     try {
                         ragService.processUploadedFile(relativePath, fileName, fileType,
-                                file.getSize(), fileMd5, bookId, currentUserId);
-                    } catch (IOException e) {
-                        throw new RuntimeException("文件解析失败: " + e.getMessage(), e);
+                                file.getSize(), fileMd5, bookId, currentUserId, visibility);
+                    } catch (Exception e) {
+                        log.error("文件解析失败: {}", fileName, e);
                     }
                 });
                 return Result.success("文件已提交后台处理: " + fileName + "，请稍后查询知识库");
@@ -151,31 +170,74 @@ public class ChatController {
     }
 
     /**
-     * RAG 问答
+     * RAG 问答（同步）
      *
-     * @param question 用户问题
-     * @param bookId   图书ID，为空时搜索通用知识库
-     * @param docId    文档ID，为空时不限制
+     * @param question       用户问题
+     * @param bookId         图书ID，为空时搜索通用知识库
+     * @param docId          文档ID，为空时不限制
+     * @param conversationId 会话ID，为空时不使用历史记忆
      */
     @GetMapping("/rag/chat")
-    public CompletableFuture<String> ragChat(@RequestParam String question,
-                                             @RequestParam(required = false) Long bookId,
-                                             @RequestParam(required = false) Long docId) {
+    public CompletableFuture<RagAnswerVO> ragChat(@RequestParam String question,
+                                                  @RequestParam(required = false) Long bookId,
+                                                  @RequestParam(required = false) Long docId,
+                                                  @RequestParam(required = false) String conversationId) {
         Integer currentUserId = getCurrentUserId();
-        return CompletableFuture.supplyAsync(() -> ragService.ragChat(question, currentUserId, bookId, docId), aiExecutor);
+        return CompletableFuture.supplyAsync(() -> ragService.ragChat(question, currentUserId, bookId, docId, conversationId), aiExecutor);
     }
 
     /**
-     * 查询某本书/通用知识库下的文档列表
+     * RAG Agent 聊天：通过自然语言操作图书（文章）。
+     *
+     * @param message        用户自然语言指令
+     * @param conversationId 可选的会话 ID
+     */
+    @PostMapping("/rag/agent/chat")
+    public Result<String> ragAgentChat(@RequestParam String message,
+                                       @RequestParam(required = false) String conversationId) {
+        Integer currentUserId = getCurrentUserId();
+        if (currentUserId == null) {
+            return Result.error("请先登录");
+        }
+        String answer = ragService.agentChat(message, currentUserId, conversationId);
+        return Result.success(answer);
+    }
+
+    /**
+     * RAG 问答（流式输出）
+     *
+     * @param question       用户问题
+     * @param bookId         图书ID，为空时搜索通用知识库
+     * @param docId          文档ID，为空时不限制
+     * @param conversationId 会话ID，为空时不使用历史记忆
+     */
+    @GetMapping(value = "/rag/chat/stream", produces = "text/plain;charset=utf-8")
+    public Flux<String> ragChatStream(@RequestParam String question,
+                                      @RequestParam(required = false) Long bookId,
+                                      @RequestParam(required = false) Long docId,
+                                      @RequestParam(required = false) String conversationId) {
+        Integer currentUserId = getCurrentUserId();
+        if (currentUserId == null) {
+            return Flux.error(new IllegalArgumentException("请先登录"));
+        }
+        return ragService.ragChatStream(question, currentUserId, bookId, docId, conversationId)
+                .subscribeOn(reactor.core.scheduler.Schedulers.fromExecutor(aiExecutor));
+    }
+
+    /**
+     * 查询某本书/通用知识库下的文档列表。
+     * <p>
+     * 只返回当前用户有权限查看的文档：自己上传的 + 团队可见 + 公共可见。
+     *
+     * @param bookId 图书 ID，为空时查询通用知识库
      */
     @GetMapping("/rag/docs")
     public Result<List<KnowledgeDoc>> listDocs(@RequestParam(required = false) Long bookId) {
-        List<KnowledgeDoc> docs;
-        if (bookId == null) {
-            docs = knowledgeDocService.findAllDocs();
-        } else {
-            docs = knowledgeDocService.findDocsByBookId(bookId);
+        Integer currentUserId = getCurrentUserId();
+        if (currentUserId == null) {
+            return Result.error("请先登录");
         }
+        List<KnowledgeDoc> docs = knowledgeDocService.findAuthorizedDocs(currentUserId, bookId);
         return Result.success(docs);
     }
 
@@ -184,7 +246,11 @@ public class ChatController {
      */
     @DeleteMapping("/rag/doc/{id}")
     public Result<String> deleteDoc(@PathVariable Long id) {
-        knowledgeDocService.deleteDoc(id);
+        Integer currentUserId = getCurrentUserId();
+        if (currentUserId == null) {
+            return Result.error("请先登录");
+        }
+        knowledgeDocService.deleteDoc(id, currentUserId);
         return Result.success("删除成功");
     }
 
@@ -193,7 +259,11 @@ public class ChatController {
      */
     @PostMapping("/rag/doc/{id}/reprocess")
     public Result<String> reprocessDoc(@PathVariable Long id) {
-        knowledgeDocService.reprocessDoc(id);
+        Integer currentUserId = getCurrentUserId();
+        if (currentUserId == null) {
+            return Result.error("请先登录");
+        }
+        knowledgeDocService.reprocessDoc(id, currentUserId);
         return Result.success("重新处理任务已提交");
     }
 
@@ -202,15 +272,103 @@ public class ChatController {
      */
     @PostMapping("/rag/book/{bookId}/reprocess")
     public Result<String> reprocessBook(@PathVariable Long bookId) {
-        aiExecutor.execute(() -> knowledgeDocService.reprocessBook(bookId));
+        Integer currentUserId = getCurrentUserId();
+        if (currentUserId == null) {
+            return Result.error("请先登录");
+        }
+        aiExecutor.execute(() -> knowledgeDocService.reprocessBook(bookId, currentUserId));
         return Result.success("重新处理任务已提交后台执行");
     }
 
     /**
-     * AI对话式文章管理（流式输出）
+     * AI 文章管理工具聊天（流式输出）。
+     * <p>
+     * 保留 LangChain4j 工具执行能力，会话由 conversationId 隔离。
+     *
+     * @param userId         用户 ID
+     * @param conversationId 可选的会话 ID
+     * @param message        用户问题
+     * @return 流式 AI 回复
      */
     @GetMapping(value = "/chat/article", produces = "text/plain;charset=utf-8")
-    public Flux<String> chatWithArticleTools(@RequestParam Long userId, @RequestParam String message) {
-        return aiArticleService.chatWithArticleTools(userId, message);
+    public Flux<String> chatWithArticleTools(@RequestParam Integer userId,
+                                             @RequestParam(required = false) String conversationId,
+                                             @RequestParam String message) {
+        return aiChatOrchestratorService.chatWithArticleTools(userId, conversationId, message);
+    }
+
+    /**
+     * 创建新的 AI 会话。
+     *
+     * @param title 可选的会话标题，为空时默认为"新对话"
+     * @return 创建成功的会话信息
+     */
+    @PostMapping("/ai/conversations")
+    public Result<AiConversation> createConversation(@RequestParam(required = false) String title) {
+        Integer userId = getCurrentUserId();
+        if (userId == null) {
+            return Result.error("请先登录");
+        }
+        return Result.success(aiConversationService.createConversation(userId, title));
+    }
+
+    /**
+     * 获取当前登录用户的 AI 会话列表，按最近更新时间倒序排列。
+     *
+     * @return 会话列表
+     */
+    @GetMapping("/ai/conversations")
+    public Result<List<AiConversation>> listConversations() {
+        Integer userId = getCurrentUserId();
+        if (userId == null) {
+            return Result.error("请先登录");
+        }
+        return Result.success(aiConversationService.listByUserId(userId));
+    }
+
+    /**
+     * 重命名指定 AI 会话。
+     * <p>
+     * 只有会话的创建者才能操作。
+     *
+     * @param id    会话 ID
+     * @param title 新标题
+     * @return 操作结果
+     */
+    @PutMapping("/ai/conversations/{id}/title")
+    public Result<String> updateConversationTitle(@PathVariable Long id, @RequestParam String title) {
+        Integer userId = getCurrentUserId();
+        AiConversation conversation = aiConversationService.findById(id);
+        if (conversation == null) {
+            return Result.error("会话不存在");
+        }
+        if (!conversation.getUserId().equals(userId)) {
+            return Result.error("无权操作该会话");
+        }
+        aiConversationService.updateTitle(id, title);
+        return Result.success("重命名成功");
+    }
+
+    /**
+     * 删除指定 AI 会话，并级联清理该会话关联的记忆数据。
+     * <p>
+     * 级联清理范围：Redis 短期记忆、ES 长期语义记忆。
+     * 只有会话的创建者才能删除。
+     *
+     * @param id 会话 ID
+     * @return 操作结果
+     */
+    @DeleteMapping("/ai/conversations/{id}")
+    public Result<String> deleteConversation(@PathVariable Long id) {
+        Integer userId = getCurrentUserId();
+        AiConversation conversation = aiConversationService.findById(id);
+        if (conversation == null) {
+            return Result.error("会话不存在");
+        }
+        if (!conversation.getUserId().equals(userId)) {
+            return Result.error("无权删除该会话");
+        }
+        aiConversationService.deleteConversation(id);
+        return Result.success("删除成功");
     }
 }

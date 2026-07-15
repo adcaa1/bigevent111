@@ -2,8 +2,8 @@ package com.example.bigevent.service;
 
 import com.example.bigevent.domain.vo.rag.HybridResultVO;
 import com.example.bigevent.domain.vo.rag.SearchResultVO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,18 +12,36 @@ import java.util.*;
  * 多路召回服务：向量检索 + 关键词检索融合排序
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class HybridSearchService {
 
     private final VectorStoreService vectorStoreService;
     private final ElasticsearchKeywordService elasticsearchKeywordService;
 
-    private static final int VECTOR_TOP_K = 10;
-    private static final int KEYWORD_TOP_K = 10;
-    private static final double VECTOR_WEIGHT = 1.0;
-    private static final double KEYWORD_WEIGHT = 0.7;
-    private static final int RRF_K = 60;
+    private final int vectorTopK;
+    private final int keywordTopK;
+    private final double vectorWeight;
+    private final double keywordWeight;
+    private final int rrfK;
+    private final double minScore;
+
+    public HybridSearchService(VectorStoreService vectorStoreService,
+                               ElasticsearchKeywordService elasticsearchKeywordService,
+                               @Value("${rag.search.vector-top-k:10}") int vectorTopK,
+                               @Value("${rag.search.keyword-top-k:10}") int keywordTopK,
+                               @Value("${rag.search.vector-weight:1.0}") double vectorWeight,
+                               @Value("${rag.search.keyword-weight:0.7}") double keywordWeight,
+                               @Value("${rag.search.rrf-k:60}") int rrfK,
+                               @Value("${rag.search.min-score:0.2}") double minScore) {
+        this.vectorStoreService = vectorStoreService;
+        this.elasticsearchKeywordService = elasticsearchKeywordService;
+        this.vectorTopK = vectorTopK;
+        this.keywordTopK = keywordTopK;
+        this.vectorWeight = vectorWeight;
+        this.keywordWeight = keywordWeight;
+        this.rrfK = rrfK;
+        this.minScore = minScore;
+    }
 
     /**
      * 多路召回检索，支持用户隔离与指定范围过滤
@@ -36,8 +54,8 @@ public class HybridSearchService {
      * @return 融合排序后的结果
      */
     public List<HybridResultVO> search(Integer userId, Long bookId, Long docId, String question, int finalTopK) {
-        List<HybridResultVO> vectorResults = vectorSearch(userId, bookId, docId, question, VECTOR_TOP_K);
-        List<HybridResultVO> keywordResults = elasticsearchKeywordService.search(userId, bookId, docId, question, KEYWORD_TOP_K);
+        List<HybridResultVO> vectorResults = vectorSearch(userId, bookId, docId, question, vectorTopK);
+        List<HybridResultVO> keywordResults = elasticsearchKeywordService.search(userId, bookId, docId, question, keywordTopK);
 
         log.info("向量召回 {} 条，ES 关键词召回 {} 条", vectorResults.size(), keywordResults.size());
 
@@ -45,14 +63,14 @@ public class HybridSearchService {
 
         for (int i = 0; i < vectorResults.size(); i++) {
             HybridResultVO vo = vectorResults.get(i);
-            double score = VECTOR_WEIGHT * (1.0 / (RRF_K + i + 1));
+            double score = vectorWeight * (1.0 / (rrfK + i + 1));
             vo.setScore(score);
             merged.merge(vo.getChunkId(), vo, this::mergeScore);
         }
 
         for (int i = 0; i < keywordResults.size(); i++) {
             HybridResultVO vo = keywordResults.get(i);
-            double score = KEYWORD_WEIGHT * (1.0 / (RRF_K + i + 1));
+            double score = keywordWeight * (1.0 / (rrfK + i + 1));
             vo.setScore(score);
             merged.merge(vo.getChunkId(), vo, this::mergeScore);
         }
@@ -71,7 +89,7 @@ public class HybridSearchService {
      * 向量检索封装
      */
     private List<HybridResultVO> vectorSearch(Integer userId, Long bookId, Long docId, String question, int topK) {
-        List<SearchResultVO> vectorResults = vectorStoreService.search(userId, bookId, docId, question, topK, 0.0);
+        List<SearchResultVO> vectorResults = vectorStoreService.search(userId, bookId, docId, question, topK, minScore);
 
         return vectorResults.stream().map(r -> {
             HybridResultVO vo = new HybridResultVO();

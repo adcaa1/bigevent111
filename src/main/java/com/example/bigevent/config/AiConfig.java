@@ -6,7 +6,6 @@ import com.example.bigevent.service.ArticleTools;
 import dev.langchain4j.community.store.embedding.redis.RedisEmbeddingStore;
 import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
-import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -50,19 +49,11 @@ public class AiConfig {
 
 
     @Bean
-    public ChatMemory chatMemory() {
-        MessageWindowChatMemory chatMemory = MessageWindowChatMemory.builder()
-                .maxMessages(10)
-                .build();
-        return chatMemory;
-    }
-
-    @Bean
     public ChatMemoryProvider chatMemoryProvider() {
-        // 为每个 memoryId 创建独立的记忆窗口，保留最近 10 条消息
+        // 为每个 conversationId 创建独立的短期记忆窗口，保留最近 20 条消息（约 10 轮）
         return memoryId -> MessageWindowChatMemory.builder()
                 .id(memoryId)
-                .maxMessages(10)// 建议控制大小，避免 token 超限
+                .maxMessages(20)
                 .chatMemoryStore(redisChatMemoryStore)
                 .build();
     }

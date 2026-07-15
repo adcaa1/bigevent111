@@ -27,8 +27,18 @@ public interface KnowledgeDocMapper {
     @Select("select * from knowledge_doc where book_id = #{bookId} order by create_time desc")
     List<KnowledgeDoc> findByBookId(Long bookId);
 
-    @Select("select * from knowledge_doc order by create_time desc")
-    List<KnowledgeDoc> findAll();
+
+    /**
+     * 查询当前用户有权限查看的所有文档：自己的 + 团队 + 公共
+     */
+    @Select("select * from knowledge_doc where create_user = #{userId} or visibility in (1, 2) order by create_time desc")
+    List<KnowledgeDoc> findAuthorizedAll(Integer userId);
+
+    /**
+     * 查询当前用户有权限查看的某本书下的文档：自己的 + 团队 + 公共
+     */
+    @Select("select * from knowledge_doc where book_id = #{bookId} and (create_user = #{userId} or visibility in (1, 2)) order by create_time desc")
+    List<KnowledgeDoc> findAuthorizedByBookId(@Param("bookId") Long bookId, @Param("userId") Integer userId);
 
     @Delete("delete from knowledge_doc where id = #{id}")
     void deleteById(Long id);
