@@ -69,7 +69,6 @@ public class ElasticsearchKeywordService {
         Map<String, Object> doc = new HashMap<>();
         doc.put("chunkId", chunk.getChunkId());
         doc.put("docId", chunk.getDocId());
-        doc.put("bookId", chunk.getBookId() == null ? 0 : chunk.getBookId());
         doc.put("userId", chunk.getUserId() == null ? 0 : chunk.getUserId());
         doc.put("visibility", chunk.getVisibility() == null ? 2 : chunk.getVisibility());
         doc.put("departmentId", chunk.getDepartmentId() == null ? 0 : chunk.getDepartmentId());
@@ -87,12 +86,11 @@ public class ElasticsearchKeywordService {
      *
      * @param userId       当前用户ID，null 时只查公共知识
      * @param departmentId 当前用户部门ID，用于部门级可见性判断
-     * @param bookId 图书 ID，null 时不限制
      * @param docId  文档 ID，null 时不限制
      * @param keyword 用户问题
      * @param topK   返回条数
      */
-    public List<HybridResultVO> search(Integer userId, Integer departmentId, Long bookId, Long docId, String keyword, int topK) {
+    public List<HybridResultVO> search(Integer userId, Integer departmentId, Long docId, String keyword, int topK) {
         try {
             SearchResponse<Map> response = client.search(s -> s
                             .index(RagElasticsearchIndexInitializer.RAG_INDEX)
@@ -102,9 +100,6 @@ public class ElasticsearchKeywordService {
                                                 .fields("title^2", "content")
                                                 .query(keyword)));
                                         b.filter(f -> buildAuthFilter(f, userId, departmentId));
-                                        if (bookId != null) {
-                                            b.filter(f -> f.term(t -> t.field("bookId").value(bookId)));
-                                        }
                                         if (docId != null) {
                                             b.filter(f -> f.term(t -> t.field("docId").value(docId)));
                                         }
@@ -159,13 +154,6 @@ public class ElasticsearchKeywordService {
     }
 
     /**
-     * 按 bookId 删除 ES 中的 chunk
-     */
-    public void deleteByBookId(Long bookId) {
-        deleteByField("bookId", bookId);
-    }
-
-    /**
      * 按 userId 删除 ES 中的 chunk
      */
     public void deleteByUserId(Integer userId) {
@@ -190,7 +178,6 @@ public class ElasticsearchKeywordService {
         HybridResultVO vo = new HybridResultVO();
         vo.setChunkId(toLong(source.get("chunkId")));
         vo.setDocId(toLong(source.get("docId")));
-        vo.setBookId(toLong(source.get("bookId")));
         vo.setUserId(toInt(source.get("userId")));
         vo.setTitle((String) source.get("title"));
         vo.setContent((String) source.get("content"));

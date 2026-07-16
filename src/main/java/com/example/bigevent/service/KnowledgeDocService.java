@@ -56,7 +56,7 @@ public class KnowledgeDocService {
      * @param visibility 可见性：0-私有 1-部门 2-公共
      */
     @Transactional
-    public KnowledgeDoc uploadAndProcess(MultipartFile file, Long bookId, Integer createUser, Integer visibility, Integer departmentId) throws IOException {
+    public KnowledgeDoc uploadAndProcess(MultipartFile file, Integer createUser, Integer visibility, Integer departmentId) throws IOException {
         validateFile(file);
 
         String fileName = file.getOriginalFilename();
@@ -70,7 +70,7 @@ public class KnowledgeDocService {
         }
 
         String relativePath = documentStorageService.store(file);
-        return processStoredFile(relativePath, fileName, fileType, file.getSize(), fileMd5, bookId, createUser, visibility, departmentId);
+        return processStoredFile(relativePath, fileName, fileType, file.getSize(), fileMd5, createUser, visibility, departmentId);
     }
 
     /**
@@ -81,10 +81,9 @@ public class KnowledgeDocService {
      * @param visibility 可见性：0-私有 1-部门 2-公共
      */
     public KnowledgeDoc processStoredFile(String relativePath, String fileName, String fileType,
-                                          long fileSize, String fileMd5, Long bookId, Integer createUser,
+                                          long fileSize, String fileMd5, Integer createUser,
                                           Integer visibility, Integer departmentId) throws IOException {
         KnowledgeDoc doc = new KnowledgeDoc();
-        doc.setBookId(bookId);
         doc.setCreateUser(createUser);
         doc.setFileName(fileName);
         doc.setFileType(fileType);
@@ -114,7 +113,7 @@ public class KnowledgeDocService {
      * 统一文本知识与文件知识的入口，都会生成 KnowledgeDoc 和 KnowledgeChunk 记录。
      */
     @Transactional
-    public KnowledgeDoc createAndProcessTextDoc(String text, Long bookId, Integer createUser, Integer visibility, Integer departmentId) {
+    public KnowledgeDoc createAndProcessTextDoc(String text, Integer createUser, Integer visibility, Integer departmentId) {
         String fileName = "文本知识_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + ".txt";
 
         // 文本内容按 MD5 查重
@@ -125,7 +124,6 @@ public class KnowledgeDocService {
         }
 
         KnowledgeDoc doc = new KnowledgeDoc();
-        doc.setBookId(bookId);
         doc.setCreateUser(createUser);
         doc.setFileName(fileName);
         doc.setFileType("txt");
@@ -153,7 +151,6 @@ public class KnowledgeDocService {
      * 若 Redis/ES 写入成功后 MySQL 事务回滚，会清理 Redis/ES 残留数据，避免孤儿向量。
      */
     public KnowledgeDoc processDocContent(KnowledgeDoc doc, String content, String title) {
-        Long bookId = doc.getBookId();
         Integer userId = doc.getCreateUser();
         String fileName = doc.getFileName();
 
@@ -180,7 +177,6 @@ public class KnowledgeDocService {
 
                     KnowledgeChunk chunk = new KnowledgeChunk();
                     chunk.setDocId(doc.getId());
-                    chunk.setBookId(bookId);
                     chunk.setContent(segment.text());
                     chunk.setChunkIndex(i);
                     chunk.setPageNum(extractPageNum(segment));
@@ -191,7 +187,6 @@ public class KnowledgeDocService {
                     ChunkEmbeddingDTO dto = new ChunkEmbeddingDTO();
                     dto.setChunkId(chunk.getId());
                     dto.setDocId(doc.getId());
-                    dto.setBookId(bookId);
                     dto.setUserId(userId);
                     dto.setVisibility(doc.getVisibility());
                     dto.setDepartmentId(doc.getDepartmentId());
@@ -272,17 +267,13 @@ public class KnowledgeDocService {
      *
      * @param currentUserId 当前登录用户 ID
      * @param departmentId  当前用户部门ID
-     * @param bookId        图书 ID，为 null 时查询通用知识库
      * @return 有权限的文档列表
      */
-    public List<KnowledgeDoc> findAuthorizedDocs(Integer currentUserId, Integer departmentId, Long bookId) {
+    public List<KnowledgeDoc> findAuthorizedDocs(Integer currentUserId, Integer departmentId) {
         if (currentUserId == null) {
             throw new IllegalArgumentException("currentUserId 不能为空");
         }
-        if (bookId == null) {
-            return knowledgeDocMapper.findAuthorizedAll(currentUserId, departmentId);
-        }
-        return knowledgeDocMapper.findAuthorizedByBookId(bookId, currentUserId, departmentId);
+        return knowledgeDocMapper.findAuthorizedAll(currentUserId, departmentId);
     }
 
     /**
@@ -293,30 +284,6 @@ public class KnowledgeDocService {
             return null;
         }
         return knowledgeDocMapper.findByFileMd5(fileMd5);
-    }
-
-    /**
-     * 重新处理某本书的所有文档
-     * <p>
-     * 每篇文档独立事务处理，避免单篇失败导致整批回滚。
-     */
-    public void reprocessBook(Long bookId, Integer userId) {
-        List<KnowledgeDoc> docs = knowledgeDocMapper.findByBookId(bookId);
-        if (docs == null || docs.isEmpty()) {
-            return;
-        }
-
-        for (KnowledgeDoc doc : docs) {
-            try {
-                if (!doc.getCreateUser().equals(userId)) {
-                    log.warn("用户 {} 无权重新处理文档 {}", userId, doc.getId());
-                    continue;
-                }
-                reprocessDoc(doc.getId(), userId);
-            } catch (Exception e) {
-                log.error("重新处理文档失败, docId={}: {}", doc.getId(), e.getMessage(), e);
-            }
-        }
     }
 
     /**

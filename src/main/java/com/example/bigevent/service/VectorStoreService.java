@@ -34,7 +34,6 @@ public class VectorStoreService {
 
     public static final String META_CHUNK_ID = "chunkId";
     public static final String META_DOC_ID = "docId";
-    public static final String META_BOOK_ID = "bookId";
     public static final String META_USER_ID = "userId";
     public static final String META_VISIBILITY = "visibility";
     public static final String META_DEPARTMENT_ID = "departmentId";
@@ -45,10 +44,10 @@ public class VectorStoreService {
     /**
      * 保存 chunk 向量到 RedisSearch
      */
-    public void saveChunk(Long chunkId, Long docId, Long bookId, Integer userId, Integer visibility, Integer departmentId,
+    public void saveChunk(Long chunkId, Long docId, Integer userId, Integer visibility, Integer departmentId,
                           String title, String content, Embedding embedding,
                           Integer chunkIndex, Integer pageNum) {
-        Metadata metadata = buildMetadata(chunkId, docId, bookId, userId, visibility, departmentId, title, chunkIndex, pageNum);
+        Metadata metadata = buildMetadata(chunkId, docId, userId, visibility, departmentId, title, chunkIndex, pageNum);
         TextSegment segment = TextSegment.from(content, metadata);
         embeddingStore.add(embedding, segment);
     }
@@ -60,7 +59,7 @@ public class VectorStoreService {
         List<TextSegment> segments = chunks.stream()
                 .map(chunk -> {
                     Metadata metadata = buildMetadata(
-                            chunk.getChunkId(), chunk.getDocId(), chunk.getBookId(),
+                            chunk.getChunkId(), chunk.getDocId(),
                             chunk.getUserId(), chunk.getVisibility(), chunk.getDepartmentId(), chunk.getTitle(),
                             chunk.getChunkIndex(), chunk.getPageNum());
                     return TextSegment.from(chunk.getContent(), metadata);
@@ -79,13 +78,12 @@ public class VectorStoreService {
      *
      * @param userId       当前用户ID，null 时只查公共知识
      * @param departmentId 当前用户部门ID，用于部门级可见性判断
-     * @param bookId       图书ID，为 null 时搜索全部
      * @param docId        文档ID，为 null 时搜索全部
      * @param question     用户问题
      * @param topK         返回数量
      * @param minScore     最小相似度阈值
      */
-    public List<SearchResultVO> search(Integer userId, Integer departmentId, Long bookId, Long docId, String question, int topK, double minScore) {
+    public List<SearchResultVO> search(Integer userId, Integer departmentId, Long docId, String question, int topK, double minScore) {
         Embedding queryEmbedding = embeddingModel.embed(question).content();
 
         EmbeddingSearchRequest.EmbeddingSearchRequestBuilder requestBuilder = EmbeddingSearchRequest.builder()
@@ -93,7 +91,7 @@ public class VectorStoreService {
                 .maxResults(topK)
                 .minScore(minScore);
 
-        Filter filter = buildFilter(userId, departmentId, bookId, docId);
+        Filter filter = buildFilter(userId, departmentId, docId);
         if (filter != null) {
             requestBuilder.filter(filter);
         }
@@ -110,7 +108,7 @@ public class VectorStoreService {
      */
     public void deleteByChunkId(Long chunkId) {
         Filter filter = metadataKey(META_CHUNK_ID).isEqualTo(String.valueOf(chunkId));
-        embeddingStore.removeAll(filter);
+        safeRemoveAll(filter, "chunkId=" + chunkId);
     }
 
     /**
@@ -118,17 +116,8 @@ public class VectorStoreService {
      */
     public void deleteByDocId(Long docId) {
         Filter filter = metadataKey(META_DOC_ID).isEqualTo(String.valueOf(docId));
-        embeddingStore.removeAll(filter);
+        safeRemoveAll(filter, "docId=" + docId);
         log.info("已删除 docId={} 的向量", docId);
-    }
-
-    /**
-     * 删除某本书下的所有向量
-     */
-    public void deleteByBookId(Long bookId) {
-        Filter filter = metadataKey(META_BOOK_ID).isEqualTo(String.valueOf(bookId));
-        embeddingStore.removeAll(filter);
-        log.info("已删除 bookId={} 的向量", bookId);
     }
 
     /**
@@ -136,17 +125,30 @@ public class VectorStoreService {
      */
     public void deleteByUserId(Integer userId) {
         Filter filter = metadataKey(META_USER_ID).isEqualTo(String.valueOf(userId));
-        embeddingStore.removeAll(filter);
+        safeRemoveAll(filter, "userId=" + userId);
         log.info("已删除 userId={} 的向量", userId);
     }
 
-    private Filter buildFilter(Integer userId, Integer departmentId, Long bookId, Long docId) {
-        Filter filter = buildAuthFilter(userId, departmentId);
-
-        if (bookId != null) {
-            Filter bookFilter = metadataKey(META_BOOK_ID).isEqualTo(String.valueOf(bookId));
-            filter = filter == null ? bookFilter : filter.and(bookFilter);
+    /**
+     * 安全调用 removeAll：LangChain4j RedisEmbeddingStore 在匹配不到任何记录时，
+     * 可能会向 Redis 发送无参数的 DEL 命令，导致 ERR wrong number of arguments for 'del'。
+     * 空结果意味着目标已不存在，直接忽略即可。
+     */
+    private void safeRemoveAll(Filter filter, String desc) {
+        try {
+            embeddingStore.removeAll(filter);
+        } catch (RuntimeException e) {
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("wrong number of arguments for 'del'")) {
+                log.warn("Redis 中不存在 {} 的向量，跳过删除", desc);
+            } else {
+                throw e;
+            }
         }
+    }
+
+    private Filter buildFilter(Integer userId, Integer departmentId, Long docId) {
+        Filter filter = buildAuthFilter(userId, departmentId);
 
         if (docId != null) {
             Filter docFilter = metadataKey(META_DOC_ID).isEqualTo(String.valueOf(docId));
@@ -175,12 +177,11 @@ public class VectorStoreService {
         return ownFilter.or(publicFilter);
     }
 
-    private Metadata buildMetadata(Long chunkId, Long docId, Long bookId, Integer userId,
+    private Metadata buildMetadata(Long chunkId, Long docId, Integer userId,
                                    Integer visibility, Integer departmentId, String title, Integer chunkIndex, Integer pageNum) {
         Metadata metadata = new Metadata();
         metadata.put(META_CHUNK_ID, String.valueOf(chunkId));
         metadata.put(META_DOC_ID, String.valueOf(docId));
-        metadata.put(META_BOOK_ID, String.valueOf(bookId));
         metadata.put(META_USER_ID, String.valueOf(userId));
         metadata.put(META_VISIBILITY, String.valueOf(visibility == null ? KnowledgeConstants.Visibility.PRIVATE : visibility));
         metadata.put(META_DEPARTMENT_ID, String.valueOf(departmentId));
@@ -198,7 +199,6 @@ public class VectorStoreService {
         SearchResultVO searchResult = new SearchResultVO();
         searchResult.setChunkId(parseLong(metadata.getString(META_CHUNK_ID)));
         searchResult.setDocId(parseLong(metadata.getString(META_DOC_ID)));
-        searchResult.setBookId(parseLong(metadata.getString(META_BOOK_ID)));
         searchResult.setUserId(parseInt(metadata.getString(META_USER_ID)));
         searchResult.setTitle(metadata.getString(META_TITLE));
         searchResult.setContent(segment.text());

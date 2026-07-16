@@ -69,7 +69,6 @@ public class RagElasticsearchIndexInitializer implements CommandLineRunner {
         return TypeMapping.of(m -> m
                 .properties("chunkId", p -> p.long_(l -> l))
                 .properties("docId", p -> p.long_(l -> l))
-                .properties("bookId", p -> p.long_(l -> l))
                 .properties("userId", p -> p.integer(i -> i))
                 .properties("visibility", p -> p.integer(i -> i))
                 .properties("departmentId", p -> p.integer(i -> i))

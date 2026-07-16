@@ -2,6 +2,7 @@ package com.example.bigevent.controller;
 
 import com.example.bigevent.domain.Department;
 import com.example.bigevent.domain.Result;
+import com.example.bigevent.domain.vo.DepartmentVO;
 import com.example.bigevent.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,18 +17,19 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     /**
-     * 获取所有部门列表
+     * 获取所有部门列表（包含人数）
      */
     @GetMapping
-    public Result<List<Department>> list() {
-        return Result.success(departmentService.findAll());
+    public Result<List<DepartmentVO>> list() {
+        return Result.success(departmentService.findAllWithMemberCount());
     }
 
     /**
      * 新增部门
      */
     @PostMapping
-    public Result<Department> create(@RequestParam String name) {
+    public Result<Department> create(@RequestBody Department department) {
+        String name = department.getName();
         if (name == null || name.isBlank()) {
             return Result.error("部门名称不能为空");
         }
@@ -38,7 +40,8 @@ public class DepartmentController {
      * 修改部门名称
      */
     @PutMapping("/{id}")
-    public Result<String> update(@PathVariable Integer id, @RequestParam String name) {
+    public Result<String> update(@PathVariable Integer id, @RequestBody Department department) {
+        String name = department.getName();
         if (name == null || name.isBlank()) {
             return Result.error("部门名称不能为空");
         }

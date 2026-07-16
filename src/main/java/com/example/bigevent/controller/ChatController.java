@@ -120,18 +120,21 @@ public class ChatController {
      *
      * @param text       文本内容
      * @param file       上传文件
-     * @param bookId     关联图书ID，为空表示通用知识库
      * @param visibility 可见性：0-私有 1-部门 2-公共，默认私有
      */
     @PostMapping("/rag/add")
     public Result<String> addKnowledge(
             @RequestParam(required = false) String text,
             @RequestParam(required = false) MultipartFile file,
-            @RequestParam(required = false) Long bookId,
             @RequestParam(required = false, defaultValue = "0") Integer visibility) {
         try {
             Integer currentUserId = getCurrentUserId();
             Integer departmentId = getCurrentUserDepartmentId();
+
+            // 部门可见性必须关联有效部门
+            if (visibility != null && visibility == KnowledgeConstants.Visibility.DEPARTMENT && departmentId == null) {
+                return Result.error("当前用户未分配部门，无法上传部门可见文档，请选择私有或公共");
+            }
 
             if (file != null && !file.isEmpty()) {
                 if (file.getSize() > KnowledgeConstants.MAX_FILE_SIZE) {
@@ -170,14 +173,14 @@ public class ChatController {
                 aiExecutor.execute(() -> {
                     try {
                         ragService.processUploadedFile(relativePath, fileName, fileType,
-                                file.getSize(), fileMd5, bookId, currentUserId, visibility, finalDepartmentId);
+                                file.getSize(), fileMd5, currentUserId, visibility, finalDepartmentId);
                     } catch (Exception e) {
                         log.error("文件解析失败: {}", fileName, e);
                     }
                 });
                 return Result.success("文件已提交后台处理: " + fileName + "，请稍后查询知识库");
             } else if (text != null && !text.isEmpty()) {
-                ragService.addKnowledge(text, bookId, currentUserId, visibility, departmentId);
+                ragService.addKnowledge(text, currentUserId, visibility, departmentId);
                 return Result.success("文本知识添加成功");
             } else {
                 return Result.error("请提供文本内容或上传文件");
@@ -191,18 +194,16 @@ public class ChatController {
      * RAG 问答（同步）
      *
      * @param question       用户问题
-     * @param bookId         图书ID，为空时搜索通用知识库
      * @param docId          文档ID，为空时不限制
      * @param conversationId 会话ID，为空时不使用历史记忆
      */
     @GetMapping("/rag/chat")
     public CompletableFuture<RagAnswerVO> ragChat(@RequestParam String question,
-                                                  @RequestParam(required = false) Long bookId,
                                                   @RequestParam(required = false) Long docId,
                                                   @RequestParam(required = false) String conversationId) {
         Integer currentUserId = getCurrentUserId();
         Integer departmentId = getCurrentUserDepartmentId();
-        return CompletableFuture.supplyAsync(() -> ragService.ragChat(question, currentUserId, departmentId, bookId, docId, conversationId), aiExecutor);
+        return CompletableFuture.supplyAsync(() -> ragService.ragChat(question, currentUserId, departmentId, docId, conversationId), aiExecutor);
     }
 
     /**
@@ -226,13 +227,11 @@ public class ChatController {
      * RAG 问答（流式输出）
      *
      * @param question       用户问题
-     * @param bookId         图书ID，为空时搜索通用知识库
      * @param docId          文档ID，为空时不限制
      * @param conversationId 会话ID，为空时不使用历史记忆
      */
     @GetMapping(value = "/rag/chat/stream", produces = "text/plain;charset=utf-8")
     public Flux<String> ragChatStream(@RequestParam String question,
-                                      @RequestParam(required = false) Long bookId,
                                       @RequestParam(required = false) Long docId,
                                       @RequestParam(required = false) String conversationId) {
         Integer currentUserId = getCurrentUserId();
@@ -240,25 +239,23 @@ public class ChatController {
             return Flux.error(new IllegalArgumentException("请先登录"));
         }
         Integer departmentId = getCurrentUserDepartmentId();
-        return ragService.ragChatStream(question, currentUserId, departmentId, bookId, docId, conversationId)
+        return ragService.ragChatStream(question, currentUserId, departmentId, docId, conversationId)
                 .subscribeOn(reactor.core.scheduler.Schedulers.fromExecutor(aiExecutor));
     }
 
     /**
-     * 查询某本书/通用知识库下的文档列表。
+     * 查询知识库文档列表。
      * <p>
      * 只返回当前用户有权限查看的文档：自己上传的 + 同部门可见 + 公共可见。
-     *
-     * @param bookId 图书 ID，为空时查询通用知识库
      */
     @GetMapping("/rag/docs")
-    public Result<List<KnowledgeDoc>> listDocs(@RequestParam(required = false) Long bookId) {
+    public Result<List<KnowledgeDoc>> listDocs() {
         Integer currentUserId = getCurrentUserId();
         if (currentUserId == null) {
             return Result.error("请先登录");
         }
         Integer departmentId = getCurrentUserDepartmentId();
-        List<KnowledgeDoc> docs = knowledgeDocService.findAuthorizedDocs(currentUserId, departmentId, bookId);
+        List<KnowledgeDoc> docs = knowledgeDocService.findAuthorizedDocs(currentUserId, departmentId);
         return Result.success(docs);
     }
 
@@ -286,19 +283,6 @@ public class ChatController {
         }
         knowledgeDocService.reprocessDoc(id, currentUserId);
         return Result.success("重新处理任务已提交");
-    }
-
-    /**
-     * 重新处理某本书下的所有文档
-     */
-    @PostMapping("/rag/book/{bookId}/reprocess")
-    public Result<String> reprocessBook(@PathVariable Long bookId) {
-        Integer currentUserId = getCurrentUserId();
-        if (currentUserId == null) {
-            return Result.error("请先登录");
-        }
-        aiExecutor.execute(() -> knowledgeDocService.reprocessBook(bookId, currentUserId));
-        return Result.success("重新处理任务已提交后台执行");
     }
 
     /**

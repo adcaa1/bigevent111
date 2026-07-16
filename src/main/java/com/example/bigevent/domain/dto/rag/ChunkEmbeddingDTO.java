@@ -13,7 +13,6 @@ public class ChunkEmbeddingDTO {
 
     private Long chunkId;
     private Long docId;
-    private Long bookId;
     private Integer userId;
     private Integer visibility;
     private Integer departmentId;

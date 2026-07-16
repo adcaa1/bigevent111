@@ -86,14 +86,13 @@ public class RagService {
      * 统一走 KnowledgeDoc → KnowledgeChunk → Embedding → Redis/ES 流程。
      *
      * @param text       文本内容
-     * @param bookId     关联图书ID，为 null 表示通用知识库
      * @param createUser 上传用户ID
      * @param visibility 可见性：0-私有 1-部门 2-公共
      */
-    public void addKnowledge(String text, Long bookId, Integer createUser, Integer visibility, Integer departmentId) {
-        log.info("开始添加文本知识，文本长度: {}, bookId: {}, createUser: {}", text.length(), bookId, createUser);
+    public void addKnowledge(String text, Integer createUser, Integer visibility, Integer departmentId) {
+        log.info("开始添加文本知识，文本长度: {}, createUser: {}", text.length(), createUser);
 
-        KnowledgeDoc doc = knowledgeDocService.createAndProcessTextDoc(text, bookId, createUser, visibility, departmentId);
+        KnowledgeDoc doc = knowledgeDocService.createAndProcessTextDoc(text, createUser, visibility, departmentId);
 
         log.info("文本知识添加成功，docId={}, 共 {} 个片段", doc.getId(), doc.getChunkCount());
     }
@@ -104,10 +103,10 @@ public class RagService {
      * @param visibility 可见性：0-私有 1-部门 2-公共
      */
     public KnowledgeDoc processUploadedFile(String relativePath, String fileName, String fileType,
-                                            long fileSize, String fileMd5, Long bookId, Integer createUser,
+                                            long fileSize, String fileMd5, Integer createUser,
                                             Integer visibility, Integer departmentId) throws IOException {
-        log.info("开始处理已存储文件: {}, bookId: {}, createUser: {}, visibility: {}", fileName, bookId, createUser, visibility);
-        return knowledgeDocService.processStoredFile(relativePath, fileName, fileType, fileSize, fileMd5, bookId, createUser, visibility, departmentId);
+        log.info("开始处理已存储文件: {}, createUser: {}, visibility: {}", fileName, createUser, visibility);
+        return knowledgeDocService.processStoredFile(relativePath, fileName, fileType, fileSize, fileMd5, createUser, visibility, departmentId);
     }
 
     /**
@@ -116,15 +115,14 @@ public class RagService {
      * @param query          用户问题
      * @param userId         当前用户ID，用于权限过滤
      * @param departmentId   当前用户部门ID，用于部门级可见性判断
-     * @param bookId         图书ID，为 null 时搜索通用知识库
      * @param docId          指定文档ID，为 null 时不限制
      * @param conversationId 会话ID，为空时不使用历史记忆
      */
-    public RagAnswerVO ragChat(String query, Integer userId, Integer departmentId, Long bookId, Long docId, String conversationId) {
+    public RagAnswerVO ragChat(String query, Integer userId, Integer departmentId, Long docId, String conversationId) {
         log.info("=== RAG查询开始 ===");
-        log.info("查询内容: {}, userId: {}, departmentId: {}, bookId: {}, docId: {}, conversationId: {}", query, userId, departmentId, bookId, docId, conversationId);
+        log.info("查询内容: {}, userId: {}, departmentId: {}, docId: {}, conversationId: {}", query, userId, departmentId, docId, conversationId);
 
-        List<HybridResultVO> results = hybridSearchService.search(userId, departmentId, bookId, docId, query, 5);
+        List<HybridResultVO> results = hybridSearchService.search(userId, departmentId, docId, query, 5);
 
         log.info("检索到 {} 条相关内容", results.size());
 
@@ -155,16 +153,15 @@ public class RagService {
      * @param query          用户问题
      * @param userId         当前用户ID，用于权限过滤
      * @param departmentId   当前用户部门ID，用于部门级可见性判断
-     * @param bookId         图书ID，为 null 时搜索通用知识库
      * @param docId          指定文档ID，为 null 时不限制
      * @param conversationId 会话ID，为空时不使用历史记忆
      * @return 流式 AI 回复
      */
-    public Flux<String> ragChatStream(String query, Integer userId, Integer departmentId, Long bookId, Long docId, String conversationId) {
+    public Flux<String> ragChatStream(String query, Integer userId, Integer departmentId, Long docId, String conversationId) {
         log.info("=== RAG流式查询开始 ===");
-        log.info("查询内容: {}, userId: {}, departmentId: {}, bookId: {}, docId: {}, conversationId: {}", query, userId, departmentId, bookId, docId, conversationId);
+        log.info("查询内容: {}, userId: {}, departmentId: {}, docId: {}, conversationId: {}", query, userId, departmentId, docId, conversationId);
 
-        List<HybridResultVO> results = hybridSearchService.search(userId, departmentId, bookId, docId, query, 5);
+        List<HybridResultVO> results = hybridSearchService.search(userId, departmentId, docId, query, 5);
 
         log.info("检索到 {} 条相关内容", results.size());
 

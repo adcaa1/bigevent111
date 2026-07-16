@@ -13,11 +13,6 @@ public class KnowledgeDoc {
     private Long id;
 
     /**
-     * 关联图书ID，为 null 时表示通用知识库
-     */
-    private Long bookId;
-
-    /**
      * 上传用户ID（知识所有者）
      */
     private Integer createUser;

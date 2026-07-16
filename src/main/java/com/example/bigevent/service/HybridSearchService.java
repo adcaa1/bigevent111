@@ -48,15 +48,14 @@ public class HybridSearchService {
      *
      * @param userId       当前用户ID，用于权限过滤
      * @param departmentId 当前用户部门ID，用于部门级可见性判断
-     * @param bookId       图书 ID，null 时检索通用知识库
      * @param docId        文档 ID，null 时不限制
      * @param question     用户问题
      * @param finalTopK    最终返回条数
      * @return 融合排序后的结果
      */
-    public List<HybridResultVO> search(Integer userId, Integer departmentId, Long bookId, Long docId, String question, int finalTopK) {
-        List<HybridResultVO> vectorResults = vectorSearch(userId, departmentId, bookId, docId, question, vectorTopK);
-        List<HybridResultVO> keywordResults = elasticsearchKeywordService.search(userId, departmentId, bookId, docId, question, keywordTopK);
+    public List<HybridResultVO> search(Integer userId, Integer departmentId, Long docId, String question, int finalTopK) {
+        List<HybridResultVO> vectorResults = vectorSearch(userId, departmentId, docId, question, vectorTopK);
+        List<HybridResultVO> keywordResults = elasticsearchKeywordService.search(userId, departmentId, docId, question, keywordTopK);
 
         log.info("向量召回 {} 条，ES 关键词召回 {} 条", vectorResults.size(), keywordResults.size());
 
@@ -89,14 +88,13 @@ public class HybridSearchService {
     /**
      * 向量检索封装
      */
-    private List<HybridResultVO> vectorSearch(Integer userId, Integer departmentId, Long bookId, Long docId, String question, int topK) {
-        List<SearchResultVO> vectorResults = vectorStoreService.search(userId, departmentId, bookId, docId, question, topK, minScore);
+    private List<HybridResultVO> vectorSearch(Integer userId, Integer departmentId, Long docId, String question, int topK) {
+        List<SearchResultVO> vectorResults = vectorStoreService.search(userId, departmentId, docId, question, topK, minScore);
 
         return vectorResults.stream().map(r -> {
             HybridResultVO vo = new HybridResultVO();
             vo.setChunkId(r.getChunkId());
             vo.setDocId(r.getDocId());
-            vo.setBookId(r.getBookId());
             vo.setUserId(r.getUserId());
             vo.setTitle(r.getTitle());
             vo.setContent(r.getContent());

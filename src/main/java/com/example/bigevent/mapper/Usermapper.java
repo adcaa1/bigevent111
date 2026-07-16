@@ -35,6 +35,12 @@ public interface Usermapper {
    @Update("update user set password=#{newpwd},update_time=now() where id=#{id}")
     void updatepwd(String newpwd,Integer id);
     /**
+     * 统计指定部门下的用户数
+     */
+    @Select("select count(*) from user where department_id = #{departmentId} and deleted = 0")
+    Long countByDepartmentId(Integer departmentId);
+
+    /**
      * 查询所有用户名（布隆过滤器预热用）
      */
     @Select("select username from user")

@@ -18,11 +18,6 @@ public class KnowledgeChunk {
     private Long docId;
 
     /**
-     * 关联图书ID
-     */
-    private Long bookId;
-
-    /**
      * 片段内容
      */
     private String content;

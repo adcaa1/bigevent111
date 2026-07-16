@@ -10,7 +10,6 @@ public class HybridResultVO {
 
     private Long chunkId;
     private Long docId;
-    private Long bookId;
     private Integer userId;
     private String title;
     private String content;
