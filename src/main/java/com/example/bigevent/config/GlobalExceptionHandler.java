@@ -1,6 +1,7 @@
 package com.example.bigevent.config;
 
 import com.example.bigevent.domain.Result;
+import com.example.bigevent.exception.KnowledgeStorageException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -17,6 +18,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public Result<String> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException e) {
         return Result.error("上传文件过大，文件大小不能超过10MB，请压缩后重新上传或选择较小的文件");
+    }
+
+    /**
+     * 处理知识库存储异常
+     */
+    @ExceptionHandler(KnowledgeStorageException.class)
+    public Result<String> handleKnowledgeStorageException(KnowledgeStorageException e) {
+        return Result.error(e.getMessage());
     }
 
     /**

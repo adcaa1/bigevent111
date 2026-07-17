@@ -1,6 +1,7 @@
 package com.example.bigevent.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch.core.DeleteByQueryRequest;
 import co.elastic.clients.elasticsearch.core.DeleteByQueryResponse;
@@ -74,7 +75,9 @@ public class ElasticsearchKeywordService {
         doc.put("departmentId", chunk.getDepartmentId() == null ? 0 : chunk.getDepartmentId());
         doc.put("title", chunk.getTitle() == null ? "" : chunk.getTitle());
         doc.put("content", chunk.getContent());
-        doc.put("pageNum", chunk.getPageNum() == null ? 0 : chunk.getPageNum());
+        if (chunk.getPageNum() != null) {
+            doc.put("pageNum", chunk.getPageNum());
+        }
         doc.put("chunkIndex", chunk.getChunkIndex() == null ? 0 : chunk.getChunkIndex());
         doc.put("embedding", vector);
         doc.put("createTime", formatTime(LocalDateTime.now()));
@@ -162,9 +165,12 @@ public class ElasticsearchKeywordService {
 
     private void deleteByField(String field, Object value) {
         try {
+            FieldValue fieldValue = value instanceof Number n
+                    ? FieldValue.of(n.longValue())
+                    : FieldValue.of(value.toString());
             DeleteByQueryResponse response = client.deleteByQuery(DeleteByQueryRequest.of(d -> d
                     .index(RagElasticsearchIndexInitializer.RAG_INDEX)
-                    .query(q -> q.term(t -> t.field(field).value(value.toString())))
+                    .query(q -> q.term(t -> t.field(field).value(fieldValue)))
             ));
             log.info("ES 删除 {}={} 的 chunk，共 {} 条", field, value, response.deleted());
         } catch (IOException e) {

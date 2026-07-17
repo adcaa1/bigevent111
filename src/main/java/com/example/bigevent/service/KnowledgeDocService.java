@@ -4,12 +4,14 @@ import com.example.bigevent.constant.KnowledgeConstants;
 import com.example.bigevent.domain.KnowledgeChunk;
 import com.example.bigevent.domain.KnowledgeDoc;
 import com.example.bigevent.domain.dto.rag.ChunkEmbeddingDTO;
+import com.example.bigevent.domain.rag.DocBlock;
+import com.example.bigevent.exception.KnowledgeStorageException;
 import com.example.bigevent.mapper.KnowledgeChunkMapper;
 import com.example.bigevent.mapper.KnowledgeDocMapper;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
-import dev.langchain4j.data.document.parser.apache.pdfbox.ApachePdfBoxDocumentParser;
-import dev.langchain4j.data.document.parser.apache.poi.ApachePoiDocumentParser;
+import dev.langchain4j.data.document.Metadata;
+import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -44,6 +48,7 @@ public class KnowledgeDocService {
     private final VectorStoreService vectorStoreService;
     private final ElasticsearchKeywordService elasticsearchKeywordService;
     private final DocumentStorageService documentStorageService;
+    private final DocumentParserService documentParserService;
     private final DocumentSplitter documentSplitter;
     private final EmbeddingModel embeddingModel;
     private final PlatformTransactionManager transactionManager;
@@ -96,14 +101,20 @@ public class KnowledgeDocService {
         knowledgeDocMapper.insert(doc);
 
         try (InputStream is = documentStorageService.load(relativePath)) {
-            String content = parseContent(fileType, is);
-            return processDocContent(doc, content, fileName);
+            List<DocBlock> blocks = documentParserService.parse(fileType, is);
+            return processBlocks(doc, blocks, fileName);
         } catch (Exception e) {
             log.error("文件处理失败: {}", fileName, e);
+            String reason = e instanceof KnowledgeStorageException kse
+                    ? kse.getMessage()
+                    : "文件处理失败: " + e.getMessage();
             doc.setStatus(KnowledgeConstants.DocStatus.FAILED);
-            doc.setFailReason("文件处理失败: " + e.getMessage());
+            doc.setFailReason(reason);
             knowledgeDocMapper.update(doc);
-            return doc;
+            if (e instanceof KnowledgeStorageException kse) {
+                throw kse;
+            }
+            throw new RuntimeException(reason, e);
         }
     }
 
@@ -136,7 +147,8 @@ public class KnowledgeDocService {
         doc.setDepartmentId(departmentId);
         knowledgeDocMapper.insert(doc);
 
-        return processDocContent(doc, text, fileName);
+        List<DocBlock> blocks = documentParserService.parsePlainText(text);
+        return processBlocks(doc, blocks, fileName);
     }
 
     /**
@@ -148,22 +160,38 @@ public class KnowledgeDocService {
      * 3. 再批量写入 Elasticsearch
      * 4. 最后更新 doc 状态为成功
      * <p>
-     * 若 Redis/ES 写入成功后 MySQL 事务回滚，会清理 Redis/ES 残留数据，避免孤儿向量。
+     * 若任一环节失败，会回滚所有已写入的数据，并抛出 KnowledgeStorageException。
      */
-    public KnowledgeDoc processDocContent(KnowledgeDoc doc, String content, String title) {
+    public KnowledgeDoc processBlocks(KnowledgeDoc doc, List<DocBlock> blocks, String title) {
         Integer userId = doc.getCreateUser();
         String fileName = doc.getFileName();
 
-        doc.setContent(content);
+        String fullText = blocks.stream()
+                .map(DocBlock::getText)
+                .filter(s -> s != null && !s.isBlank())
+                .collect(Collectors.joining("\n"));
+        doc.setContent(fullText);
 
-        Document document = Document.from(content);
-        List<TextSegment> segments = documentSplitter.split(document);
+        List<TextSegment> segments = buildSegments(blocks);
         log.info("文档 [{}] 解析完成，共 {} 个片段", fileName, segments.size());
 
-        var embeddingResponse = embeddingModel.embedAll(segments);
-        var embeddings = embeddingResponse.content();
+        if (segments.isEmpty()) {
+            throw new IllegalArgumentException("文档内容为空，无法生成片段: " + fileName);
+        }
+
+        List<Embedding> embeddings;
+        try {
+            var embeddingResponse = embeddingModel.embedAll(segments);
+            embeddings = embeddingResponse.content();
+        } catch (Exception e) {
+            log.error("文档 [{}] 向量生成失败", fileName, e);
+            markDocFailed(doc, KnowledgeStorageException.Stage.EMBEDDING);
+            throw new KnowledgeStorageException(KnowledgeStorageException.Stage.EMBEDDING,
+                    "向量生成存储失败，请联系管理员", e);
+        }
 
         List<ChunkEmbeddingDTO> chunkEmbeddings = new ArrayList<>();
+        boolean mysqlWritten = false;
         boolean redisWritten = false;
         boolean esWritten = false;
 
@@ -200,6 +228,7 @@ public class KnowledgeDocService {
                 }
                 return null;
             });
+            mysqlWritten = true;
 
             if (!chunkEmbeddings.isEmpty()) {
                 vectorStoreService.saveChunks(chunkEmbeddings);
@@ -219,23 +248,127 @@ public class KnowledgeDocService {
             return doc;
 
         } catch (Exception e) {
-            log.error("文档 [{}] 处理失败: {}", fileName, e.getMessage(), e);
+            log.error("文档 [{}] 处理失败，准备回滚所有存储: {}", fileName, e.getMessage(), e);
 
-            if (redisWritten) {
-                log.warn("Redis 已写入但后续失败，清理 docId={} 的向量残留", doc.getId());
-                vectorStoreService.deleteByDocId(doc.getId());
-            }
-            if (esWritten) {
-                log.warn("ES 已写入但后续失败，清理 docId={} 的索引残留", doc.getId());
-                elasticsearchKeywordService.deleteByDocId(doc.getId());
-            }
+            rollbackAll(doc.getId(), mysqlWritten, redisWritten, esWritten);
+            KnowledgeStorageException.Stage stage = determineFailureStage(e, mysqlWritten, redisWritten, esWritten);
+            String message = stage.getLabel() + "存储失败，请联系管理员";
+            markDocFailed(doc, stage);
 
-            doc.setStatus(KnowledgeConstants.DocStatus.FAILED);
-            doc.setFailReason("文档处理失败: " + e.getMessage());
-            knowledgeDocMapper.update(doc);
-
-            return doc;
+            throw new KnowledgeStorageException(stage, message, e);
         }
+    }
+
+    /**
+     * 标记文档处理失败，并记录失败环节。
+     */
+    private void markDocFailed(KnowledgeDoc doc, KnowledgeStorageException.Stage stage) {
+        doc.setStatus(KnowledgeConstants.DocStatus.FAILED);
+        doc.setFailReason(stage.getLabel() + "存储失败，请联系管理员");
+        try {
+            knowledgeDocMapper.update(doc);
+        } catch (Exception ex) {
+            log.error("更新文档失败状态出错, docId={}", doc.getId(), ex);
+        }
+    }
+
+    /**
+     * 回滚 MySQL、Redis、Elasticsearch 中已写入的数据。
+     */
+    private void rollbackAll(Long docId, boolean mysqlWritten, boolean redisWritten, boolean esWritten) {
+        if (mysqlWritten) {
+            try {
+                knowledgeChunkMapper.deleteByDocId(docId);
+                log.info("已回滚 MySQL 中 docId={} 的 chunks", docId);
+            } catch (Exception e) {
+                log.error("回滚 MySQL chunks 失败, docId={}", docId, e);
+            }
+        }
+        if (redisWritten) {
+            try {
+                vectorStoreService.deleteByDocId(docId);
+                log.info("已回滚 Redis 中 docId={} 的向量", docId);
+            } catch (Exception e) {
+                log.error("回滚 Redis 向量失败, docId={}", docId, e);
+            }
+        }
+        if (esWritten) {
+            try {
+                elasticsearchKeywordService.deleteByDocId(docId);
+                log.info("已回滚 ES 中 docId={} 的索引", docId);
+            } catch (Exception e) {
+                log.error("回滚 ES 索引失败, docId={}", docId, e);
+            }
+        }
+    }
+
+    /**
+     * 根据各环节写入状态判断失败发生在哪一步。
+     */
+    private KnowledgeStorageException.Stage determineFailureStage(Exception e,
+                                                                  boolean mysqlWritten,
+                                                                  boolean redisWritten,
+                                                                  boolean esWritten) {
+        if (e instanceof KnowledgeStorageException kse) {
+            return kse.getStage();
+        }
+        if (esWritten) {
+            // ES 成功后出错，只可能是最终 doc 状态更新
+            return KnowledgeStorageException.Stage.MYSQL;
+        }
+        if (redisWritten) {
+            return KnowledgeStorageException.Stage.ELASTICSEARCH;
+        }
+        if (mysqlWritten) {
+            return KnowledgeStorageException.Stage.REDIS;
+        }
+        return KnowledgeStorageException.Stage.MYSQL;
+    }
+
+    /**
+     * 根据文档结构化块生成 TextSegment。
+     * <p>
+     * - 正文段落：保留标题上下文，超长时使用递归切分器再切。
+     * - 表格行 / Excel 行：一行一个片段，不二次切分，保证记录语义完整。
+     */
+    private List<TextSegment> buildSegments(List<DocBlock> blocks) {
+        List<TextSegment> segments = new ArrayList<>();
+        for (DocBlock block : blocks) {
+            switch (block.getType()) {
+                case HEADING -> {
+                    // 标题本身不单独生成片段，已作为上下文附加到后续段落/行中
+                }
+                case PARAGRAPH, PLAIN_TEXT -> {
+                    String text = block.getText();
+                    if (text == null || text.isBlank()) {
+                        continue;
+                    }
+                    if (text.length() <= 500) {
+                        segments.add(toSegment(text, block.getPageNum()));
+                    } else {
+                        List<TextSegment> split = documentSplitter.split(Document.from(text));
+                        for (TextSegment seg : split) {
+                            segments.add(toSegment(seg.text(), block.getPageNum()));
+                        }
+                    }
+                }
+                case TABLE_ROW, SPREADSHEET_ROW -> {
+                    String text = block.getText();
+                    if (text != null && !text.isBlank()) {
+                        segments.add(toSegment(text, block.getPageNum()));
+                    }
+                }
+                default -> log.warn("未知的文档块类型: {}", block.getType());
+            }
+        }
+        return segments;
+    }
+
+    private TextSegment toSegment(String text, Integer pageNum) {
+        if (pageNum == null) {
+            return TextSegment.from(text);
+        }
+        return TextSegment.from(text, Metadata.from(Map.of("page_number", String.valueOf(pageNum))));
     }
 
     /**
@@ -302,14 +435,14 @@ public class KnowledgeDocService {
     }
 
     private void reprocessSingleDoc(KnowledgeDoc doc) {
-        String content;
+        List<DocBlock> blocks;
         try {
             if (doc.getFileUrl() != null && !doc.getFileUrl().isBlank()) {
                 try (InputStream is = documentStorageService.load(doc.getFileUrl())) {
-                    content = parseContent(doc.getFileType(), is);
+                    blocks = documentParserService.parse(doc.getFileType(), is);
                 }
             } else if (doc.getContent() != null) {
-                content = doc.getContent();
+                blocks = documentParserService.parsePlainText(doc.getContent());
             } else {
                 throw new IllegalStateException("文档没有文件路径也没有内容，无法重新处理: " + doc.getId());
             }
@@ -322,15 +455,20 @@ public class KnowledgeDocService {
             doc.setFailReason(null);
             knowledgeDocMapper.update(doc);
 
-            processDocContent(doc, content, doc.getFileName());
+            processBlocks(doc, blocks, doc.getFileName());
         } catch (Exception e) {
-            String reason = "重新处理文档失败: " + e.getMessage();
+            String reason = e instanceof KnowledgeStorageException kse
+                    ? kse.getMessage()
+                    : "重新处理文档失败: " + e.getMessage();
             log.error(reason, e);
 
             doc.setStatus(KnowledgeConstants.DocStatus.FAILED);
             doc.setFailReason(reason);
             knowledgeDocMapper.update(doc);
 
+            if (e instanceof KnowledgeStorageException kse) {
+                throw kse;
+            }
             throw new RuntimeException(reason, e);
         }
     }
@@ -344,15 +482,6 @@ public class KnowledgeDocService {
                 String.format("文件大小不能超过 10MB，当前: %.2fMB", file.getSize() / 1024.0 / 1024.0)
             );
         }
-    }
-
-    private String parseContent(String fileType, InputStream inputStream) throws IOException {
-        return switch (fileType.toLowerCase()) {
-            case "pdf" -> new ApachePdfBoxDocumentParser().parse(inputStream).text();
-            case "doc", "docx" -> new ApachePoiDocumentParser().parse(inputStream).text();
-            case "txt", "md" -> new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            default -> throw new IllegalArgumentException("不支持的文件类型: " + fileType);
-        };
     }
 
     private String getFileType(String fileName) {

@@ -45,5 +45,10 @@ public class RagAnswerVO {
          * 片段内容摘要
          */
         private String content;
+
+        /**
+         * 片段在文档中的序号，用于区分同一文档的多个 chunk
+         */
+        private Integer chunkIndex;
     }
 }

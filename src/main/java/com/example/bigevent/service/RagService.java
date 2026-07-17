@@ -208,12 +208,14 @@ public class RagService {
 
     /**
      * 构建带引用编号的知识库内容
+     * <p>
+     * 使用与 prompt 完全一致的 [^n] 格式，避免 LLM 编号对应错误。
      */
     private String buildKnowledgeWithCitation(List<HybridResultVO> results) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < results.size(); i++) {
             HybridResultVO r = results.get(i);
-            String source = "【来源 " + (i + 1) + "】" + (r.getTitle() == null ? "未知文档" : r.getTitle());
+            String source = "[^" + (i + 1) + "] " + (r.getTitle() == null ? "未知文档" : r.getTitle());
             if (r.getPageNum() != null) {
                 source += " 第" + r.getPageNum() + "页";
             }
@@ -277,11 +279,18 @@ public class RagService {
             }
         }
 
-        // 清理回答中的引用列表部分（从第一个 "[^1]:" 开头的行开始截断）
+        // 清理回答末尾的引用列表部分：匹配任意 [^n]: 开头的连续引用行区块
         String cleanAnswer = rawAnswer;
-        int citationListStart = rawAnswer.indexOf("[^1]:");
-        if (citationListStart > 0) {
-            cleanAnswer = rawAnswer.substring(0, citationListStart).trim();
+        Pattern citationListPattern = Pattern.compile(
+                "(?:^|\\n)\\[\\^\\d+\\]:.*(?:\\r?\\n\\[\\^\\d+\\]:.*)*",
+                Pattern.DOTALL
+        );
+        Matcher listMatcher = citationListPattern.matcher(rawAnswer);
+        if (listMatcher.find()) {
+            int start = listMatcher.start();
+            if (start > 0) {
+                cleanAnswer = rawAnswer.substring(0, start).trim();
+            }
         }
 
         // 构建引用列表
@@ -292,6 +301,7 @@ public class RagService {
             citation.setId(id);
             citation.setTitle(r.getTitle() == null ? "未知文档" : r.getTitle());
             citation.setPageNum(r.getPageNum());
+            citation.setChunkIndex(r.getChunkIndex());
             citation.setContent(truncateContent(r.getContent(), 200));
             citations.add(citation);
         }
