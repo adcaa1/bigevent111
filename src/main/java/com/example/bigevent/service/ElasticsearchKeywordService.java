@@ -93,7 +93,7 @@ public class ElasticsearchKeywordService {
      * @param keyword 用户问题
      * @param topK   返回条数
      */
-    public List<HybridResultVO> search(Integer userId, Integer departmentId, Long docId, String keyword, int topK) {
+    public List<HybridResultVO> search(Integer userId, Integer departmentId, Long docId, String keyword, int topK, double minScoreRatio) {
         try {
             SearchResponse<Map> response = client.search(s -> s
                             .index(RagElasticsearchIndexInitializer.RAG_INDEX)
@@ -114,8 +114,24 @@ public class ElasticsearchKeywordService {
                     Map.class
             );
 
-            return response.hits().hits().stream()
+            List<HybridResultVO> results = response.hits().hits().stream()
                     .map(this::toHybridResult)
+                    .collect(Collectors.toList());
+
+            if (results.isEmpty()) {
+                return results;
+            }
+
+            double maxScore = results.stream()
+                    .mapToDouble(HybridResultVO::getKeywordScore)
+                    .max()
+                    .orElse(0.0);
+            double threshold = maxScore * minScoreRatio;
+
+            return results.stream()
+                    .filter(vo -> vo.getKeywordScore() >= threshold)
+                    .peek(vo -> log.debug("ES 命中 chunkId={}, keywordScore={}/{}",
+                            vo.getChunkId(), vo.getKeywordScore(), maxScore))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             log.error("ES 关键词检索失败", e);
@@ -189,7 +205,7 @@ public class ElasticsearchKeywordService {
         vo.setContent((String) source.get("content"));
         vo.setChunkIndex(toInt(source.get("chunkIndex")));
         vo.setPageNum(toInt(source.get("pageNum")));
-        vo.setScore(hit.score());
+        vo.setKeywordScore(hit.score() != null ? hit.score().floatValue() : null);
         return vo;
     }
 

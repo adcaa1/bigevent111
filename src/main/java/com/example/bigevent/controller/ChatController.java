@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -55,6 +56,10 @@ public class ChatController {
     @Autowired
     @Qualifier("aiExecutor")
     private Executor aiExecutor;
+
+    private static final Set<String> SUPPORTED_FILE_TYPES = Set.of(
+            "txt", "md", "pdf", "doc", "docx", "xls", "xlsx"
+    );
 
     private Integer getCurrentUserId() {
         Map<String, Object> claims = ThreadLocalUtil.get();
@@ -144,6 +149,11 @@ public class ChatController {
 
                 String fileName = file.getOriginalFilename();
                 String fileType = getFileType(fileName);
+
+                // 校验文件类型，避免异步解析阶段才发现不支持
+                if (!SUPPORTED_FILE_TYPES.contains(fileType)) {
+                    return Result.error("不支持此格式");
+                }
 
                 // 先计算 MD5 并查重，避免重复文件落盘产生孤儿文件
                 final String fileMd5;

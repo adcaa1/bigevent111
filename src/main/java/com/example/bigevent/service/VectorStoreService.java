@@ -108,7 +108,9 @@ public class VectorStoreService {
      */
     public void deleteByChunkId(Long chunkId) {
         Filter filter = metadataKey(META_CHUNK_ID).isEqualTo(String.valueOf(chunkId));
-        safeRemoveAll(filter, "chunkId=" + chunkId);
+        if (safeRemoveAll(filter, "chunkId=" + chunkId)) {
+            log.info("已删除 chunkId={} 的向量", chunkId);
+        }
     }
 
     /**
@@ -116,8 +118,9 @@ public class VectorStoreService {
      */
     public void deleteByDocId(Long docId) {
         Filter filter = metadataKey(META_DOC_ID).isEqualTo(String.valueOf(docId));
-        safeRemoveAll(filter, "docId=" + docId);
-        log.info("已删除 docId={} 的向量", docId);
+        if (safeRemoveAll(filter, "docId=" + docId)) {
+            log.info("已删除 docId={} 的向量", docId);
+        }
     }
 
     /**
@@ -125,22 +128,27 @@ public class VectorStoreService {
      */
     public void deleteByUserId(Integer userId) {
         Filter filter = metadataKey(META_USER_ID).isEqualTo(String.valueOf(userId));
-        safeRemoveAll(filter, "userId=" + userId);
-        log.info("已删除 userId={} 的向量", userId);
+        if (safeRemoveAll(filter, "userId=" + userId)) {
+            log.info("已删除 userId={} 的向量", userId);
+        }
     }
 
     /**
      * 安全调用 removeAll：LangChain4j RedisEmbeddingStore 在匹配不到任何记录时，
      * 可能会向 Redis 发送无参数的 DEL 命令，导致 ERR wrong number of arguments for 'del'。
      * 空结果意味着目标已不存在，直接忽略即可。
+     *
+     * @return true 表示执行了删除；false 表示未匹配到任何向量
      */
-    private void safeRemoveAll(Filter filter, String desc) {
+    private boolean safeRemoveAll(Filter filter, String desc) {
         try {
             embeddingStore.removeAll(filter);
+            return true;
         } catch (RuntimeException e) {
             String msg = e.getMessage();
             if (msg != null && msg.contains("wrong number of arguments for 'del'")) {
-                log.warn("Redis 中不存在 {} 的向量，跳过删除", desc);
+                log.info("Redis 中不存在 {} 的向量，跳过删除", desc);
+                return false;
             } else {
                 throw e;
             }

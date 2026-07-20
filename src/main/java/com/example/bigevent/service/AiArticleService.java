@@ -2,13 +2,19 @@ package com.example.bigevent.service;
 
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.spring.AiService;
+import dev.langchain4j.service.spring.AiServiceWiringMode;
 import reactor.core.publisher.Flux;
 
 /**
  * AI文章管理服务
  * 通过自然语言对话实现文章的增删改查操作
  */
-@AiService
+@AiService(
+        wiringMode = AiServiceWiringMode.EXPLICIT,
+        streamingChatModel = "openAiStreamingChatModel",
+        chatMemoryProvider = "chatMemoryProvider",
+        tools = "articleTools"
+)
 public interface AiArticleService {
 
     /**

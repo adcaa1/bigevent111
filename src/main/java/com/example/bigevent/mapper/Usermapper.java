@@ -28,7 +28,7 @@ public interface Usermapper {
     @Insert("insert into user(username,password,department_id,create_time,update_time)" +
             "values (#{username},#{password},#{departmentId},now(),now())")
     public int add(String username, String password, Integer departmentId);
-     @Update("update user set nickname=#{nickname},email=#{email},intro=#{intro},fans_visible=#{fansVisible},following_visible=#{followingVisible},update_time=now() where id=#{id}")
+     @Update("update user set nickname=#{nickname},email=#{email},intro=#{intro},fans_visible=#{fansVisible},following_visible=#{followingVisible},department_id=#{departmentId},update_time=now() where id=#{id}")
     void update(User user);
     @Update("update user set user_pic=#{txurl},update_time=now() where id=#{id}")
     void updatetx(String txurl,Integer id);

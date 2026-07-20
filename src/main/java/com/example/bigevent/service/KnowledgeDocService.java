@@ -3,11 +3,13 @@ package com.example.bigevent.service;
 import com.example.bigevent.constant.KnowledgeConstants;
 import com.example.bigevent.domain.KnowledgeChunk;
 import com.example.bigevent.domain.KnowledgeDoc;
+import com.example.bigevent.domain.KnowledgeImage;
 import com.example.bigevent.domain.dto.rag.ChunkEmbeddingDTO;
 import com.example.bigevent.domain.rag.DocBlock;
 import com.example.bigevent.exception.KnowledgeStorageException;
 import com.example.bigevent.mapper.KnowledgeChunkMapper;
 import com.example.bigevent.mapper.KnowledgeDocMapper;
+import com.example.bigevent.mapper.KnowledgeImageMapper;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.Metadata;
@@ -45,10 +47,12 @@ public class KnowledgeDocService {
 
     private final KnowledgeDocMapper knowledgeDocMapper;
     private final KnowledgeChunkMapper knowledgeChunkMapper;
+    private final KnowledgeImageMapper knowledgeImageMapper;
     private final VectorStoreService vectorStoreService;
     private final ElasticsearchKeywordService elasticsearchKeywordService;
     private final DocumentStorageService documentStorageService;
     private final DocumentParserService documentParserService;
+    private final ImageDescriptionService imageDescriptionService;
     private final DocumentSplitter documentSplitter;
     private final EmbeddingModel embeddingModel;
     private final PlatformTransactionManager transactionManager;
@@ -101,7 +105,7 @@ public class KnowledgeDocService {
         knowledgeDocMapper.insert(doc);
 
         try (InputStream is = documentStorageService.load(relativePath)) {
-            List<DocBlock> blocks = documentParserService.parse(fileType, is);
+            List<DocBlock> blocks = documentParserService.parse(fileType, is, doc.getId());
             return processBlocks(doc, blocks, fileName);
         } catch (Exception e) {
             log.error("文件处理失败: {}", fileName, e);
@@ -166,13 +170,17 @@ public class KnowledgeDocService {
         Integer userId = doc.getCreateUser();
         String fileName = doc.getFileName();
 
-        String fullText = blocks.stream()
+        // 预处理：对 IMAGE 块调用 VLM 生成描述，转成 PARAGRAPH 块，同时记录图片元信息
+        List<ImageChunkInfo> imageInfos = new ArrayList<>();
+        List<DocBlock> processedBlocks = preprocessImageBlocks(blocks, imageInfos);
+
+        String fullText = processedBlocks.stream()
                 .map(DocBlock::getText)
                 .filter(s -> s != null && !s.isBlank())
                 .collect(Collectors.joining("\n"));
         doc.setContent(fullText);
 
-        List<TextSegment> segments = buildSegments(blocks);
+        List<TextSegment> segments = buildSegments(processedBlocks);
         log.info("文档 [{}] 解析完成，共 {} 个片段", fileName, segments.size());
 
         if (segments.isEmpty()) {
@@ -191,6 +199,7 @@ public class KnowledgeDocService {
         }
 
         List<ChunkEmbeddingDTO> chunkEmbeddings = new ArrayList<>();
+        List<KnowledgeChunk> insertedChunks = new ArrayList<>();
         boolean mysqlWritten = false;
         boolean redisWritten = false;
         boolean esWritten = false;
@@ -211,6 +220,7 @@ public class KnowledgeDocService {
                     chunk.setWordCount(segment.text().length());
                     chunk.setEsDocId(esDocId);
                     knowledgeChunkMapper.insert(chunk);
+                    insertedChunks.add(chunk);
 
                     ChunkEmbeddingDTO dto = new ChunkEmbeddingDTO();
                     dto.setChunkId(chunk.getId());
@@ -229,6 +239,9 @@ public class KnowledgeDocService {
                 return null;
             });
             mysqlWritten = true;
+
+            // 保存图片元信息（MySQL 已写入，chunkId 已生成）
+            saveImageChunkMappings(doc.getId(), imageInfos, insertedChunks);
 
             if (!chunkEmbeddings.isEmpty()) {
                 vectorStoreService.saveChunks(chunkEmbeddings);
@@ -256,6 +269,58 @@ public class KnowledgeDocService {
             markDocFailed(doc, stage);
 
             throw new KnowledgeStorageException(stage, message, e);
+        }
+    }
+
+    /**
+     * 预处理 IMAGE 块：调用 VLM 生成描述，转成不可再分的 PARAGRAPH 块。
+     *
+     * @param blocks     原始解析块
+     * @param imageInfos 输出参数：记录图片与生成片段的映射关系
+     * @return 处理后的块列表
+     */
+    private List<DocBlock> preprocessImageBlocks(List<DocBlock> blocks, List<ImageChunkInfo> imageInfos) {
+        List<DocBlock> processed = new ArrayList<>();
+        for (DocBlock block : blocks) {
+            if (block.getType() == DocBlock.Type.IMAGE) {
+                String description = imageDescriptionService.describe(block.getImagePath());
+                if (description != null && !description.isBlank()) {
+                    int chunkIndex = processed.size();
+                    DocBlock textBlock = new DocBlock(DocBlock.Type.PARAGRAPH, description, null, block.getPageNum());
+                    textBlock.setUnsplittable(true);
+                    processed.add(textBlock);
+                    imageInfos.add(new ImageChunkInfo(block.getImagePath(), description, chunkIndex));
+                }
+            } else {
+                processed.add(block);
+            }
+        }
+        return processed;
+    }
+
+    /**
+     * 保存图片与 chunk 的映射关系。
+     */
+    private void saveImageChunkMappings(Long docId, List<ImageChunkInfo> imageInfos,
+                                        List<KnowledgeChunk> insertedChunks) {
+        if (imageInfos.isEmpty()) {
+            return;
+        }
+        Map<Integer, KnowledgeChunk> chunkMap = insertedChunks.stream()
+                .collect(Collectors.toMap(KnowledgeChunk::getChunkIndex, c -> c, (a, b) -> a));
+        for (ImageChunkInfo info : imageInfos) {
+            KnowledgeChunk chunk = chunkMap.get(info.chunkIndex);
+            if (chunk == null) {
+                log.warn("未找到图片对应的 chunk, docId={}, chunkIndex={}", docId, info.chunkIndex);
+                continue;
+            }
+            KnowledgeImage image = new KnowledgeImage();
+            image.setDocId(docId);
+            image.setChunkId(chunk.getId());
+            image.setChunkIndex(info.chunkIndex);
+            image.setImagePath(info.imagePath);
+            image.setDescription(info.description);
+            knowledgeImageMapper.insert(image);
         }
     }
 
@@ -343,7 +408,7 @@ public class KnowledgeDocService {
                     if (text == null || text.isBlank()) {
                         continue;
                     }
-                    if (text.length() <= 500) {
+                    if (block.isUnsplittable() || text.length() <= 500) {
                         segments.add(toSegment(text, block.getPageNum()));
                     } else {
                         List<TextSegment> split = documentSplitter.split(Document.from(text));
@@ -372,9 +437,11 @@ public class KnowledgeDocService {
     }
 
     /**
-     * 删除文档，同时清理 MySQL、RedisSearch、Elasticsearch 和本地文件
+     * 删除文档，同时清理 MySQL、RedisSearch、Elasticsearch 和本地文件。
+     * <p>
+     * 关键顺序：先删 MySQL 记录（事务保证），再删 Redis/ES/本地文件。
+     * 外部存储删除允许失败，避免 Redis/ES 删除成功后 DB 回滚导致列表仍可见。
      */
-    @Transactional
     public void deleteDoc(Long docId, Integer userId) {
         KnowledgeDoc doc = knowledgeDocMapper.findById(docId);
         if (doc == null) {
@@ -384,12 +451,38 @@ public class KnowledgeDocService {
             throw new IllegalArgumentException("无权删除该文档");
         }
 
-        vectorStoreService.deleteByDocId(docId);
-        elasticsearchKeywordService.deleteByDocId(docId);
+        // 1. 先查询出图片路径（DB 删除后就查不到了）
+        List<KnowledgeImage> images = knowledgeImageMapper.findByDocId(docId);
 
-        knowledgeChunkMapper.deleteByDocId(docId);
-        knowledgeDocMapper.deleteById(docId);
+        // 2. 先删 MySQL 记录，确保文档列表永远一致
+        TransactionTemplate txTemplate = new TransactionTemplate(transactionManager);
+        txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        txTemplate.execute(status -> {
+            knowledgeChunkMapper.deleteByDocId(docId);
+            knowledgeImageMapper.deleteByDocId(docId);
+            knowledgeDocMapper.deleteById(docId);
+            return null;
+        });
 
+        // 3. 再删外部存储，失败只记录日志，不影响 DB
+        try {
+            vectorStoreService.deleteByDocId(docId);
+        } catch (Exception e) {
+            log.warn("删除文档 Redis 向量失败, docId={}", docId, e);
+        }
+
+        try {
+            elasticsearchKeywordService.deleteByDocId(docId);
+        } catch (Exception e) {
+            log.warn("删除文档 ES 索引失败, docId={}", docId, e);
+        }
+
+        // 4. 删除本地图片文件
+        for (KnowledgeImage image : images) {
+            documentStorageService.delete(image.getImagePath());
+        }
+
+        // 5. 删除原始文档文件
         documentStorageService.delete(doc.getFileUrl());
     }
 
@@ -437,9 +530,15 @@ public class KnowledgeDocService {
     private void reprocessSingleDoc(KnowledgeDoc doc) {
         List<DocBlock> blocks;
         try {
+            List<KnowledgeImage> oldImages = knowledgeImageMapper.findByDocId(doc.getId());
+            for (KnowledgeImage image : oldImages) {
+                documentStorageService.delete(image.getImagePath());
+            }
+            knowledgeImageMapper.deleteByDocId(doc.getId());
+
             if (doc.getFileUrl() != null && !doc.getFileUrl().isBlank()) {
                 try (InputStream is = documentStorageService.load(doc.getFileUrl())) {
-                    blocks = documentParserService.parse(doc.getFileType(), is);
+                    blocks = documentParserService.parse(doc.getFileType(), is, doc.getId());
                 }
             } else if (doc.getContent() != null) {
                 blocks = documentParserService.parsePlainText(doc.getContent());
@@ -448,6 +547,8 @@ public class KnowledgeDocService {
             }
 
             knowledgeChunkMapper.deleteByDocId(doc.getId());
+
+            // 重新处理前清理旧图片
             vectorStoreService.deleteByDocId(doc.getId());
             elasticsearchKeywordService.deleteByDocId(doc.getId());
 
@@ -518,5 +619,11 @@ public class KnowledgeDocService {
             sb.append(String.format("%02x", b));
         }
         return sb.toString();
+    }
+
+    /**
+     * 图片与 chunk 的临时映射信息。
+     */
+    private record ImageChunkInfo(String imagePath, String description, int chunkIndex) {
     }
 }

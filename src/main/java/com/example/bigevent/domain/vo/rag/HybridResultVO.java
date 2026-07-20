@@ -17,7 +17,17 @@ public class HybridResultVO {
     private Integer pageNum;
 
     /**
-     * 融合排序分数，不参与持久化
+     * 融合排序分数（RRF），不参与持久化
      */
     private double score;
+
+    /**
+     * 向量检索原始相似度分数（余弦相似度），不参与持久化
+     */
+    private Float vectorScore;
+
+    /**
+     * ES 关键词检索原始 BM25 分数，不参与持久化
+     */
+    private Float keywordScore;
 }

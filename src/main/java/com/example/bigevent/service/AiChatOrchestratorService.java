@@ -1,17 +1,12 @@
 package com.example.bigevent.service;
 
 import com.example.bigevent.domain.AiConversation;
-import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
-import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
@@ -20,25 +15,19 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 /**
- * AI 对话编排层
+ * AI 对话编排层。
  * <p>
- * 整合三层记忆（短期 Redis / 长期业务 fact / 长期语义 ES）并统一构建 Prompt，
+ * 整合三层记忆（用户关键事实、历史摘要、最近 6 轮对话）并统一构建 Prompt，
  * 手动调用 StreamingChatModel 生成流式回复。
  */
 @Slf4j
 @Service
 public class AiChatOrchestratorService {
 
-    private static final String SYSTEM_PROMPT = "你是一个友好、简洁且热情的 AI 助手。请根据提供的用户关键信息和历史对话上下文回答问题。";
-
-    @Autowired
-    private ChatMemoryProvider chatMemoryProvider;
+    private static final String SYSTEM_PROMPT = "你是一个友好、简洁且热情的 AI 助手。请根据提供的用户关键信息、历史对话摘要和最近对话上下文回答问题。";
 
     @Autowired
     private UserFactService userFactService;
-
-    @Autowired
-    private ChatHistoryVectorService chatHistoryVectorService;
 
     @Autowired
     private AiConversationService aiConversationService;
@@ -55,55 +44,45 @@ public class AiChatOrchestratorService {
     @Autowired
     private Executor aiExecutor;
 
-    /** 语义召回最大条数 */
-    @Value("${ai.history.top-k:5}")
-    private int topK;
-
-    /** 语义召回最低相似度阈值，低于该分数的结果会被过滤 */
-    @Value("${ai.history.min-score:0.6}")
-    private double minScore;
-
-    /** 只召回最近 N 天的历史，小于等于 0 表示不限制 */
-    @Value("${ai.history.max-age-days:30}")
-    private int maxAgeDays;
-
-    /** 召回策略：same_session / cross_session / with_decay */
-    @Value("${ai.history.recall-strategy:cross_session}")
-    private String recallStrategy;
+    @Autowired
+    private ConversationContextService conversationContextService;
 
     /**
      * 通用 AI 流式聊天。
      * <p>
      * 整体流程：
      * <ol>
-     *     <li>确保会话存在（未传 conversationId 时自动创建）</li>
-     *     <li>读取 Redis 短期记忆（最近 20 条消息，约 10 轮）</li>
-     *     <li>读取 MySQL 用户关键事实（nickname、latest_articles 等）</li>
-     *     <li>用当前问题在 ES 中做语义召回，支持跨会话</li>
-     *     <li>通过 PromptBuilder 组装完整 Prompt</li>
-     *     <li>调用流式模型生成回复，实时返回 token</li>
-     *     <li>保存当前 QA 到 Redis 短期记忆，并异步写入 ES 长期语义记忆</li>
+     *     <li>确保会话存在</li>
+     *     <li>重复问题走缓存直接返回答案</li>
+     *     <li>读取 Redis 短期记忆（最近 6 轮）与历史摘要</li>
+     *     <li>读取 MySQL 用户关键事实</li>
+     *     <li>通过 PromptBuilder 组装分层 Prompt</li>
+     *     <li>调用流式模型生成回复</li>
+     *     <li>保存当前 QA 到上下文管理服务，维护窗口与摘要</li>
      * </ol>
      *
      * @param userId         当前用户 ID
-     * @param conversationId 会话 ID，为空时自动创建新会话
+     * @param conversationId 会话 ID，为空时自动创建
      * @param message        用户当前问题
      * @return 流式 AI 回复
      */
     public Flux<String> chatStream(Integer userId, String conversationId, String message) {
         String convId = ensureConversation(userId, conversationId);
-        ChatMemory chatMemory = chatMemoryProvider.get(convId);
 
-        List<ChatMessage> recentMessages = chatMemory.messages();
+        String cachedAnswer = conversationContextService.getCachedAnswerIfRepeated(convId, message);
+        if (cachedAnswer != null) {
+            log.info("通用聊天命中重复问题缓存，直接返回答案");
+            return Flux.just(cachedAnswer);
+        }
+
+        ConversationContext context = conversationContextService.load(convId);
         String userFactText = userFactService.formatFactsForPrompt(userId);
-        List<String> relevantHistory = chatHistoryVectorService.search(
-                userId, convId, message, topK, minScore, maxAgeDays, recallStrategy);
 
         List<ChatMessage> promptMessages = promptBuilder.build(
-                SYSTEM_PROMPT, userFactText, relevantHistory, recentMessages, message);
+                SYSTEM_PROMPT, userFactText, context.summary(), context.recentMessages(), null, message);
 
         return Flux.<String>create(sink -> streamingChatModel.chat(
-                        promptMessages, buildHandler(sink, chatMemory, userId, convId, message)))
+                        promptMessages, buildHandler(sink, convId, message)))
                 .subscribeOn(reactor.core.scheduler.Schedulers.fromExecutor(aiExecutor));
     }
 
@@ -111,32 +90,26 @@ public class AiChatOrchestratorService {
      * AI 文章管理工具聊天（保留 LangChain4j 工具能力）。
      * <p>
      * 该接口不直接走通用 PromptBuilder，而是复用 {@link AiArticleService} 中的 @AiService 工具定义。
-     * 它会先确保会话存在，让 LangChain4j 自动管理短期记忆，完成后再异步把当前 QA 写入 ES 长期语义记忆。
+     * 它会先确保会话存在，让 LangChain4j 自动管理短期记忆。
      *
      * @param userId         当前用户 ID
-     * @param conversationId 会话 ID，为空时自动创建新会话
+     * @param conversationId 会话 ID，为空时自动创建
      * @param message        用户当前问题
      * @return 流式 AI 回复
      */
     public Flux<String> chatWithArticleTools(Integer userId, String conversationId, String message) {
-        // 工具聊天保留 LangChain4j @AiService 工具执行能力；
-        // 暂不注入 ES 历史召回，避免工具参数解析被污染。
         String convId = ensureConversation(userId, conversationId);
-        StringBuilder answerBuilder = new StringBuilder();
         return aiArticleService.chatWithArticleTools(Long.valueOf(convId), message)
-                .doOnNext(answerBuilder::append)
-                .doOnComplete(() -> aiExecutor.execute(() ->
-                        chatHistoryVectorService.save(userId, convId, message, answerBuilder.toString())))
                 .subscribeOn(reactor.core.scheduler.Schedulers.fromExecutor(aiExecutor));
     }
 
     /**
      * 构建流式响应处理器。
      * <p>
-     * 负责把模型回调的 token 推给 Flux 消费者，并在流结束时把完整 QA 保存到记忆。
+     * 负责把模型回调的 token 推给 Flux 消费者，并在流结束时把完整 QA 保存到上下文管理服务。
      */
-    private StreamingChatResponseHandler buildHandler(FluxSink<String> sink, ChatMemory chatMemory,
-                                                      Integer userId, String convId, String message) {
+    private StreamingChatResponseHandler buildHandler(FluxSink<String> sink,
+                                                      String convId, String message) {
         return new StreamingChatResponseHandler() {
             private final StringBuilder answerBuilder = new StringBuilder();
 
@@ -150,7 +123,7 @@ public class AiChatOrchestratorService {
             public void onCompleteResponse(ChatResponse completeResponse) {
                 String answer = answerBuilder.toString();
                 sink.complete();
-                saveInteraction(userId, convId, message, answer, chatMemory);
+                saveInteraction(convId, message, answer);
             }
 
             @Override
@@ -162,18 +135,14 @@ public class AiChatOrchestratorService {
     }
 
     /**
-     * 保存当前轮次的 QA。
-     * <p>
-     * 同步保存到 Redis 短期记忆，异步保存到 ES 长期语义记忆。
+     * 保存当前轮次的 QA，并交给 ConversationContextService 维护窗口与摘要。
      */
-    private void saveInteraction(Integer userId, String convId, String message, String answer, ChatMemory chatMemory) {
+    private void saveInteraction(String convId, String message, String answer) {
         try {
-            chatMemory.add(UserMessage.from(message));
-            chatMemory.add(AiMessage.from(answer));
+            conversationContextService.saveInteraction(convId, message, answer);
         } catch (Exception e) {
-            log.error("保存短期记忆失败", e);
+            log.error("保存对话上下文失败", e);
         }
-        aiExecutor.execute(() -> chatHistoryVectorService.save(userId, convId, message, answer));
     }
 
     /**

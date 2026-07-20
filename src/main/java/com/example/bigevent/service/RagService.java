@@ -1,12 +1,9 @@
 package com.example.bigevent.service;
 
-import com.example.bigevent.constant.KnowledgeConstants;
 import com.example.bigevent.domain.KnowledgeDoc;
 import com.example.bigevent.domain.vo.rag.HybridResultVO;
 import com.example.bigevent.domain.vo.rag.RagAnswerVO;
-import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
-import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.model.chat.StreamingChatModel;
@@ -16,7 +13,6 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
@@ -26,14 +22,24 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
+import static com.example.bigevent.service.RagService.QueryType.*;
 
 /**
- * RAG 服务：负责知识入库与基于知识库的问答
+ * RAG 服务：负责知识入库与基于知识库的问答。
+ * <p>
+ * 问答侧采用分层上下文管理：
+ * <ul>
+ *     <li>每轮根据当前问题重新召回 Top5 知识片段，不沿用上一轮知识库</li>
+ *     <li>历史对话只保留最近 6 轮，更早内容自动总结为摘要</li>
+ *     <li>Prompt 中不再把知识库原文拼进历史记录，避免知识被重复复制</li>
+ * </ul>
  */
 @Slf4j
 @Service
 public class RagService {
+
+    private static final String RAG_SYSTEM_PROMPT = "你是一个基于知识库的智能助手，请根据提供的知识库片段回答用户问题。";
 
     private final KnowledgeDocService knowledgeDocService;
     private final HybridSearchService hybridSearchService;
@@ -41,19 +47,25 @@ public class RagService {
     private final StreamingChatModel streamingChatModel;
     private final ChatMemoryProvider chatMemoryProvider;
     private final ArticleTools articleTools;
+    private final ConversationContextService conversationContextService;
+    private final PromptBuilder promptBuilder;
 
     public RagService(KnowledgeDocService knowledgeDocService,
                       HybridSearchService hybridSearchService,
                       OpenAiChatModel openAiChatModel,
                       StreamingChatModel streamingChatModel,
                       ChatMemoryProvider chatMemoryProvider,
-                      ArticleTools articleTools) {
+                      ArticleTools articleTools,
+                      ConversationContextService conversationContextService,
+                      PromptBuilder promptBuilder) {
         this.knowledgeDocService = knowledgeDocService;
         this.hybridSearchService = hybridSearchService;
         this.openAiChatModel = openAiChatModel;
         this.streamingChatModel = streamingChatModel;
         this.chatMemoryProvider = chatMemoryProvider;
         this.articleTools = articleTools;
+        this.conversationContextService = conversationContextService;
+        this.promptBuilder = promptBuilder;
     }
 
     /**
@@ -61,22 +73,21 @@ public class RagService {
      *
      * @param message        用户自然语言指令
      * @param userId         当前用户ID
-     * @param conversationId 会话ID，为空时使用 userId 作为默认会话
+     * @param conversationId 会话ID，为空时不保留历史记忆
      * @return AI 回答
      */
     public String agentChat(String message, Integer userId, String conversationId) {
-        String memoryId = (conversationId == null || conversationId.isBlank())
-                ? "agent:user:" + userId
-                : "agent:" + conversationId;
-
-        ChatMemory chatMemory = chatMemoryProvider.get(memoryId);
-
-        RagAgentAssistant assistant = AiServices.builder(RagAgentAssistant.class)
+        var builder = AiServices.builder(RagAgentAssistant.class)
                 .chatModel(openAiChatModel)
-                .tools(articleTools)
-                .chatMemory(chatMemory)
-                .build();
+                .tools(articleTools);
 
+        // 只有在传了 conversationId 时才挂载记忆，避免所有无会话的 Agent 聊天共用同一份历史
+        if (conversationId != null && !conversationId.isBlank()) {
+            ChatMemory chatMemory = chatMemoryProvider.get("agent:" + conversationId);
+            builder.chatMemory(chatMemory);
+        }
+
+        RagAgentAssistant assistant = builder.build();
         return assistant.chat(message);
     }
 
@@ -122,8 +133,19 @@ public class RagService {
         log.info("=== RAG查询开始 ===");
         log.info("查询内容: {}, userId: {}, departmentId: {}, docId: {}, conversationId: {}", query, userId, departmentId, docId, conversationId);
 
-        List<HybridResultVO> results = hybridSearchService.search(userId, departmentId, docId, query, 5);
+        String convId = normalizeConversationId(conversationId);
 
+        // 重复问题直接走缓存，避免重复 Embedding + 检索 + LLM 调用
+        String cachedAnswer = conversationContextService.getCachedAnswerIfRepeated(convId, query);
+        if (cachedAnswer != null) {
+            log.info("命中重复问题缓存，直接返回答案");
+            RagAnswerVO cachedVO = new RagAnswerVO();
+            cachedVO.setAnswer(cachedAnswer);
+            cachedVO.setCitations(new ArrayList<>());
+            return cachedVO;
+        }
+
+        List<HybridResultVO> results = hybridSearchService.search(userId, departmentId, docId, query, determineTopK(query));
         log.info("检索到 {} 条相关内容", results.size());
 
         if (results.isEmpty()) {
@@ -134,16 +156,21 @@ public class RagService {
             return emptyAnswer;
         }
 
-        String knowledge = buildKnowledgeWithCitation(results);
-        log.info("检索到的知识内容长度: {}", knowledge.length());
+        List<String> ragChunks = buildRagChunks(results);
+        log.info("检索到的知识内容共 {} 个片段", ragChunks.size());
 
-        String history = buildHistoryContext(conversationId);
-        String enhancedPrompt = buildRagPrompt(query, knowledge, results, history);
-        // 直接调用 OpenAiChatModel.chat()，不走 @AiService，避免记忆污染
-        String rawAnswer = openAiChatModel.chat(enhancedPrompt);
+        ConversationContext context = conversationContextService.load(convId);
+        log.info("RAG 上下文加载完成: conversationId={}, recentMessages={}, summaryLength={}",
+                convId, context.recentMessages().size(), context.summary().length());
 
+        List<ChatMessage> promptMessages = promptBuilder.build(
+                RAG_SYSTEM_PROMPT, null, context.summary(), context.recentMessages(), ragChunks, query);
+
+        String rawAnswer = openAiChatModel.chat(promptMessages).aiMessage().text();
         RagAnswerVO answerVO = parseAnswerWithCitations(rawAnswer, results);
-        saveToMemory(conversationId, query, answerVO.getAnswer());
+
+        // 只保存最终回答，不保存知识库原文，防止下一轮 Prompt 把知识库又拼进来
+        conversationContextService.saveInteraction(convId, query, answerVO.getAnswer());
         return answerVO;
     }
 
@@ -161,8 +188,15 @@ public class RagService {
         log.info("=== RAG流式查询开始 ===");
         log.info("查询内容: {}, userId: {}, departmentId: {}, docId: {}, conversationId: {}", query, userId, departmentId, docId, conversationId);
 
-        List<HybridResultVO> results = hybridSearchService.search(userId, departmentId, docId, query, 5);
+        String convId = normalizeConversationId(conversationId);
 
+        String cachedAnswer = conversationContextService.getCachedAnswerIfRepeated(convId, query);
+        if (cachedAnswer != null) {
+            log.info("命中重复问题缓存，直接返回答案");
+            return Flux.just(cachedAnswer);
+        }
+
+        List<HybridResultVO> results = hybridSearchService.search(userId, departmentId, docId, query, determineTopK(query));
         log.info("检索到 {} 条相关内容", results.size());
 
         if (results.isEmpty()) {
@@ -170,14 +204,17 @@ public class RagService {
             return Flux.just("抱歉，知识库中没有找到与您的问题相关的信息。请先上传相关文档或添加知识内容。");
         }
 
-        String knowledge = buildKnowledgeWithCitation(results);
-        String history = buildHistoryContext(conversationId);
-        String enhancedPrompt = buildRagPrompt(query, knowledge, results, history);
-        ChatMemory chatMemory = getChatMemory(conversationId);
+        List<String> ragChunks = buildRagChunks(results);
+        ConversationContext context = conversationContextService.load(convId);
+        log.info("RAG 上下文加载完成: conversationId={}, recentMessages={}, summaryLength={}",
+                convId, context.recentMessages().size(), context.summary().length());
+
+        List<ChatMessage> promptMessages = promptBuilder.build(
+                RAG_SYSTEM_PROMPT, null, context.summary(), context.recentMessages(), ragChunks, query);
 
         return Flux.create(sink -> {
             StringBuilder fullAnswer = new StringBuilder();
-            streamingChatModel.chat(enhancedPrompt, new StreamingChatResponseHandler() {
+            streamingChatModel.chat(promptMessages, new StreamingChatResponseHandler() {
                 @Override
                 public void onPartialResponse(String partialResponse) {
                     fullAnswer.append(partialResponse);
@@ -187,14 +224,7 @@ public class RagService {
                 @Override
                 public void onCompleteResponse(ChatResponse completeResponse) {
                     sink.complete();
-                    if (chatMemory != null) {
-                        try {
-                            chatMemory.add(UserMessage.from(query));
-                            chatMemory.add(AiMessage.from(fullAnswer.toString()));
-                        } catch (Exception e) {
-                            log.error("保存 RAG 流式对话记忆失败", e);
-                        }
-                    }
+                    conversationContextService.saveInteraction(convId, query, fullAnswer.toString());
                 }
 
                 @Override
@@ -207,56 +237,24 @@ public class RagService {
     }
 
     /**
-     * 构建带引用编号的知识库内容
+     * 构建带引用编号的知识库片段列表。
      * <p>
-     * 使用与 prompt 完全一致的 [^n] 格式，避免 LLM 编号对应错误。
+     * 每个片段格式为：[^n] 标题 第x页\n内容，与 PromptBuilder 中的来源列表保持一致。
      */
-    private String buildKnowledgeWithCitation(List<HybridResultVO> results) {
-        StringBuilder sb = new StringBuilder();
+    private List<String> buildRagChunks(List<HybridResultVO> results) {
+        List<String> chunks = new ArrayList<>();
         for (int i = 0; i < results.size(); i++) {
             HybridResultVO r = results.get(i);
-            String source = "[^" + (i + 1) + "] " + (r.getTitle() == null ? "未知文档" : r.getTitle());
-            if (r.getPageNum() != null) {
-                source += " 第" + r.getPageNum() + "页";
-            }
-            sb.append(source).append("\n").append(r.getContent());
-            if (i < results.size() - 1) {
-                sb.append("\n\n");
-            }
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 构建 RAG Prompt，要求 LLM 标注引用来源
-     */
-    private String buildRagPrompt(String query, String knowledge, List<HybridResultVO> results, String history) {
-        StringBuilder citationList = new StringBuilder();
-        for (int i = 0; i < results.size(); i++) {
-            HybridResultVO r = results.get(i);
-            citationList.append("[^").append(i + 1).append("]: ")
+            StringBuilder sb = new StringBuilder();
+            sb.append("[^").append(i + 1).append("] ")
                     .append(r.getTitle() == null ? "未知文档" : r.getTitle());
             if (r.getPageNum() != null) {
-                citationList.append(" 第").append(r.getPageNum()).append("页");
+                sb.append(" 第").append(r.getPageNum()).append("页");
             }
-            citationList.append("\n");
+            sb.append("\n").append(r.getContent());
+            chunks.add(sb.toString());
         }
-
-        String historyPart = "";
-        if (history != null && !history.isBlank()) {
-            historyPart = "\n\n历史对话：\n" + history;
-        }
-
-        return "你是一个基于知识库的智能助手。请根据以下资料回答问题，不要编造知识库中不存在的内容。\n\n" +
-                "知识库：\n" + knowledge + historyPart + "\n\n" +
-                "问题：" + query + "\n\n" +
-                "引用来源：\n" + citationList + "\n" +
-                "要求：\n" +
-                "1. 只根据知识库内容回答，不要编造\n" +
-                "2. 如果知识库中没有相关信息，请明确说明\n" +
-                "3. 引用资料时用 [^1]、[^2] 等标注来源编号\n" +
-                "4. 回答末尾列出引用来源\n" +
-                "5. 不要直接复制原文，请总结回答";
+        return chunks;
     }
 
     /**
@@ -325,56 +323,51 @@ public class RagService {
     }
 
     /**
-     * 根据 conversationId 获取 ChatMemory，未传入时返回 null
+     * 统一 RAG 会话 ID 前缀，避免与普通 AI 会话冲突。
      */
-    private ChatMemory getChatMemory(String conversationId) {
+    private String normalizeConversationId(String conversationId) {
         if (conversationId == null || conversationId.isBlank()) {
             return null;
         }
-        return chatMemoryProvider.get("rag:" + conversationId);
+        return "rag:" + conversationId;
+    }
+
+    // ==================== 动态检索量 ====================
+
+    /** 默认检索量（普通问答） */
+    private static final int DEFAULT_TOP_K = 8;
+    /** 枚举类问题检索量（"有哪些"、"列出所有"等） */
+    private static final int ENUMERATION_TOP_K = 20;
+
+    /** 问题类型 */
+    enum QueryType {
+        /** 枚举/列表类：有哪些、列出、全部、多少、几个 */
+        ENUMERATION,
+        /** 普通问答 */
+        GENERAL
     }
 
     /**
-     * 构建历史对话上下文文本，最多最近 5 轮 / 10 条消息
+     * 根据问题意图判断检索量。
+     * <p>
+     * 枚举类问题（"有哪些手机"、"列出所有"）需要更大窗口才能覆盖更多结果；
+     * 普通问答（"iPhone 15 的屏幕尺寸"）用默认量即可。
      */
-    private String buildHistoryContext(String conversationId) {
-        ChatMemory chatMemory = getChatMemory(conversationId);
-        if (chatMemory == null) {
-            return "";
-        }
-        List<ChatMessage> messages = chatMemory.messages();
-        if (messages == null || messages.isEmpty()) {
-            return "";
-        }
-
-        int start = Math.max(0, messages.size() - 10);
-        List<ChatMessage> recentMessages = messages.subList(start, messages.size());
-
-        StringBuilder sb = new StringBuilder();
-        for (ChatMessage message : recentMessages) {
-            if (message instanceof UserMessage) {
-                sb.append("User: ").append(((UserMessage) message).singleText()).append("\n");
-            } else if (message instanceof AiMessage) {
-                sb.append("Assistant: ").append(((AiMessage) message).text()).append("\n");
-            }
-        }
-        return sb.toString().trim();
+    private int determineTopK(String query) {
+        return classifyQuery(query) == ENUMERATION ? ENUMERATION_TOP_K : DEFAULT_TOP_K;
     }
 
     /**
-     * 将当前轮次 QA 保存到 ChatMemory
+     * 判断问题类型。
      */
-    private void saveToMemory(String conversationId, String query, String answer) {
-        ChatMemory chatMemory = getChatMemory(conversationId);
-        if (chatMemory == null) {
-            return;
+    static QueryType classifyQuery(String query) {
+        if (query == null || query.isBlank()) {
+            return GENERAL;
         }
-        try {
-            chatMemory.add(UserMessage.from(query));
-            chatMemory.add(AiMessage.from(answer));
-        } catch (Exception e) {
-            log.error("保存 RAG 对话记忆失败", e);
+        // 枚举/列表类特征词
+        if (query.matches(".*(有哪些|列出|所有|全部|多少|几个|哪些|列举|都有什么|都有哪些).*")) {
+            return ENUMERATION;
         }
+        return GENERAL;
     }
 }
-

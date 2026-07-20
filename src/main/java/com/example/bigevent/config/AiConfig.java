@@ -50,10 +50,10 @@ public class AiConfig {
 
     @Bean
     public ChatMemoryProvider chatMemoryProvider() {
-        // 为每个 conversationId 创建独立的短期记忆窗口，保留最近 20 条消息（约 10 轮）
+        // 为每个 conversationId 创建独立的短期记忆窗口，保留最近 12 条消息（约 6 轮）
         return memoryId -> MessageWindowChatMemory.builder()
                 .id(memoryId)
-                .maxMessages(20)
+                .maxMessages(12)
                 .chatMemoryStore(redisChatMemoryStore)
                 .build();
     }
@@ -90,7 +90,7 @@ public class AiConfig {
     /**
      * 配置文章管理工具
      * 将ArticleTools中的@Tool方法注册为AI可调用的工具
-     * 
+     *
      * 注意：这个Bean会自动关联到AiArticleService（通过命名约定）
      * RagAiService不会使用这些tools，保持轻量级
      */

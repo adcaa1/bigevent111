@@ -24,6 +24,8 @@ public class HybridSearchService {
     private final double keywordWeight;
     private final int rrfK;
     private final double minScore;
+    private final double keywordMinScoreRatio;
+    private final double finalMinScoreRatio;
 
     public HybridSearchService(VectorStoreService vectorStoreService,
                                ElasticsearchKeywordService elasticsearchKeywordService,
@@ -32,7 +34,9 @@ public class HybridSearchService {
                                @Value("${rag.search.vector-weight:1.0}") double vectorWeight,
                                @Value("${rag.search.keyword-weight:0.7}") double keywordWeight,
                                @Value("${rag.search.rrf-k:60}") int rrfK,
-                               @Value("${rag.search.min-score:0.2}") double minScore) {
+                               @Value("${rag.search.min-score:0.5}") double minScore,
+                               @Value("${rag.search.keyword-min-score-ratio:0.7}") double keywordMinScoreRatio,
+                               @Value("${rag.search.final-min-score-ratio:0.7}") double finalMinScoreRatio) {
         this.vectorStoreService = vectorStoreService;
         this.elasticsearchKeywordService = elasticsearchKeywordService;
         this.vectorTopK = vectorTopK;
@@ -41,6 +45,8 @@ public class HybridSearchService {
         this.keywordWeight = keywordWeight;
         this.rrfK = rrfK;
         this.minScore = minScore;
+        this.keywordMinScoreRatio = keywordMinScoreRatio;
+        this.finalMinScoreRatio = finalMinScoreRatio;
     }
 
     /**
@@ -55,9 +61,10 @@ public class HybridSearchService {
      */
     public List<HybridResultVO> search(Integer userId, Integer departmentId, Long docId, String question, int finalTopK) {
         List<HybridResultVO> vectorResults = vectorSearch(userId, departmentId, docId, question, vectorTopK);
-        List<HybridResultVO> keywordResults = elasticsearchKeywordService.search(userId, departmentId, docId, question, keywordTopK);
+        List<HybridResultVO> keywordResults = elasticsearchKeywordService.search(userId, departmentId, docId, question, keywordTopK, keywordMinScoreRatio);
 
-        log.info("向量召回 {} 条，ES 关键词召回 {} 条", vectorResults.size(), keywordResults.size());
+        log.info("向量召回 {} 条（minScore={}），ES 关键词召回 {} 条（minScoreRatio={}）",
+                vectorResults.size(), minScore, keywordResults.size(), keywordMinScoreRatio);
 
         Map<Long, HybridResultVO> merged = new LinkedHashMap<>();
 
@@ -75,13 +82,27 @@ public class HybridSearchService {
             merged.merge(vo.getChunkId(), vo, this::mergeScore);
         }
 
-        List<HybridResultVO> result = merged.values().stream()
+        if (merged.isEmpty()) {
+            return List.of();
+        }
+
+        List<HybridResultVO> sorted = merged.values().stream()
                 .sorted(Comparator.comparing(HybridResultVO::getScore).reversed())
-                .limit(finalTopK)
-                .peek(vo -> log.info("融合结果 chunkId={}, score={}", vo.getChunkId(), vo.getScore()))
                 .toList();
 
-        log.info("多路召回最终返回 {} 条", result.size());
+        double maxScore = sorted.get(0).getScore();
+        double finalThreshold = maxScore * finalMinScoreRatio;
+
+        List<HybridResultVO> result = sorted.stream()
+                .filter(vo -> vo.getScore() >= finalThreshold)
+                .limit(finalTopK)
+                .peek(vo -> log.info("融合结果 chunkId={}, rrfScore={}, vectorScore={}, keywordScore={}",
+                        vo.getChunkId(), String.format("%.6f", vo.getScore()),
+                        vo.getVectorScore(), vo.getKeywordScore()))
+                .toList();
+
+        log.info("多路召回最终返回 {} 条（maxScore={:.6f}, threshold={:.6f}）",
+                result.size(), maxScore, finalThreshold);
         return result;
     }
 
@@ -100,6 +121,7 @@ public class HybridSearchService {
             vo.setContent(r.getContent());
             vo.setChunkIndex(r.getChunkIndex());
             vo.setPageNum(r.getPageNum());
+            vo.setVectorScore(r.getScore());
             return vo;
         }).toList();
     }
