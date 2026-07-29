@@ -47,9 +47,15 @@ public interface FollowService {
     List<User> findFollowing(Integer userId);
 
     /**
-     * 获取广场用户列表（带粉丝数/关注数/是否已关注）
+     * 获取广场推荐用户列表（非好友，带粉丝数/关注数/是否已关注）
+     * sort=article 时按发布文章数降序；否则随机推荐
      */
-    List<UserSquareVO> getSquareUsers(Integer currentUserId);
+    List<UserSquareVO> getSquareUsers(Integer currentUserId, Integer limit, String sort);
+
+    /**
+     * 获取互相关注好友列表
+     */
+    List<UserSquareVO> getMutualFriends(Integer currentUserId, Integer limit);
 
     /**
      * 获取用户主页信息

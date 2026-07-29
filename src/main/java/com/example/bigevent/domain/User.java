@@ -27,4 +27,8 @@ public class User {
     private LocalDateTime updateTime;//更新时间
     private Integer deleted;//0-正常 1-已注销
     private Integer departmentId;//所属部门ID
+    private Integer role;//0-普通用户 1-管理员
+    private Integer fansCount;//粉丝数冗余字段
+    private Integer followCount;//关注数冗余字段
+    private Integer articleCount;//已发布文章数冗余字段
 }

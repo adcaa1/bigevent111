@@ -13,5 +13,6 @@ public class UserSquareVO {
     private String userPic;         // 头像地址
     private Long fansCount;         // 粉丝数量
     private Long followCount;       // 关注数量
+    private Long articleCount;      // 已发布文章数量
     private Boolean isFollowed;     // 当前登录用户是否已关注此人
 }

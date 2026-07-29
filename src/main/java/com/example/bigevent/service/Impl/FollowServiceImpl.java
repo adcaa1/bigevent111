@@ -11,8 +11,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * 关注关系Service实现类
@@ -31,7 +33,7 @@ public class FollowServiceImpl implements FollowService {
      * 不能关注自己，不能重复关注
      */
     @Override
-    @CacheEvict(value = {"squareUsers", "userProfile"}, allEntries = true)
+    @CacheEvict(value = {"squareUsers", "mutualFriends", "userProfile"}, allEntries = true)
     public void follow(Integer userId, Integer followUserId) {
         if (userId.equals(followUserId)) {
             throw new RuntimeException("不能关注自己");
@@ -45,15 +47,25 @@ public class FollowServiceImpl implements FollowService {
             throw new RuntimeException("已关注该用户");
         }
         followMapper.addFollow(userId, followUserId);
+        // 同步维护冗余计数字段
+        usermapper.deltaFansCount(followUserId, 1);
+        usermapper.deltaFollowCount(userId, 1);
     }
 
     /**
      * 取消关注
      */
     @Override
-    @CacheEvict(value = {"squareUsers", "userProfile"}, allEntries = true)
+    @CacheEvict(value = {"squareUsers", "mutualFriends", "userProfile"}, allEntries = true)
     public void unfollow(Integer userId, Integer followUserId) {
-        followMapper.deleteFollow(userId, followUserId);
+        // 只有真正存在关注关系时才扣减计数
+        if (followMapper.isFollowed(userId, followUserId) > 0) {
+            followMapper.deleteFollow(userId, followUserId);
+            usermapper.deltaFansCount(followUserId, -1);
+            usermapper.deltaFollowCount(userId, -1);
+        } else {
+            followMapper.deleteFollow(userId, followUserId);
+        }
     }
 
     /**
@@ -97,37 +109,69 @@ public class FollowServiceImpl implements FollowService {
     }
 
     /**
-     * 获取广场用户列表
+     * 获取广场推荐用户列表（排除自己和互相关注好友）
+     * sort=article 时按发布文章数降序；否则使用随机 OFFSET 随机推荐
      */
     @Override
-    @Cacheable(value = "squareUsers", key = "#currentUserId != null ? 'login:' + #currentUserId : 'all'", unless = "#result == null")
-    public List<UserSquareVO> getSquareUsers(Integer currentUserId) {
-        List<User> allUsers = usermapper.findAll();
-        List<UserSquareVO> voList = new ArrayList<>();
-        for (User user : allUsers) {
-            // 跳过已注销用户
-            if (user.getDeleted() != null && user.getDeleted() == 1) {
-                continue;
-            }
-            // 广场不展示当前登录用户自己
-            if (currentUserId != null && user.getId().equals(currentUserId)) {
-                continue;
-            }
-            UserSquareVO vo = new UserSquareVO();
-            vo.setId(user.getId());
-            vo.setUsername(user.getUsername());
-            vo.setNickname(user.getNickname());
-            vo.setUserPic(user.getUserPic());
-            vo.setFansCount(followMapper.countFans(user.getId()));
-            vo.setFollowCount(followMapper.countFollowing(user.getId()));
-            if (currentUserId != null) {
-                vo.setIsFollowed(followMapper.isFollowed(currentUserId, user.getId()) > 0);
-            } else {
-                vo.setIsFollowed(false);
-            }
-            voList.add(vo);
+    public List<UserSquareVO> getSquareUsers(Integer currentUserId, Integer limit, String sort) {
+        if (limit == null || limit <= 0) {
+            limit = 20;
         }
-        return voList;
+        // 避免前端传过大的 limit 拖慢数据库
+        if (limit > 100) {
+            limit = 100;
+        }
+        boolean byArticle = "article".equals(sort);
+        List<UserSquareVO> users;
+        if (byArticle) {
+            // 首屏：按发布文章数降序，取第一页
+            users = usermapper.findSquareUsersByArticle(currentUserId, limit, 0);
+        } else {
+            // 换一批：随机 offset
+            Long total = usermapper.countSquareUsers(currentUserId);
+            if (total == null || total == 0) {
+                return List.of();
+            }
+            int maxOffset = (int) Math.max(0, total - limit);
+            int offset = maxOffset > 0 ? new Random().nextInt(maxOffset + 1) : 0;
+            users = usermapper.findRandomSquareUsers(currentUserId, limit, offset);
+        }
+        fillFollowedStatus(currentUserId, users);
+        return users;
+    }
+
+    /**
+     * 获取互相关注好友列表
+     */
+    @Override
+    @Cacheable(value = "mutualFriends", key = "'mf:' + #currentUserId + ':' + (#limit != null ? #limit : 0)", unless = "#result == null")
+    public List<UserSquareVO> getMutualFriends(Integer currentUserId, Integer limit) {
+        if (limit == null || limit <= 0) {
+            limit = 100;
+        }
+        if (limit > 500) {
+            limit = 500;
+        }
+        List<UserSquareVO> friends = followMapper.findMutualFriends(currentUserId, limit);
+        for (UserSquareVO vo : friends) {
+            vo.setIsFollowed(true);
+        }
+        return friends;
+    }
+
+    /**
+     * 批量填充当前用户是否已关注标记
+     */
+    private void fillFollowedStatus(Integer currentUserId, List<UserSquareVO> users) {
+        if (users == null || users.isEmpty() || currentUserId == null) {
+            return;
+        }
+        List<Integer> userIds = users.stream().map(UserSquareVO::getId).toList();
+        List<Integer> followedIds = followMapper.batchIsFollowed(currentUserId, userIds);
+        Set<Integer> followedSet = new HashSet<>(followedIds);
+        for (UserSquareVO vo : users) {
+            vo.setIsFollowed(followedSet.contains(vo.getId()));
+        }
     }
 
     /**
@@ -147,8 +191,8 @@ public class FollowServiceImpl implements FollowService {
         vo.setIntro(user.getIntro());
         vo.setUserPic(user.getUserPic());
         vo.setEmail(user.getEmail());
-        vo.setFansCount(followMapper.countFans(userId));
-        vo.setFollowCount(followMapper.countFollowing(userId));
+        vo.setFansCount(user.getFansCount() != null ? user.getFansCount().longValue() : 0L);
+        vo.setFollowCount(user.getFollowCount() != null ? user.getFollowCount().longValue() : 0L);
         if (currentUserId != null) {
             vo.setIsFollowed(followMapper.isFollowed(currentUserId, userId) > 0);
         } else {

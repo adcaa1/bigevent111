@@ -43,6 +43,10 @@ public class ArticleServiceImpl implements ArticleService {
         Integer id = (Integer) claims.get("id");
         article.setCreateUser(id);
         articleMapper.addarticle(article);
+        // 已发布文章同步递增冗余计数
+        if ("已发布".equals(article.getState())) {
+            usermapper.deltaArticleCount(id, 1);
+        }
 // 刷新用户的"最近文章"长期业务记忆
         refreshLatestArticles(id);
     }
@@ -99,12 +103,26 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @CacheEvict(value = "article", key = "#id")
     public void deletearticle(Integer id) {
+        Article old = articleMapper.findById(id);
+        if (old != null && "已发布".equals(old.getState())) {
+            usermapper.deltaArticleCount(old.getCreateUser(), -1);
+        }
         articleMapper.deletearticle(id);
     }
 
     @Override
     @CacheEvict(value = "article", key = "#article.id")
     public void updatearticle(Article article) {
+        Article old = articleMapper.findById(article.getId());
+        if (old != null) {
+            boolean wasPublished = "已发布".equals(old.getState());
+            boolean willPublish = "已发布".equals(article.getState());
+            if (!wasPublished && willPublish) {
+                usermapper.deltaArticleCount(old.getCreateUser(), 1);
+            } else if (wasPublished && !willPublish) {
+                usermapper.deltaArticleCount(old.getCreateUser(), -1);
+            }
+        }
         articleMapper.updatearticle(article);
     }
 
