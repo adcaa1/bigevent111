@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -30,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * WebSocket 聊天服务端
  */
+@Slf4j
 @Component
 @ServerEndpoint("/ws/chat")
 public class ChatWebSocketServer {
@@ -82,14 +84,14 @@ public class ChatWebSocketServer {
      */
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("[WebSocket] 收到连接请求: " + session.getRequestURI());
+        log.info("[WebSocket] 收到连接请求: {}", session.getRequestURI());
         Integer userId = authenticate(session);
         if (userId == null) {
-            System.err.println("[WebSocket] 认证失败，关闭连接");
+            log.warn("[WebSocket] 认证失败，关闭连接");
             try {
                 session.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "认证失败"));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("[WebSocket] 关闭认证失败连接异常", e);
             }
             return;
         }
@@ -102,7 +104,7 @@ public class ChatWebSocketServer {
         String onlineKey = "user:online:" + userId;
         stringRedisTemplate.opsForValue().set(onlineKey, session.getId(), 60, TimeUnit.SECONDS);
 
-        System.out.println("WebSocket 连接成功: userId=" + userId + ", 当前在线=" + wsSessionManager.getOnlineCount());
+        log.info("WebSocket 连接成功: userId={}, 当前在线={}", userId, wsSessionManager.getOnlineCount());
     }
 
     /**
@@ -110,16 +112,16 @@ public class ChatWebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println("[WebSocket] 收到原始消息: " + message);
+        log.debug("[WebSocket] 收到原始消息: {}", message);
         Integer senderId = (Integer) session.getUserProperties().get("userId");
         if (senderId == null) {
-            System.err.println("[WebSocket] userId 为空，无法处理消息");
+            log.warn("[WebSocket] userId 为空，无法处理消息");
             return;
         }
 
         try {
             WsMessageDTO dto = objectMapper.readValue(message, WsMessageDTO.class);
-            System.out.println("[WebSocket] 解析消息: type=" + dto.getType() + ", senderId=" + senderId);
+            log.debug("[WebSocket] 解析消息: type={}, senderId={}", dto.getType(), senderId);
 
             if ("ping".equals(dto.getType())) {
                 // 心跳响应，同时刷新在线状态 TTL
@@ -133,12 +135,11 @@ public class ChatWebSocketServer {
             } else if ("group".equals(dto.getType())) {
                 handleGroupMessage(senderId, dto);
             } else {
-                System.err.println("[WebSocket] 未知的消息类型: " + dto.getType());
+                log.warn("[WebSocket] 未知的消息类型: {}", dto.getType());
             }
 
         } catch (Exception e) {
-            System.err.println("[WebSocket] 消息解析失败: " + e.getMessage());
-            e.printStackTrace();
+            log.error("[WebSocket] 消息解析失败", e);
             sendError(session, "消息处理失败: " + e.getMessage());
         }
     }
@@ -153,7 +154,7 @@ public class ChatWebSocketServer {
         if (userId != null) {
             stringRedisTemplate.delete("user:online:" + userId);
         }
-        System.out.println("WebSocket 断开: userId=" + userId + ", 当前在线=" + wsSessionManager.getOnlineCount());
+        log.info("WebSocket 断开: userId={}, 当前在线={}", userId, wsSessionManager.getOnlineCount());
     }
 
     /**
@@ -162,7 +163,7 @@ public class ChatWebSocketServer {
     @OnError
     public void onError(Session session, Throwable error) {
         Integer userId = (Integer) session.getUserProperties().get("userId");
-        System.err.println("WebSocket 错误: userId=" + userId + ", error=" + error.getMessage());
+        log.error("WebSocket 错误: userId={}, error={}", userId, error.getMessage(), error);
     }
 
     /**
@@ -195,7 +196,7 @@ public class ChatWebSocketServer {
         Integer receiverId = dto.getReceiverId();
         String content = dto.getContent();
         if (receiverId == null || content == null || content.trim().isEmpty()) {
-            System.err.println("[WebSocket] 单聊消息参数无效: senderId=" + senderId + ", receiverId=" + receiverId + ", content=" + content);
+            log.warn("[WebSocket] 单聊消息参数无效: senderId={}, receiverId={}, content={}", senderId, receiverId, content);
             return;
         }
 
@@ -207,16 +208,15 @@ public class ChatWebSocketServer {
         event.setTempId(dto.getTempId());
         event.setType(0);
 
-        System.out.println("[WebSocket] 准备发送单聊消息到RabbitMQ: " + event);
+        log.debug("[WebSocket] 准备发送单聊消息到RabbitMQ: {}", event);
 
         // 发送到 RabbitMQ
         try {
             rabbitTemplate.convertAndSend(RabbitMQConfig.CHAT_EXCHANGE,
                     RabbitMQConfig.CHAT_PRIVATE_KEY, event);
-            System.out.println("[WebSocket] 单聊消息已发送到RabbitMQ: senderId=" + senderId + ", receiverId=" + receiverId);
+            log.info("[WebSocket] 单聊消息已发送到RabbitMQ: senderId={}, receiverId={}", senderId, receiverId);
         } catch (Exception e) {
-            System.err.println("[WebSocket] 发送消息到RabbitMQ失败: " + e.getMessage());
-            e.printStackTrace();
+            log.error("[WebSocket] 发送消息到RabbitMQ失败", e);
         }
 
         // 立刻回推 ACK 给发送者
@@ -231,7 +231,7 @@ public class ChatWebSocketServer {
         Integer groupId = dto.getGroupId();
         String content = dto.getContent();
         if (groupId == null || content == null || content.trim().isEmpty()) {
-            System.err.println("[WebSocket] 群聊消息参数无效: senderId=" + senderId + ", groupId=" + groupId + ", content=" + content);
+            log.warn("[WebSocket] 群聊消息参数无效: senderId={}, groupId={}, content={}", senderId, groupId, content);
             return;
         }
 
@@ -252,16 +252,15 @@ public class ChatWebSocketServer {
         event.setTempId(dto.getTempId());
         event.setType(1);
 
-        System.out.println("[WebSocket] 准备发送群聊消息到RabbitMQ: " + event);
+        log.debug("[WebSocket] 准备发送群聊消息到RabbitMQ: {}", event);
 
         // 发送到 RabbitMQ
         try {
             rabbitTemplate.convertAndSend(RabbitMQConfig.CHAT_EXCHANGE,
                     RabbitMQConfig.CHAT_GROUP_KEY, event);
-            System.out.println("[WebSocket] 群聊消息已发送到RabbitMQ: senderId=" + senderId + ", groupId=" + groupId);
+            log.info("[WebSocket] 群聊消息已发送到RabbitMQ: senderId={}, groupId={}", senderId, groupId);
         } catch (Exception e) {
-            System.err.println("[WebSocket] 发送消息到RabbitMQ失败: " + e.getMessage());
-            e.printStackTrace();
+            log.error("[WebSocket] 发送消息到RabbitMQ失败", e);
         }
 
         // 立刻回推 ACK 给发送者
@@ -283,6 +282,7 @@ public class ChatWebSocketServer {
         vo.setSenderId(msg.getSenderId());
         vo.setReceiverId(msg.getReceiverId());
         vo.setGroupId(msg.getGroupId());
+        vo.setConversationId(msg.getConversationId());
         vo.setContent(msg.getContent());
         vo.setCreateTime(msg.getCreateTime().format(formatter));
         vo.setTempId(tempId);
@@ -293,7 +293,7 @@ public class ChatWebSocketServer {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("[WebSocket] 消息序列化失败", e);
             return "";
         }
     }
@@ -306,7 +306,7 @@ public class ChatWebSocketServer {
             error.setMessage(errorMsg);
             session.getBasicRemote().sendText(toJson(error));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("[WebSocket] 发送错误消息失败", e);
         }
     }
 

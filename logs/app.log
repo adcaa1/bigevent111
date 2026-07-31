@@ -1,0 +1,193 @@
+2026-08-01 00:46:17.275 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-08-01 00:46:17.329 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 5760 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-08-01 00:46:17.331 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-08-01 00:46:24.398 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-08-01 00:46:24.406 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-08-01 00:46:24.515 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 65 ms. Found 0 Redis repository interfaces.
+2026-08-01 00:46:27.878 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-08-01 00:46:27.906 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-08-01 00:46:27.910 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-08-01 00:46:27.910 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-08-01 00:46:28.207 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-08-01 00:46:28.209 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 10819 ms
+2026-08-01 00:46:30.716 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-08-01 00:46:36.087 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-08-01 00:46:38.752 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-08-01 00:46:38.802 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-08-01 00:46:41.601 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-08-01 00:46:43.255 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-08-01 00:46:43.299 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-08-01 00:46:44.495 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:46:44.735 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#13edc1bc:0/SimpleConnection@58052571 [delegate=amqp://guest@127.0.0.1:5672/, localPort=54781]
+2026-08-01 00:46:45.080 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 28.641 seconds (process running for 30.3)
+2026-08-01 00:46:45.115 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-08-01 00:46:45.450 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-08-01 00:46:45.461 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-08-01 00:47:16.597 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-01 00:47:16.599 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-08-01 00:47:16.601 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-08-01 00:47:16.716 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ3MjExMX0.wcJLjLXFNeGjwH2pz7o1xMsAkLTqGcs022LQEqC2TXc
+2026-08-01 00:47:16.766 [http-nio-8080-exec-1] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-08-01 00:47:16.783 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-08-01 00:47:22.221 [http-nio-8080-exec-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-08-01 00:47:22.812 [http-nio-8080-exec-5] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@44ff9603
+2026-08-01 00:47:22.816 [http-nio-8080-exec-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-08-01 00:47:23.219 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTU1OTY0Mn0.0-0oLoII9KlzVYspgFHP0Dt_8HRjmS_vqvAJqbzszTM
+2026-08-01 00:47:23.255 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-08-01 00:49:13.900 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-08-01 00:49:17.488 [lettuce-eventExecutorLoop-1-9] INFO  i.l.core.protocol.ConnectionWatchdog - Reconnecting, last destination was localhost/127.0.0.1:6379
+2026-08-01 00:49:17.488 [lettuce-eventExecutorLoop-1-8] INFO  i.l.core.protocol.ConnectionWatchdog - Reconnecting, last destination was localhost/127.0.0.1:6379
+2026-08-01 00:49:17.518 [lettuce-nioEventLoop-7-4] WARN  i.l.core.protocol.ConnectionWatchdog - Cannot reconnect to [localhost/<unresolved>:6379]: Connection closed prematurely
+io.lettuce.core.RedisConnectionException: Connection closed prematurely
+	at io.lettuce.core.protocol.RedisHandshakeHandler.channelInactive(RedisHandshakeHandler.java:91)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+	at io.netty.channel.ChannelInboundHandlerAdapter.channelInactive(ChannelInboundHandlerAdapter.java:81)
+	at io.lettuce.core.ChannelGroupListener.channelInactive(ChannelGroupListener.java:69)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelInactive(DefaultChannelPipeline.java:1405)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:301)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelInactive(DefaultChannelPipeline.java:901)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$7.run(AbstractChannel.java:813)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:566)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2026-08-01 00:49:17.518 [lettuce-nioEventLoop-7-3] WARN  i.l.core.protocol.ConnectionWatchdog - Cannot reconnect to [localhost/<unresolved>:6379]: Connection closed prematurely
+io.lettuce.core.RedisConnectionException: Connection closed prematurely
+	at io.lettuce.core.protocol.RedisHandshakeHandler.channelInactive(RedisHandshakeHandler.java:91)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+	at io.netty.channel.ChannelInboundHandlerAdapter.channelInactive(ChannelInboundHandlerAdapter.java:81)
+	at io.lettuce.core.ChannelGroupListener.channelInactive(ChannelGroupListener.java:69)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:274)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelInactive(DefaultChannelPipeline.java:1405)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:301)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:281)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelInactive(DefaultChannelPipeline.java:901)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$7.run(AbstractChannel.java:813)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:566)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2026-08-01 00:49:19.209 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Restarting Consumer@52dfd7f5: tags=[[amq.ctag-SlZ-m5H7L3tQ9cibmvtHpA]], channel=Cached Rabbit Channel: AMQChannel(amqp://guest@127.0.0.1:5672/,1), conn: Proxy@6ee34fe4 Shared Rabbit Connection: SimpleConnection@58052571 [delegate=amqp://guest@127.0.0.1:5672/, localPort=54781], acknowledgeMode=AUTO local queue size=0
+2026-08-01 00:49:19.209 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-1] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Restarting Consumer@504216ff: tags=[[amq.ctag-HNeTNsCA9t2Q4FvVNyTXOA]], channel=Cached Rabbit Channel: AMQChannel(amqp://guest@127.0.0.1:5672/,2), conn: Proxy@6ee34fe4 Shared Rabbit Connection: SimpleConnection@58052571 [delegate=amqp://guest@127.0.0.1:5672/, localPort=54781], acknowledgeMode=AUTO local queue size=0
+2026-08-01 00:49:19.213 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:49:19.232 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:49:19.232 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] ERROR o.s.a.r.l.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.io.IOException
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:606)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:727)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:672)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:645)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:534)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1478)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2255)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2222)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2202)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1960)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1924)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1435)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1277)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.io.IOException: null
+	at com.rabbitmq.client.impl.AMQChannel.wrap(AMQChannel.java:140)
+	at com.rabbitmq.client.impl.AMQChannel.wrap(AMQChannel.java:136)
+	at com.rabbitmq.client.impl.AMQConnection.start(AMQConnection.java:406)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1251)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:652)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:621)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:568)
+	... 15 common frames omitted
+Caused by: com.rabbitmq.client.ShutdownSignalException: connection error
+	at com.rabbitmq.utility.ValueOrException.getValue(ValueOrException.java:66)
+	at com.rabbitmq.utility.BlockingValueOrException.uninterruptibleGetValue(BlockingValueOrException.java:36)
+	at com.rabbitmq.client.impl.AMQChannel$BlockingRpcContinuation.getReply(AMQChannel.java:552)
+	at com.rabbitmq.client.impl.AMQConnection.start(AMQConnection.java:336)
+	... 20 common frames omitted
+Caused by: java.io.EOFException: null
+	at java.base/java.io.DataInputStream.readUnsignedByte(DataInputStream.java:296)
+	at com.rabbitmq.client.impl.Frame.readFrom(Frame.java:91)
+	at com.rabbitmq.client.impl.SocketFrameHandler.readFrame(SocketFrameHandler.java:199)
+	at com.rabbitmq.client.impl.AMQConnection$MainLoop.run(AMQConnection.java:687)
+	... 1 common frames omitted
+2026-08-01 00:49:19.243 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:49:19.243 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] ERROR o.s.a.r.l.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.io.IOException
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:606)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:727)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:672)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:645)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:534)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1478)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2255)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2222)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2202)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1960)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1924)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1435)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1277)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.io.IOException: null
+	at com.rabbitmq.client.impl.AMQChannel.wrap(AMQChannel.java:140)
+	at com.rabbitmq.client.impl.AMQChannel.wrap(AMQChannel.java:136)
+	at com.rabbitmq.client.impl.AMQConnection.start(AMQConnection.java:406)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1251)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:652)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:621)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:568)
+	... 15 common frames omitted
+Caused by: com.rabbitmq.client.ShutdownSignalException: connection error
+	at com.rabbitmq.utility.ValueOrException.getValue(ValueOrException.java:66)
+	at com.rabbitmq.utility.BlockingValueOrException.uninterruptibleGetValue(BlockingValueOrException.java:36)
+	at com.rabbitmq.client.impl.AMQChannel$BlockingRpcContinuation.getReply(AMQChannel.java:552)
+	at com.rabbitmq.client.impl.AMQConnection.start(AMQConnection.java:336)
+	... 20 common frames omitted
+Caused by: java.io.EOFException: null
+	at java.base/java.io.DataInputStream.readUnsignedByte(DataInputStream.java:296)
+	at com.rabbitmq.client.impl.Frame.readFrom(Frame.java:91)
+	at com.rabbitmq.client.impl.SocketFrameHandler.readFrame(SocketFrameHandler.java:199)
+	at com.rabbitmq.client.impl.AMQConnection$MainLoop.run(AMQConnection.java:687)
+	... 1 common frames omitted
+2026-08-01 00:49:19.252 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:49:22.482 [lettuce-eventExecutorLoop-1-7] INFO  i.l.core.protocol.ConnectionWatchdog - Reconnecting, last destination was localhost/<unresolved>:6379
+2026-08-01 00:49:22.482 [lettuce-eventExecutorLoop-1-4] INFO  i.l.core.protocol.ConnectionWatchdog - Reconnecting, last destination was localhost/<unresolved>:6379
+2026-08-01 00:49:22.483 [lettuce-nioEventLoop-7-2] WARN  i.l.core.protocol.ConnectionWatchdog - Cannot reconnect to [localhost/<unresolved>:6379]: Connection refused: no further information: localhost/127.0.0.1:6379
+2026-08-01 00:49:22.483 [lettuce-nioEventLoop-7-1] WARN  i.l.core.protocol.ConnectionWatchdog - Cannot reconnect to [localhost/<unresolved>:6379]: Connection refused: no further information: localhost/127.0.0.1:6379
+2026-08-01 00:49:24.265 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Restarting Consumer@1fbae9e5: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2026-08-01 00:49:24.267 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:49:24.269 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] ERROR o.s.a.r.l.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+2026-08-01 00:49:24.272 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:49:24.444 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Restarting Consumer@2d03e960: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2026-08-01 00:49:24.447 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-3] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:49:24.449 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-3] ERROR o.s.a.r.l.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+2026-08-01 00:49:24.453 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-3] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-08-01 00:49:28.284 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-08-01 00:49:28.284 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-4] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-08-01 00:49:28.285 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-4] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-08-01 00:49:28.285 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-08-01 00:49:28.467 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-08-01 00:49:28.489 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

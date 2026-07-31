@@ -3,10 +3,11 @@ import com.aliyun.oss.*;
 import com.aliyun.oss.common.auth.*;
 import com.aliyun.oss.common.comm.SignVersion;
 import com.aliyun.oss.model.*;
-import java.io.ByteArrayInputStream;
-import java.io.File;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.FileInputStream;
 
+@Slf4j
 public class Demo {
 
     public static void main(String[] args) throws Exception {
@@ -49,17 +50,10 @@ public class Demo {
             // 上传字符串。
             PutObjectResult result = ossClient.putObject(putObjectRequest);
         } catch (OSSException oe) {
-            System.out.println("Caught an OSSException, which means your request made it to OSS, "
-                    + "but was rejected with an error response for some reason.");
-            System.out.println("Error Message:" + oe.getErrorMessage());
-            System.out.println("Error Code:" + oe.getErrorCode());
-            System.out.println("Request ID:" + oe.getRequestId());
-            System.out.println("Host ID:" + oe.getHostId());
+            log.error("OSS 上传失败, ErrorMessage={}, ErrorCode={}, RequestId={}, HostId={}",
+                    oe.getErrorMessage(), oe.getErrorCode(), oe.getRequestId(), oe.getHostId());
         } catch (ClientException ce) {
-            System.out.println("Caught an ClientException, which means the client encountered "
-                    + "a serious internal problem while trying to communicate with OSS, "
-                    + "such as not being able to access the network.");
-            System.out.println("Error Message:" + ce.getMessage());
+            log.error("OSS 客户端异常, ErrorMessage={}", ce.getMessage(), ce);
         } finally {
             if (ossClient != null) {
                 ossClient.shutdown();

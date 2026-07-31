@@ -1,0 +1,2832 @@
+2026-07-31 00:02:00.239 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-31 00:02:00.241 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-31 00:02:00.642 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-31 00:02:00.917 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-31 00:02:01.126 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-31 00:02:01.139 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-31 00:02:01.151 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=java.nio.channels.ClosedChannelException
+java.io.IOException: java.nio.channels.ClosedChannelException
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:321)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:257)
+	at org.apache.tomcat.websocket.WsSession.sendCloseMessage(WsSession.java:718)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:587)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.nio.channels.ClosedChannelException: null
+	at org.apache.tomcat.util.net.NioChannel$1.write(NioChannel.java:269)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper$NioOperationState.run(NioEndpoint.java:1635)
+	at org.apache.tomcat.util.net.SocketWrapperBase$OperationState.start(SocketWrapperBase.java:1051)
+	at org.apache.tomcat.util.net.SocketWrapperBase.vectoredOperation(SocketWrapperBase.java:1440)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1366)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1337)
+	at org.apache.tomcat.websocket.server.WsRemoteEndpointImplServer.doWrite(WsRemoteEndpointImplServer.java:165)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.writeMessagePart(WsRemoteEndpointImplBase.java:516)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:308)
+	... 37 common frames omitted
+2026-07-31 00:02:01.155 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=null
+java.lang.reflect.InvocationTargetException: null
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.tomcat.websocket.pojo.PojoEndpointBase.onClose(PojoEndpointBase.java:101)
+	at org.apache.tomcat.websocket.WsSession.fireEndpointOnClose(WsSession.java:662)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:588)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.assertStarted(LettuceConnectionFactory.java:1402)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:999)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.RedisTemplate.doWithKeys(RedisTemplate.java:785)
+	at org.springframework.data.redis.core.RedisTemplate.delete(RedisTemplate.java:588)
+	at com.example.bigevent.websocket.ChatWebSocketServer.onClose(ChatWebSocketServer.java:155)
+	... 41 common frames omitted
+2026-07-31 00:02:11.192 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-31 00:02:11.224 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 26740 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-31 00:02:11.225 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-31 00:02:12.196 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-31 00:02:12.202 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-31 00:02:12.237 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 18 ms. Found 0 Redis repository interfaces.
+2026-07-31 00:02:13.274 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-31 00:02:13.300 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-31 00:02:13.308 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-31 00:02:13.309 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-31 00:02:13.529 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-31 00:02:13.529 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2263 ms
+2026-07-31 00:02:15.131 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-31 00:02:15.473 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'aiConfig': Unsatisfied dependency expressed through field 'articleTools': No qualifying bean of type 'com.example.bigevent.service.ArticleTools' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2026-07-31 00:02:15.514 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-07-31 00:02:15.571 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-07-31 00:02:15.618 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field articleTools in com.example.bigevent.config.AiConfig required a bean of type 'com.example.bigevent.service.ArticleTools' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.example.bigevent.service.ArticleTools' in your configuration.
+
+2026-07-31 00:12:32.604 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-31 00:12:32.635 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 27316 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-31 00:12:32.636 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-31 00:12:33.356 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-31 00:12:33.358 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-31 00:12:33.385 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 15 ms. Found 0 Redis repository interfaces.
+2026-07-31 00:12:34.123 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-31 00:12:34.132 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-31 00:12:34.133 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-31 00:12:34.133 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-31 00:12:34.200 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-31 00:12:34.200 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1527 ms
+2026-07-31 00:12:34.721 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-31 00:12:34.838 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'aiConfig': Unsatisfied dependency expressed through field 'articleTools': No qualifying bean of type 'com.example.bigevent.service.ArticleTools' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2026-07-31 00:12:34.855 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-07-31 00:12:34.880 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-07-31 00:12:34.896 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field articleTools in com.example.bigevent.config.AiConfig required a bean of type 'com.example.bigevent.service.ArticleTools' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.example.bigevent.service.ArticleTools' in your configuration.
+
+2026-07-31 00:26:12.520 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-31 00:26:12.592 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 7072 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-31 00:26:12.592 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-31 00:26:15.298 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-31 00:26:15.307 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-31 00:26:15.423 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 69 ms. Found 0 Redis repository interfaces.
+2026-07-31 00:26:18.819 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-31 00:26:18.842 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-31 00:26:18.849 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-31 00:26:18.850 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-31 00:26:19.175 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-31 00:26:19.176 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 6492 ms
+2026-07-31 00:26:21.728 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-31 00:26:25.123 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-07-31 00:26:25.997 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-07-31 00:26:26.016 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-07-31 00:26:27.749 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-07-31 00:26:29.019 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-31 00:26:29.057 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-31 00:26:29.939 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-07-31 00:26:30.159 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#684bfba9:0/SimpleConnection@2ce7ec5f [delegate=amqp://guest@127.0.0.1:5672/, localPort=60714]
+2026-07-31 00:26:30.375 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 18.677 seconds (process running for 19.95)
+2026-07-31 00:26:30.739 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-07-31 00:26:30.760 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-07-31 00:26:30.774 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-07-31 00:28:23.807 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-31 00:28:23.808 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-31 00:28:23.811 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-07-31 00:28:30.453 [http-nio-8080-exec-4] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-31 00:28:31.029 [http-nio-8080-exec-4] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5e129cc8
+2026-07-31 00:28:31.033 [http-nio-8080-exec-4] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-31 00:28:31.559 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ3MjExMX0.wcJLjLXFNeGjwH2pz7o1xMsAkLTqGcs022LQEqC2TXc
+2026-07-31 00:28:31.581 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-31 00:28:39.568 [http-nio-8080-exec-9] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "我来帮您查询所有文章。\n\n",
+    "tool_calls" : [ {
+      "id" : "call_601bc2eebb1148868833e5fc",
+      "type" : "function",
+      "function" : {
+        "name" : "listAllArticles",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_601bc2eebb1148868833e5fc",
+    "content" : "查询文章失败: Cannot invoke \"java.util.Map.get(Object)\" because \"claims\" is null"
+  }, {
+    "role" : "assistant",
+    "content" : "看起来查询出现了一些问题，让我尝试使用分页查询的方式来获取文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_95f189a3d36943e297a9753f",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10, \"categoryId\": , \"state\": \"\"}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "查询文章"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "pageNum", "pageSize" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "标题，可选"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "内容，可选"
+          },
+          "coverImg" : {
+            "type" : "string",
+            "description" : "封面图片URL，可选"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 00:28:40.956 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: f109b1ce-6c10-9f2c-a13e-006b19f1941f], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 993], [req-arrive-time: 1785428919992], [resp-start-time: 1785428920985], [x-envoy-upstream-service-time: 988], [date: Thu, 30 Jul 2026 16:28:40 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 00:28:43.034 [LangChain4j-OpenAI-1] WARN  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - !!!
+Performing asynchronous handling through the default Spring MVC SimpleAsyncTaskExecutor.
+This executor is not suitable for production use under load.
+Please, configure an AsyncTaskExecutor through the WebMvc config.
+-------------------------------
+!!!
+2026-07-31 00:28:43.647 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "我来帮您查询所有文章。\n\n",
+    "tool_calls" : [ {
+      "id" : "call_601bc2eebb1148868833e5fc",
+      "type" : "function",
+      "function" : {
+        "name" : "listAllArticles",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_601bc2eebb1148868833e5fc",
+    "content" : "查询文章失败: Cannot invoke \"java.util.Map.get(Object)\" because \"claims\" is null"
+  }, {
+    "role" : "assistant",
+    "content" : "看起来查询出现了一些问题，让我尝试使用分页查询的方式来获取文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_95f189a3d36943e297a9753f",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10, \"categoryId\": , \"state\": \"\"}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "让我为您查询文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_a87f388fd028478a95cc94e0",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_a87f388fd028478a95cc94e0",
+    "content" : "第 1 页，共 14 篇文章，每页 10 条:\n\n1. ID: 13, 标题: dadd, 状态: 已发布, 分类ID: 7\n2. ID: 14, 标题: dadd, 状态: 草稿, 分类ID: 7\n3. ID: 15, 标题: dadd, 状态: 草稿, 分类ID: 7\n4. ID: 16, 标题: dadd, 状态: null, 分类ID: 7\n5. ID: 18, 标题: dadd, 状态: null, 分类ID: 7\n6. ID: 19, 标题: dadd, 状态: null, 分类ID: 7\n7. ID: 20, 标题: eeee, 状态: null, 分类ID: 9\n8. ID: 21, 标题: dddd, 状态: null, 分类ID: 7\n9. ID: 22, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n10. ID: 23, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "pageNum", "pageSize" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "标题，可选"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "内容，可选"
+          },
+          "coverImg" : {
+            "type" : "string",
+            "description" : "封面图片URL，可选"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 00:28:44.576 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: 89233811-dbe6-900c-95b8-864d66636402], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 889], [req-arrive-time: 1785428923824], [resp-start-time: 1785428924713], [x-envoy-upstream-service-time: 888], [date: Thu, 30 Jul 2026 16:28:44 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 00:28:58.954 [http-nio-8080-exec-2] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "我来帮您查询所有文章。\n\n",
+    "tool_calls" : [ {
+      "id" : "call_601bc2eebb1148868833e5fc",
+      "type" : "function",
+      "function" : {
+        "name" : "listAllArticles",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_601bc2eebb1148868833e5fc",
+    "content" : "查询文章失败: Cannot invoke \"java.util.Map.get(Object)\" because \"claims\" is null"
+  }, {
+    "role" : "assistant",
+    "content" : "看起来查询出现了一些问题，让我尝试使用分页查询的方式来获取文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_95f189a3d36943e297a9753f",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10, \"categoryId\": , \"state\": \"\"}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "让我为您查询文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_a87f388fd028478a95cc94e0",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_a87f388fd028478a95cc94e0",
+    "content" : "第 1 页，共 14 篇文章，每页 10 条:\n\n1. ID: 13, 标题: dadd, 状态: 已发布, 分类ID: 7\n2. ID: 14, 标题: dadd, 状态: 草稿, 分类ID: 7\n3. ID: 15, 标题: dadd, 状态: 草稿, 分类ID: 7\n4. ID: 16, 标题: dadd, 状态: null, 分类ID: 7\n5. ID: 18, 标题: dadd, 状态: null, 分类ID: 7\n6. ID: 19, 标题: dadd, 状态: null, 分类ID: 7\n7. ID: 20, 标题: eeee, 状态: null, 分类ID: 9\n8. ID: 21, 标题: dddd, 状态: null, 分类ID: 7\n9. ID: 22, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n10. ID: 23, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n"
+  }, {
+    "role" : "assistant",
+    "content" : "查询成功！以下是文章列表（第 1 页，共 14 篇文章）：\n\n| ID | 标题 | 状态 | 分类ID |\n|----|------|------|--------|\n| 13 | dadd | 已发布 | 7 |\n| 14 | dadd | 草稿 | 7 |\n| 15 | dadd | 草稿 | 7 |\n| 16 | dadd | - | 7 |\n| 18 | dadd | - | 7 |\n| 19 | dadd | - | 7 |\n| 20 | eeee | - | 9 |\n| 21 | dddd | - | 7 |\n| 22 | 顶顶顶 | 已发布 | 9 |\n| 23 | 顶顶顶 | 已发布 | 9 |\n\n当前显示第 1 页（共 2 页），每页 10 条。如需查看更多文章或进行其他操作，请告诉我！"
+  }, {
+    "role" : "user",
+    "content" : "我想加文章"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "pageNum", "pageSize" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "标题，可选"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "内容，可选"
+          },
+          "coverImg" : {
+            "type" : "string",
+            "description" : "封面图片URL，可选"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 00:28:59.876 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: 20c895dc-9552-97fc-9d21-acc361ec2bbf], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 712], [req-arrive-time: 1785428939286], [resp-start-time: 1785428939999], [x-envoy-upstream-service-time: 711], [date: Thu, 30 Jul 2026 16:28:59 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 00:29:49.770 [http-nio-8080-exec-6] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "我来帮您查询所有文章。\n\n",
+    "tool_calls" : [ {
+      "id" : "call_601bc2eebb1148868833e5fc",
+      "type" : "function",
+      "function" : {
+        "name" : "listAllArticles",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_601bc2eebb1148868833e5fc",
+    "content" : "查询文章失败: Cannot invoke \"java.util.Map.get(Object)\" because \"claims\" is null"
+  }, {
+    "role" : "assistant",
+    "content" : "看起来查询出现了一些问题，让我尝试使用分页查询的方式来获取文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_95f189a3d36943e297a9753f",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10, \"categoryId\": , \"state\": \"\"}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "让我为您查询文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_a87f388fd028478a95cc94e0",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_a87f388fd028478a95cc94e0",
+    "content" : "第 1 页，共 14 篇文章，每页 10 条:\n\n1. ID: 13, 标题: dadd, 状态: 已发布, 分类ID: 7\n2. ID: 14, 标题: dadd, 状态: 草稿, 分类ID: 7\n3. ID: 15, 标题: dadd, 状态: 草稿, 分类ID: 7\n4. ID: 16, 标题: dadd, 状态: null, 分类ID: 7\n5. ID: 18, 标题: dadd, 状态: null, 分类ID: 7\n6. ID: 19, 标题: dadd, 状态: null, 分类ID: 7\n7. ID: 20, 标题: eeee, 状态: null, 分类ID: 9\n8. ID: 21, 标题: dddd, 状态: null, 分类ID: 7\n9. ID: 22, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n10. ID: 23, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n"
+  }, {
+    "role" : "assistant",
+    "content" : "查询成功！以下是文章列表（第 1 页，共 14 篇文章）：\n\n| ID | 标题 | 状态 | 分类ID |\n|----|------|------|--------|\n| 13 | dadd | 已发布 | 7 |\n| 14 | dadd | 草稿 | 7 |\n| 15 | dadd | 草稿 | 7 |\n| 16 | dadd | - | 7 |\n| 18 | dadd | - | 7 |\n| 19 | dadd | - | 7 |\n| 20 | eeee | - | 9 |\n| 21 | dddd | - | 7 |\n| 22 | 顶顶顶 | 已发布 | 9 |\n| 23 | 顶顶顶 | 已发布 | 9 |\n\n当前显示第 1 页（共 2 页），每页 10 条。如需查看更多文章或进行其他操作，请告诉我！"
+  }, {
+    "role" : "user",
+    "content" : "我想加文章"
+  }, {
+    "role" : "assistant",
+    "content" : "好的！添加文章需要以下信息：\n\n1. **标题** - 文章的标题\n2. **内容** - 文章的正文内容\n3. **封面图片URL** - 封面图片的链接地址\n4. **分类ID** - 文章所属分类的ID（从之前查询结果看，目前有分类 7 和 9）\n5. **状态** - 已发布 或 草稿\n\n请提供这些信息，我来帮您添加文章。"
+  }, {
+    "role" : "user",
+    "content" : "但是，内容是，我是今天吃饭的，图片选默认的吧，分类选7，选择草稿"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "pageNum", "pageSize" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "标题，可选"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "内容，可选"
+          },
+          "coverImg" : {
+            "type" : "string",
+            "description" : "封面图片URL，可选"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 00:29:50.765 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: 3fde7db9-3308-92ca-bc35-75b1b28cc16f], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 778], [req-arrive-time: 1785428990095], [resp-start-time: 1785428990874], [x-envoy-upstream-service-time: 778], [date: Thu, 30 Jul 2026 16:29:50 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 00:30:08.013 [http-nio-8080-exec-8] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "assistant",
+    "content" : "我来帮您查询所有文章。\n\n",
+    "tool_calls" : [ {
+      "id" : "call_601bc2eebb1148868833e5fc",
+      "type" : "function",
+      "function" : {
+        "name" : "listAllArticles",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_601bc2eebb1148868833e5fc",
+    "content" : "查询文章失败: Cannot invoke \"java.util.Map.get(Object)\" because \"claims\" is null"
+  }, {
+    "role" : "assistant",
+    "content" : "看起来查询出现了一些问题，让我尝试使用分页查询的方式来获取文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_95f189a3d36943e297a9753f",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10, \"categoryId\": , \"state\": \"\"}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "让我为您查询文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_a87f388fd028478a95cc94e0",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_a87f388fd028478a95cc94e0",
+    "content" : "第 1 页，共 14 篇文章，每页 10 条:\n\n1. ID: 13, 标题: dadd, 状态: 已发布, 分类ID: 7\n2. ID: 14, 标题: dadd, 状态: 草稿, 分类ID: 7\n3. ID: 15, 标题: dadd, 状态: 草稿, 分类ID: 7\n4. ID: 16, 标题: dadd, 状态: null, 分类ID: 7\n5. ID: 18, 标题: dadd, 状态: null, 分类ID: 7\n6. ID: 19, 标题: dadd, 状态: null, 分类ID: 7\n7. ID: 20, 标题: eeee, 状态: null, 分类ID: 9\n8. ID: 21, 标题: dddd, 状态: null, 分类ID: 7\n9. ID: 22, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n10. ID: 23, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n"
+  }, {
+    "role" : "assistant",
+    "content" : "查询成功！以下是文章列表（第 1 页，共 14 篇文章）：\n\n| ID | 标题 | 状态 | 分类ID |\n|----|------|------|--------|\n| 13 | dadd | 已发布 | 7 |\n| 14 | dadd | 草稿 | 7 |\n| 15 | dadd | 草稿 | 7 |\n| 16 | dadd | - | 7 |\n| 18 | dadd | - | 7 |\n| 19 | dadd | - | 7 |\n| 20 | eeee | - | 9 |\n| 21 | dddd | - | 7 |\n| 22 | 顶顶顶 | 已发布 | 9 |\n| 23 | 顶顶顶 | 已发布 | 9 |\n\n当前显示第 1 页（共 2 页），每页 10 条。如需查看更多文章或进行其他操作，请告诉我！"
+  }, {
+    "role" : "user",
+    "content" : "我想加文章"
+  }, {
+    "role" : "assistant",
+    "content" : "好的！添加文章需要以下信息：\n\n1. **标题** - 文章的标题\n2. **内容** - 文章的正文内容\n3. **封面图片URL** - 封面图片的链接地址\n4. **分类ID** - 文章所属分类的ID（从之前查询结果看，目前有分类 7 和 9）\n5. **状态** - 已发布 或 草稿\n\n请提供这些信息，我来帮您添加文章。"
+  }, {
+    "role" : "user",
+    "content" : "但是，内容是，我是今天吃饭的，图片选默认的吧，分类选7，选择草稿"
+  }, {
+    "role" : "assistant",
+    "content" : "好的，我还需要一个信息：\n\n**标题** - 请问这篇文章的标题是什么？\n\n其他信息我已经记下了：\n- 内容：我是今天吃饭的\n- 封面图片：使用默认图片\n- 分类ID：7\n- 状态：草稿\n\n请告诉我标题，我就可以帮您添加了！"
+  }, {
+    "role" : "user",
+    "content" : "但是"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "pageNum", "pageSize" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "标题，可选"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "内容，可选"
+          },
+          "coverImg" : {
+            "type" : "string",
+            "description" : "封面图片URL，可选"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 00:30:13.399 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: edb3f57b-b5ce-96e6-b381-4dc91eccc294], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 5190], [req-arrive-time: 1785429008280], [resp-start-time: 1785429013471], [x-envoy-upstream-service-time: 5182], [date: Thu, 30 Jul 2026 16:30:13 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 00:30:39.542 [http-nio-8080-exec-2] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "assistant",
+    "content" : "看起来查询出现了一些问题，让我尝试使用分页查询的方式来获取文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_95f189a3d36943e297a9753f",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10, \"categoryId\": , \"state\": \"\"}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "让我为您查询文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_a87f388fd028478a95cc94e0",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_a87f388fd028478a95cc94e0",
+    "content" : "第 1 页，共 14 篇文章，每页 10 条:\n\n1. ID: 13, 标题: dadd, 状态: 已发布, 分类ID: 7\n2. ID: 14, 标题: dadd, 状态: 草稿, 分类ID: 7\n3. ID: 15, 标题: dadd, 状态: 草稿, 分类ID: 7\n4. ID: 16, 标题: dadd, 状态: null, 分类ID: 7\n5. ID: 18, 标题: dadd, 状态: null, 分类ID: 7\n6. ID: 19, 标题: dadd, 状态: null, 分类ID: 7\n7. ID: 20, 标题: eeee, 状态: null, 分类ID: 9\n8. ID: 21, 标题: dddd, 状态: null, 分类ID: 7\n9. ID: 22, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n10. ID: 23, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n"
+  }, {
+    "role" : "assistant",
+    "content" : "查询成功！以下是文章列表（第 1 页，共 14 篇文章）：\n\n| ID | 标题 | 状态 | 分类ID |\n|----|------|------|--------|\n| 13 | dadd | 已发布 | 7 |\n| 14 | dadd | 草稿 | 7 |\n| 15 | dadd | 草稿 | 7 |\n| 16 | dadd | - | 7 |\n| 18 | dadd | - | 7 |\n| 19 | dadd | - | 7 |\n| 20 | eeee | - | 9 |\n| 21 | dddd | - | 7 |\n| 22 | 顶顶顶 | 已发布 | 9 |\n| 23 | 顶顶顶 | 已发布 | 9 |\n\n当前显示第 1 页（共 2 页），每页 10 条。如需查看更多文章或进行其他操作，请告诉我！"
+  }, {
+    "role" : "user",
+    "content" : "我想加文章"
+  }, {
+    "role" : "assistant",
+    "content" : "好的！添加文章需要以下信息：\n\n1. **标题** - 文章的标题\n2. **内容** - 文章的正文内容\n3. **封面图片URL** - 封面图片的链接地址\n4. **分类ID** - 文章所属分类的ID（从之前查询结果看，目前有分类 7 和 9）\n5. **状态** - 已发布 或 草稿\n\n请提供这些信息，我来帮您添加文章。"
+  }, {
+    "role" : "user",
+    "content" : "但是，内容是，我是今天吃饭的，图片选默认的吧，分类选7，选择草稿"
+  }, {
+    "role" : "assistant",
+    "content" : "好的，我还需要一个信息：\n\n**标题** - 请问这篇文章的标题是什么？\n\n其他信息我已经记下了：\n- 内容：我是今天吃饭的\n- 封面图片：使用默认图片\n- 分类ID：7\n- 状态：草稿\n\n请告诉我标题，我就可以帮您添加了！"
+  }, {
+    "role" : "user",
+    "content" : "但是"
+  }, {
+    "role" : "assistant",
+    "content" : "您请说，是遇到什么问题了吗？还是话没说完呢？\n\n如果您不知道**标题**怎么起，我可以帮您用《今天吃饭》作为标题。\n关于**默认图片**，因为系统需要填写一个具体的图片网址（URL），我可以帮您填一个默认的测试图片链接（例如：`https://dummyimage.com/300x200/ccc/999&text=Default`），您看这样行吗？\n\n或者您有其他想补充的？请随时告诉我！"
+  }, {
+    "role" : "user",
+    "content" : "可以"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "pageNum", "pageSize" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "标题，可选"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "内容，可选"
+          },
+          "coverImg" : {
+            "type" : "string",
+            "description" : "封面图片URL，可选"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 00:30:40.571 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: 6229069c-f9b2-919e-b3ee-52b9d1d8ed53], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 852], [req-arrive-time: 1785429039851], [resp-start-time: 1785429040703], [x-envoy-upstream-service-time: 846], [date: Thu, 30 Jul 2026 16:30:40 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 00:30:45.039 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "assistant",
+    "content" : "让我为您查询文章列表：\n\n",
+    "tool_calls" : [ {
+      "id" : "call_a87f388fd028478a95cc94e0",
+      "type" : "function",
+      "function" : {
+        "name" : "queryArticles",
+        "arguments" : "{\"pageNum\": 1, \"pageSize\": 10}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_a87f388fd028478a95cc94e0",
+    "content" : "第 1 页，共 14 篇文章，每页 10 条:\n\n1. ID: 13, 标题: dadd, 状态: 已发布, 分类ID: 7\n2. ID: 14, 标题: dadd, 状态: 草稿, 分类ID: 7\n3. ID: 15, 标题: dadd, 状态: 草稿, 分类ID: 7\n4. ID: 16, 标题: dadd, 状态: null, 分类ID: 7\n5. ID: 18, 标题: dadd, 状态: null, 分类ID: 7\n6. ID: 19, 标题: dadd, 状态: null, 分类ID: 7\n7. ID: 20, 标题: eeee, 状态: null, 分类ID: 9\n8. ID: 21, 标题: dddd, 状态: null, 分类ID: 7\n9. ID: 22, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n10. ID: 23, 标题: 顶顶顶, 状态: 已发布, 分类ID: 9\n"
+  }, {
+    "role" : "assistant",
+    "content" : "查询成功！以下是文章列表（第 1 页，共 14 篇文章）：\n\n| ID | 标题 | 状态 | 分类ID |\n|----|------|------|--------|\n| 13 | dadd | 已发布 | 7 |\n| 14 | dadd | 草稿 | 7 |\n| 15 | dadd | 草稿 | 7 |\n| 16 | dadd | - | 7 |\n| 18 | dadd | - | 7 |\n| 19 | dadd | - | 7 |\n| 20 | eeee | - | 9 |\n| 21 | dddd | - | 7 |\n| 22 | 顶顶顶 | 已发布 | 9 |\n| 23 | 顶顶顶 | 已发布 | 9 |\n\n当前显示第 1 页（共 2 页），每页 10 条。如需查看更多文章或进行其他操作，请告诉我！"
+  }, {
+    "role" : "user",
+    "content" : "我想加文章"
+  }, {
+    "role" : "assistant",
+    "content" : "好的！添加文章需要以下信息：\n\n1. **标题** - 文章的标题\n2. **内容** - 文章的正文内容\n3. **封面图片URL** - 封面图片的链接地址\n4. **分类ID** - 文章所属分类的ID（从之前查询结果看，目前有分类 7 和 9）\n5. **状态** - 已发布 或 草稿\n\n请提供这些信息，我来帮您添加文章。"
+  }, {
+    "role" : "user",
+    "content" : "但是，内容是，我是今天吃饭的，图片选默认的吧，分类选7，选择草稿"
+  }, {
+    "role" : "assistant",
+    "content" : "好的，我还需要一个信息：\n\n**标题** - 请问这篇文章的标题是什么？\n\n其他信息我已经记下了：\n- 内容：我是今天吃饭的\n- 封面图片：使用默认图片\n- 分类ID：7\n- 状态：草稿\n\n请告诉我标题，我就可以帮您添加了！"
+  }, {
+    "role" : "user",
+    "content" : "但是"
+  }, {
+    "role" : "assistant",
+    "content" : "您请说，是遇到什么问题了吗？还是话没说完呢？\n\n如果您不知道**标题**怎么起，我可以帮您用《今天吃饭》作为标题。\n关于**默认图片**，因为系统需要填写一个具体的图片网址（URL），我可以帮您填一个默认的测试图片链接（例如：`https://dummyimage.com/300x200/ccc/999&text=Default`），您看这样行吗？\n\n或者您有其他想补充的？请随时告诉我！"
+  }, {
+    "role" : "user",
+    "content" : "可以"
+  }, {
+    "role" : "assistant",
+    "tool_calls" : [ {
+      "id" : "call_798e97bf31de4a56a9ffdc9a",
+      "type" : "function",
+      "function" : {
+        "name" : "addArticle",
+        "arguments" : "{\"title\": \"今天吃饭\", \"content\": \"我是今天吃饭的\", \"coverImg\": \"https://dummyimage.com/300x200/ccc/999&text=Default\", \"categoryId\": 7, \"state\": \"草稿\"}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_798e97bf31de4a56a9ffdc9a",
+    "content" : "文章添加成功！标题: 今天吃饭"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "pageNum", "pageSize" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "标题，可选"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "内容，可选"
+          },
+          "coverImg" : {
+            "type" : "string",
+            "description" : "封面图片URL，可选"
+          },
+          "categoryId" : {
+            "type" : "integer",
+            "description" : "分类ID，可选"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "状态，可选"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 00:30:45.671 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: e44262b2-3e3a-9f2a-bc22-6c2904eaa136], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 590], [req-arrive-time: 1785429045214], [resp-start-time: 1785429045805], [x-envoy-upstream-service-time: 573], [date: Thu, 30 Jul 2026 16:30:45 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 00:35:41.383 [http-nio-8080-exec-10] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "我想加文档"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookDetail",
+      "description" : "查询指定图书/文档的详情。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ "docId", "bookName" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteBook",
+      "description" : "删除指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ "docId", "bookName" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "searchBooks",
+      "description" : "根据关键词搜索图书/文档，匹配文件名。参数keyword为关键词。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "keyword" : {
+            "type" : "string",
+            "description" : "搜索关键词"
+          }
+        },
+        "required" : [ "keyword" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookContent",
+      "description" : "获取指定图书/文档的文本内容摘要。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ "docId", "bookName" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addTextKnowledge",
+      "description" : "添加一段文本知识到知识库。参数text为文本内容，visibility为可见性：0私有 1部门 2公共，默认私有。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "文本内容"
+          },
+          "visibility" : {
+            "type" : "integer",
+            "description" : "可见性：0私有 1部门 2公共，可选，默认0"
+          }
+        },
+        "required" : [ "text", "visibility" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "listMyBooks",
+      "description" : "列出我的图书/文档列表。可指定页码(pageNum)和每页大小(pageSize)，不传默认前10条。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer",
+            "description" : "页码，从1开始，可选"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "每页大小，可选"
+          }
+        },
+        "required" : [ "pageNum", "pageSize" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "reprocessBook",
+      "description" : "重新解析并向量化处理指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ "docId", "bookName" ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 00:35:44.346 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: 8f4d6b3e-0052-97d6-9c74-73925c465e9d], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: true], [req-cost-time: 2752], [req-arrive-time: 1785429341723], [resp-start-time: 1785429344476], [x-envoy-upstream-service-time: 2750], [date: Thu, 30 Jul 2026 16:35:44 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 00:35:44.348 [LangChain4j-OpenAI-1] WARN  d.l.h.c.s.ServerSentEventListenerUtils - An exception occurred during the invocation of the SSE listener. This exception has been ignored.
+java.lang.NullPointerException: Cannot invoke "dev.langchain4j.model.chat.response.ChatResponse.aiMessage()" because "completeResponse" is null
+	at dev.langchain4j.service.AiServiceStreamingResponseHandler.onCompleteResponse(AiServiceStreamingResponseHandler.java:83)
+	at dev.langchain4j.model.chat.StreamingChatModel$1.onCompleteResponse(StreamingChatModel.java:54)
+	at dev.langchain4j.model.openai.OpenAiStreamingChatModel.lambda$doChat$1(OpenAiStreamingChatModel.java:138)
+	at dev.langchain4j.model.openai.internal.StreamingRequestExecutor$2.onClose(StreamingRequestExecutor.java:120)
+	at dev.langchain4j.http.client.log.LoggingHttpClient$1.onClose(LoggingHttpClient.java:80)
+	at dev.langchain4j.http.client.sse.ServerSentEventListenerUtils.ignoringExceptions(ServerSentEventListenerUtils.java:14)
+	at dev.langchain4j.http.client.spring.restclient.SpringRestClient.lambda$execute$3(SpringRestClient.java:114)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchangeInternal(DefaultRestClient.java:471)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchange(DefaultRestClient.java:444)
+	at org.springframework.web.client.RestClient$RequestHeadersSpec.exchange(RestClient.java:561)
+	at dev.langchain4j.http.client.spring.restclient.SpringRestClient.lambda$execute$6(SpringRestClient.java:94)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2026-07-31 01:01:38.995 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-31 01:01:39.008 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-31 01:01:39.154 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-31 01:01:39.154 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-31 01:01:39.385 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-31 01:01:39.392 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-31 01:01:39.408 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=java.nio.channels.ClosedChannelException
+java.io.IOException: java.nio.channels.ClosedChannelException
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:321)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:257)
+	at org.apache.tomcat.websocket.WsSession.sendCloseMessage(WsSession.java:718)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:587)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.nio.channels.ClosedChannelException: null
+	at org.apache.tomcat.util.net.NioChannel$1.write(NioChannel.java:269)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper$NioOperationState.run(NioEndpoint.java:1635)
+	at org.apache.tomcat.util.net.SocketWrapperBase$OperationState.start(SocketWrapperBase.java:1051)
+	at org.apache.tomcat.util.net.SocketWrapperBase.vectoredOperation(SocketWrapperBase.java:1440)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1366)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1337)
+	at org.apache.tomcat.websocket.server.WsRemoteEndpointImplServer.doWrite(WsRemoteEndpointImplServer.java:165)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.writeMessagePart(WsRemoteEndpointImplBase.java:516)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:308)
+	... 37 common frames omitted
+2026-07-31 01:01:39.412 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=null
+java.lang.reflect.InvocationTargetException: null
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.tomcat.websocket.pojo.PojoEndpointBase.onClose(PojoEndpointBase.java:101)
+	at org.apache.tomcat.websocket.WsSession.fireEndpointOnClose(WsSession.java:662)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:588)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.assertStarted(LettuceConnectionFactory.java:1402)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:999)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.RedisTemplate.doWithKeys(RedisTemplate.java:785)
+	at org.springframework.data.redis.core.RedisTemplate.delete(RedisTemplate.java:588)
+	at com.example.bigevent.websocket.ChatWebSocketServer.onClose(ChatWebSocketServer.java:155)
+	... 41 common frames omitted
+2026-07-31 01:01:46.778 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-31 01:01:46.830 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 23576 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-31 01:01:46.831 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-31 01:01:48.136 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-31 01:01:48.139 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-31 01:01:48.222 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 54 ms. Found 0 Redis repository interfaces.
+2026-07-31 01:01:51.046 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-31 01:01:51.064 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-31 01:01:51.066 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-31 01:01:51.069 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-31 01:01:51.328 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-31 01:01:51.330 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4441 ms
+2026-07-31 01:01:52.902 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-31 01:01:55.093 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-07-31 01:01:55.658 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-07-31 01:01:55.669 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-07-31 01:01:56.752 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-07-31 01:01:57.626 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-31 01:01:57.652 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-31 01:01:58.243 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-07-31 01:01:58.364 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#e21d73:0/SimpleConnection@375f276e [delegate=amqp://guest@127.0.0.1:5672/, localPort=50580]
+2026-07-31 01:01:58.526 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 12.311 seconds (process running for 13.353)
+2026-07-31 01:01:58.548 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-07-31 01:01:58.680 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-07-31 01:01:58.690 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-07-31 01:02:19.583 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-31 01:02:19.583 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-31 01:02:19.584 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-07-31 01:02:19.659 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ3MjExMX0.wcJLjLXFNeGjwH2pz7o1xMsAkLTqGcs022LQEqC2TXc
+2026-07-31 01:02:19.767 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-31 01:02:19.811 [http-nio-8080-exec-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-31 01:02:20.277 [http-nio-8080-exec-1] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3a24ed1b
+2026-07-31 01:02:20.286 [http-nio-8080-exec-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-31 01:02:33.855 [bigevent-ai-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "user",
+    "content" : "我想加文档"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookDetail",
+      "description" : "查询指定图书/文档的详情。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookContent",
+      "description" : "获取指定图书/文档的文本内容摘要。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "searchBooks",
+      "description" : "根据关键词搜索图书/文档，匹配文件名。参数keyword为关键词。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "keyword" : {
+            "type" : "string",
+            "description" : "搜索关键词"
+          }
+        },
+        "required" : [ "keyword" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "listMyBooks",
+      "description" : "列出我的图书/文档列表。可指定页码(pageNum)和每页大小(pageSize)，不传默认前10条。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer",
+            "description" : "页码，从1开始，可选"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "每页大小，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteBook",
+      "description" : "删除指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addTextKnowledge",
+      "description" : "添加一段文本知识到知识库。参数text为文本内容，visibility为可见性：0私有 1部门 2公共，默认私有。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "文本内容"
+          },
+          "visibility" : {
+            "type" : "integer",
+            "description" : "可见性：0私有 1部门 2公共，可选，默认0"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "reprocessBook",
+      "description" : "重新解析并向量化处理指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 01:02:35.139 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: b66a8e74-a0e1-9db3-bb36-c8a6415274c7], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 965], [req-arrive-time: 1785430954276], [resp-start-time: 1785430955242], [x-envoy-upstream-service-time: 959], [date: Thu, 30 Jul 2026 17:02:34 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 01:02:39.203 [LangChain4j-OpenAI-1] WARN  d.l.h.c.s.ServerSentEventListenerUtils - An exception occurred during the invocation of the SSE listener. This exception has been ignored.
+java.lang.IllegalArgumentException: argument type mismatch
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at dev.langchain4j.service.tool.DefaultToolExecutor.execute(DefaultToolExecutor.java:89)
+	at dev.langchain4j.service.tool.DefaultToolExecutor.execute(DefaultToolExecutor.java:73)
+	at dev.langchain4j.service.AiServiceStreamingResponseHandler.onCompleteResponse(AiServiceStreamingResponseHandler.java:90)
+	at dev.langchain4j.model.chat.StreamingChatModel$1.onCompleteResponse(StreamingChatModel.java:54)
+	at dev.langchain4j.model.openai.OpenAiStreamingChatModel.lambda$doChat$1(OpenAiStreamingChatModel.java:138)
+	at dev.langchain4j.model.openai.internal.StreamingRequestExecutor$2.onClose(StreamingRequestExecutor.java:120)
+	at dev.langchain4j.http.client.log.LoggingHttpClient$1.onClose(LoggingHttpClient.java:80)
+	at dev.langchain4j.http.client.sse.ServerSentEventListenerUtils.ignoringExceptions(ServerSentEventListenerUtils.java:14)
+	at dev.langchain4j.http.client.spring.restclient.SpringRestClient.lambda$execute$3(SpringRestClient.java:114)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchangeInternal(DefaultRestClient.java:471)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchange(DefaultRestClient.java:444)
+	at org.springframework.web.client.RestClient$RequestHeadersSpec.exchange(RestClient.java:561)
+	at dev.langchain4j.http.client.spring.restclient.SpringRestClient.lambda$execute$6(SpringRestClient.java:94)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2026-07-31 01:02:58.628 [parallel-2] WARN  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - !!!
+Performing asynchronous handling through the default Spring MVC SimpleAsyncTaskExecutor.
+This executor is not suitable for production use under load.
+Please, configure an AsyncTaskExecutor through the WebMvc config.
+-------------------------------
+!!!
+2026-07-31 01:19:20.237 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-31 01:19:20.241 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-31 01:19:20.816 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-31 01:19:21.007 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-31 01:19:21.208 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-31 01:19:21.222 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-31 01:19:21.232 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=java.nio.channels.ClosedChannelException
+java.io.IOException: java.nio.channels.ClosedChannelException
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:321)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:257)
+	at org.apache.tomcat.websocket.WsSession.sendCloseMessage(WsSession.java:718)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:587)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.nio.channels.ClosedChannelException: null
+	at org.apache.tomcat.util.net.NioChannel$1.write(NioChannel.java:269)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper$NioOperationState.run(NioEndpoint.java:1635)
+	at org.apache.tomcat.util.net.SocketWrapperBase$OperationState.start(SocketWrapperBase.java:1051)
+	at org.apache.tomcat.util.net.SocketWrapperBase.vectoredOperation(SocketWrapperBase.java:1440)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1366)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1337)
+	at org.apache.tomcat.websocket.server.WsRemoteEndpointImplServer.doWrite(WsRemoteEndpointImplServer.java:165)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.writeMessagePart(WsRemoteEndpointImplBase.java:516)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:308)
+	... 37 common frames omitted
+2026-07-31 01:19:21.235 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=null
+java.lang.reflect.InvocationTargetException: null
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.tomcat.websocket.pojo.PojoEndpointBase.onClose(PojoEndpointBase.java:101)
+	at org.apache.tomcat.websocket.WsSession.fireEndpointOnClose(WsSession.java:662)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:588)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.assertStarted(LettuceConnectionFactory.java:1402)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:999)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.RedisTemplate.doWithKeys(RedisTemplate.java:785)
+	at org.springframework.data.redis.core.RedisTemplate.delete(RedisTemplate.java:588)
+	at com.example.bigevent.websocket.ChatWebSocketServer.onClose(ChatWebSocketServer.java:155)
+	... 41 common frames omitted
+2026-07-31 01:19:26.321 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-31 01:19:26.349 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 3300 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-31 01:19:26.350 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-31 01:19:27.169 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-31 01:19:27.171 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-31 01:19:27.207 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2026-07-31 01:19:28.025 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-31 01:19:28.035 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-31 01:19:28.036 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-31 01:19:28.037 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-31 01:19:28.111 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-31 01:19:28.111 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1725 ms
+2026-07-31 01:19:28.696 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-31 01:19:29.706 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-07-31 01:19:29.943 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-07-31 01:19:29.951 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-07-31 01:19:30.390 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-07-31 01:19:30.717 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-31 01:19:30.727 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-31 01:19:30.953 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-07-31 01:19:31.004 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#33d2f9d3:0/SimpleConnection@4569b6a9 [delegate=amqp://guest@127.0.0.1:5672/, localPort=62515]
+2026-07-31 01:19:31.047 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-31 01:19:31.048 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-31 01:19:31.049 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-07-31 01:19:31.078 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 5.141 seconds (process running for 5.837)
+2026-07-31 01:19:31.081 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ3MjExMX0.wcJLjLXFNeGjwH2pz7o1xMsAkLTqGcs022LQEqC2TXc
+2026-07-31 01:19:31.152 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-31 01:19:31.175 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-07-31 01:19:31.181 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-07-31 01:19:31.189 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-07-31 01:19:38.230 [http-nio-8080-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-31 01:19:38.665 [http-nio-8080-exec-2] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@13bfbd9e
+2026-07-31 01:19:38.670 [http-nio-8080-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-31 01:19:39.121 [bigevent-ai-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "assistant",
+    "tool_calls" : [ {
+      "id" : "call_9295309d9f1848efb8fa7b68",
+      "type" : "function",
+      "function" : {
+        "name" : "listMyBooks",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "我想加文档"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "searchBooks",
+      "description" : "根据关键词搜索图书/文档，匹配文件名。参数keyword为关键词。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "keyword" : {
+            "type" : "string",
+            "description" : "搜索关键词"
+          }
+        },
+        "required" : [ "keyword" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "listMyBooks",
+      "description" : "列出我的图书/文档列表。可指定页码(pageNum)和每页大小(pageSize)，不传默认前10条。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer",
+            "description" : "页码，从1开始，可选"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "每页大小，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookContent",
+      "description" : "获取指定图书/文档的文本内容摘要。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteBook",
+      "description" : "删除指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookDetail",
+      "description" : "查询指定图书/文档的详情。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "reprocessBook",
+      "description" : "重新解析并向量化处理指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addTextKnowledge",
+      "description" : "添加一段文本知识到知识库。参数text为文本内容，visibility为可见性：0私有 1部门 2公共，默认私有。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "文本内容"
+          },
+          "visibility" : {
+            "type" : "integer",
+            "description" : "可见性：0私有 1部门 2公共，可选，默认0"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 01:19:40.411 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: 8094b764-1bcc-998e-9b3d-e16b695b67b8], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 989], [req-arrive-time: 1785431979516], [resp-start-time: 1785431980506], [x-envoy-upstream-service-time: 984], [date: Thu, 30 Jul 2026 17:19:40 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 01:19:48.589 [LangChain4j-OpenAI-1] WARN  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - !!!
+Performing asynchronous handling through the default Spring MVC SimpleAsyncTaskExecutor.
+This executor is not suitable for production use under load.
+Please, configure an AsyncTaskExecutor through the WebMvc config.
+-------------------------------
+!!!
+2026-07-31 01:20:11.456 [bigevent-ai-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "assistant",
+    "tool_calls" : [ {
+      "id" : "call_9295309d9f1848efb8fa7b68",
+      "type" : "function",
+      "function" : {
+        "name" : "listMyBooks",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "assistant",
+    "content" : "我可以帮您将内容添加到知识库中。目前支持以**文本**的形式添加知识。\n\n请问您需要添加的具体文本内容是什么？另外，您希望设置的可见性是什么？\n*   **0**：私有（默认）\n*   **1**：部门可见\n*   **2**：公共可见\n\n您可以直接把需要添加的文本发给我。"
+  }, {
+    "role" : "user",
+    "content" : "1，文本是，今天想吃饭"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "searchBooks",
+      "description" : "根据关键词搜索图书/文档，匹配文件名。参数keyword为关键词。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "keyword" : {
+            "type" : "string",
+            "description" : "搜索关键词"
+          }
+        },
+        "required" : [ "keyword" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "listMyBooks",
+      "description" : "列出我的图书/文档列表。可指定页码(pageNum)和每页大小(pageSize)，不传默认前10条。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer",
+            "description" : "页码，从1开始，可选"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "每页大小，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookContent",
+      "description" : "获取指定图书/文档的文本内容摘要。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteBook",
+      "description" : "删除指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookDetail",
+      "description" : "查询指定图书/文档的详情。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "reprocessBook",
+      "description" : "重新解析并向量化处理指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addTextKnowledge",
+      "description" : "添加一段文本知识到知识库。参数text为文本内容，visibility为可见性：0私有 1部门 2公共，默认私有。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "文本内容"
+          },
+          "visibility" : {
+            "type" : "integer",
+            "description" : "可见性：0私有 1部门 2公共，可选，默认0"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 01:20:12.531 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: ba4f5516-4bd7-948e-9c24-cff7d17289e2], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 925], [req-arrive-time: 1785432011715], [resp-start-time: 1785432012640], [x-envoy-upstream-service-time: 922], [date: Thu, 30 Jul 2026 17:20:12 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 01:20:14.384 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "assistant",
+    "tool_calls" : [ {
+      "id" : "call_9295309d9f1848efb8fa7b68",
+      "type" : "function",
+      "function" : {
+        "name" : "listMyBooks",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "user",
+    "content" : "我想加文档"
+  }, {
+    "role" : "assistant",
+    "content" : "我可以帮您将内容添加到知识库中。目前支持以**文本**的形式添加知识。\n\n请问您需要添加的具体文本内容是什么？另外，您希望设置的可见性是什么？\n*   **0**：私有（默认）\n*   **1**：部门可见\n*   **2**：公共可见\n\n您可以直接把需要添加的文本发给我。"
+  }, {
+    "role" : "user",
+    "content" : "1，文本是，今天想吃饭"
+  }, {
+    "role" : "assistant",
+    "tool_calls" : [ {
+      "id" : "call_a3eb92c5022c430181ceaaeb",
+      "type" : "function",
+      "function" : {
+        "name" : "addTextKnowledge",
+        "arguments" : "{\"text\": \"今天想吃饭\", \"visibility\": 1}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_a3eb92c5022c430181ceaaeb",
+    "content" : "添加文本知识失败: 无法获取当前用户信息"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "searchBooks",
+      "description" : "根据关键词搜索图书/文档，匹配文件名。参数keyword为关键词。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "keyword" : {
+            "type" : "string",
+            "description" : "搜索关键词"
+          }
+        },
+        "required" : [ "keyword" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "listMyBooks",
+      "description" : "列出我的图书/文档列表。可指定页码(pageNum)和每页大小(pageSize)，不传默认前10条。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer",
+            "description" : "页码，从1开始，可选"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "每页大小，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookContent",
+      "description" : "获取指定图书/文档的文本内容摘要。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteBook",
+      "description" : "删除指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getBookDetail",
+      "description" : "查询指定图书/文档的详情。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "reprocessBook",
+      "description" : "重新解析并向量化处理指定的图书/文档。参数可以是文档ID(docId)或书名/文件名(bookName)，至少传一个。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "docId" : {
+            "type" : "integer",
+            "description" : "文档ID，可选"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "书名或文件名，可选"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addTextKnowledge",
+      "description" : "添加一段文本知识到知识库。参数text为文本内容，visibility为可见性：0私有 1部门 2公共，默认私有。",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "文本内容"
+          },
+          "visibility" : {
+            "type" : "integer",
+            "description" : "可见性：0私有 1部门 2公共，可选，默认0"
+          }
+        },
+        "required" : [ ]
+      }
+    }
+  } ]
+}
+
+2026-07-31 01:20:15.404 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: ef63880b-047e-9db0-9d04-315db4e5278c], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 984], [req-arrive-time: 1785432014530], [resp-start-time: 1785432015515], [x-envoy-upstream-service-time: 983], [date: Thu, 30 Jul 2026 17:20:15 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-31 01:42:54.059 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-31 01:43:07.468 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-31 01:43:07.470 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-31 01:43:07.739 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-31 01:43:08.028 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-31 01:43:08.200 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-31 01:43:08.208 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

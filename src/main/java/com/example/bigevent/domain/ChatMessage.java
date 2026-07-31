@@ -13,6 +13,7 @@ public class ChatMessage {
     private Integer senderId;
     private Integer receiverId; // 单聊接收者
     private Integer groupId;    // 群聊群ID
+    private String conversationId; // 会话ID：private:小:大 或 group:群ID
     private String content;
     private Integer type;       // 0-单聊 1-群聊
     private Integer isRead;     // 0-未读 1-已读

@@ -1,6 +1,7 @@
 package com.example.bigevent.websocket;
 
 import jakarta.websocket.Session;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * WebSocket Session 管理器
  * 维护用户ID与Session的映射关系
  */
+@Slf4j
 @Component
 public class WsSessionManager {
 
@@ -34,7 +36,7 @@ public class WsSessionManager {
             try {
                 oldSession.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("[WebSocket] 关闭旧会话失败, userId={}", userId, e);
             }
         }
         USER_SESSION_MAP.put(userId, session);
@@ -70,16 +72,16 @@ public class WsSessionManager {
     }
 
     /**
-     * 发送消息给指定用户
+     * 发送消息给指定用户（使用 async remote，避免大群广播时阻塞推送线程）
      */
     public boolean sendMessage(Integer userId, String message) {
         Session session = USER_SESSION_MAP.get(userId);
         if (session != null && session.isOpen()) {
             try {
-                session.getBasicRemote().sendText(message);
+                session.getAsyncRemote().sendText(message);
                 return true;
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                log.error("[WebSocket] 发送消息失败, userId={}", userId, e);
             }
         }
         return false;

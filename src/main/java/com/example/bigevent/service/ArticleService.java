@@ -11,7 +11,17 @@ public interface ArticleService {
 
     List<Article> findarticle();
 
+    /**
+     * 指定用户查询文章列表，供 Agent 工具等非 Web 线程场景使用。
+     */
+    List<Article> findarticle(Integer userId);
+
     PageBean<Article> fenyearticle(Integer pageNum, Integer pageSize, Integer categoryId, String state);
+
+    /**
+     * 指定用户分页查询文章，供 Agent 工具等非 Web 线程场景使用。
+     */
+    PageBean<Article> fenyearticle(Integer userId, Integer pageNum, Integer pageSize, Integer categoryId, String state);
 
     void deletearticle(Integer id);
 

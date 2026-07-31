@@ -45,6 +45,20 @@ public class SquareController {
     }
 
     /**
+     * 搜索广场用户（按用户名/昵称模糊搜索）
+     */
+    @GetMapping("/users/search")
+    public Result<PageBean<UserSquareVO>> searchSquareUsers(@RequestParam String keyword,
+                                                            @RequestParam(defaultValue = "1") Integer page,
+                                                            @RequestParam(defaultValue = "20") Integer pageSize) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) claims.get("id");
+        List<UserSquareVO> users = followService.searchSquareUsers(currentUserId, keyword, page, pageSize);
+        Long total = usermapper.countSearchSquareUsers(currentUserId, keyword.trim());
+        return Result.success(new PageBean<>(total, users));
+    }
+
+    /**
      * 获取互相关注好友列表
      * 结构与 /square/users 统一，统一返回 PageBean
      */

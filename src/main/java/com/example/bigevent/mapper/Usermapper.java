@@ -127,6 +127,34 @@ public interface Usermapper {
     int deltaArticleCount(@Param("userId") Integer userId, @Param("delta") int delta);
 
     /**
+     * 按关键词搜索广场用户（支持用户名/昵称模糊搜索，排除已注销用户和自己）
+     */
+    @Select("SELECT u.id, u.username, u.nickname, u.user_pic, " +
+            "u.fans_count AS fansCount, " +
+            "u.follow_count AS followCount, " +
+            "u.article_count AS articleCount " +
+            "FROM user u " +
+            "WHERE u.deleted = 0 " +
+            "  AND u.id != #{currentUserId} " +
+            "  AND (u.username LIKE CONCAT('%', #{keyword}, '%') OR u.nickname LIKE CONCAT('%', #{keyword}, '%')) " +
+            "ORDER BY u.article_count DESC, u.id ASC " +
+            "LIMIT #{limit} OFFSET #{offset}")
+    List<UserSquareVO> searchSquareUsers(@Param("currentUserId") Integer currentUserId,
+                                         @Param("keyword") String keyword,
+                                         @Param("offset") Integer offset,
+                                         @Param("limit") Integer limit);
+
+    /**
+     * 统计搜索广场用户总数
+     */
+    @Select("SELECT COUNT(*) FROM user u " +
+            "WHERE u.deleted = 0 " +
+            "  AND u.id != #{currentUserId} " +
+            "  AND (u.username LIKE CONCAT('%', #{keyword}, '%') OR u.nickname LIKE CONCAT('%', #{keyword}, '%'))")
+    Long countSearchSquareUsers(@Param("currentUserId") Integer currentUserId,
+                                @Param("keyword") String keyword);
+
+    /**
      * 全量校准所有用户的 fans_count / follow_count / article_count
      */
     @Update("UPDATE user u " +

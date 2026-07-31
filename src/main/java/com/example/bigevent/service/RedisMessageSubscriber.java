@@ -3,6 +3,7 @@ package com.example.bigevent.service;
 import com.example.bigevent.domain.dto.chat.RedisChatMessageDTO;
 import com.example.bigevent.websocket.WsSessionManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
  * Redis 消息订阅者
  * 接收集群广播消息，推送给本地连接的 WebSocket 客户端
  */
+@Slf4j
 @Component
 public class RedisMessageSubscriber implements MessageListener {
 
@@ -32,7 +34,7 @@ public class RedisMessageSubscriber implements MessageListener {
                 wsSessionManager.sendMessage(chatMessage.getTargetUserId(), chatMessage.getJsonMessage());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("[Redis Pub/Sub] 处理广播消息失败", e);
         }
     }
 }

@@ -33,4 +33,37 @@ public interface KnowledgeDocMapper {
 
     @Delete("delete from knowledge_doc where id = #{id}")
     void deleteById(Long id);
+
+    /**
+     * 按文件名关键词模糊搜索当前用户有权限查看的文档。
+     */
+    @Select("select * from knowledge_doc " +
+            "where (create_user = #{userId} or visibility = 2 or (visibility = 1 and department_id = #{departmentId})) " +
+            "and file_name like concat('%', #{keyword}, '%') " +
+            "order by create_time desc")
+    List<KnowledgeDoc> findAuthorizedByKeyword(@Param("userId") Integer userId,
+                                               @Param("departmentId") Integer departmentId,
+                                               @Param("keyword") String keyword);
+
+    /**
+     * 按 ID 查询文档，并校验当前用户是否有查看权限。
+     */
+    @Select("select * from knowledge_doc " +
+            "where id = #{id} and (create_user = #{userId} or visibility = 2 or (visibility = 1 and department_id = #{departmentId})) " +
+            "limit 1")
+    KnowledgeDoc findAuthorizedById(@Param("id") Long id,
+                                    @Param("userId") Integer userId,
+                                    @Param("departmentId") Integer departmentId);
+
+    /**
+     * 分页查询当前用户有权限查看的文档。
+     */
+    @Select("select * from knowledge_doc " +
+            "where (create_user = #{userId} or visibility = 2 or (visibility = 1 and department_id = #{departmentId})) " +
+            "order by create_time desc " +
+            "limit #{limit} offset #{offset}")
+    List<KnowledgeDoc> findAuthorizedPage(@Param("userId") Integer userId,
+                                          @Param("departmentId") Integer departmentId,
+                                          @Param("limit") Integer limit,
+                                          @Param("offset") Integer offset);
 }

@@ -513,6 +513,71 @@ public class KnowledgeDocService {
     }
 
     /**
+     * 按文件名关键词搜索当前用户有权限查看的文档。
+     */
+    public List<KnowledgeDoc> searchDocsByKeyword(Integer currentUserId, Integer departmentId, String keyword) {
+        if (currentUserId == null) {
+            throw new IllegalArgumentException("currentUserId 不能为空");
+        }
+        if (keyword == null || keyword.isBlank()) {
+            return findAuthorizedDocs(currentUserId, departmentId);
+        }
+        return knowledgeDocMapper.findAuthorizedByKeyword(currentUserId, departmentId, keyword.trim());
+    }
+
+    /**
+     * 按 ID 查询文档，带权限校验。
+     */
+    public KnowledgeDoc findAuthorizedById(Long docId, Integer currentUserId, Integer departmentId) {
+        if (docId == null || currentUserId == null) {
+            throw new IllegalArgumentException("docId 和 currentUserId 不能为空");
+        }
+        return knowledgeDocMapper.findAuthorizedById(docId, currentUserId, departmentId);
+    }
+
+    /**
+     * 根据名称关键词查找唯一可操作的文档。
+     * <p>
+     * 用于 Agent 工具：当用户通过书名/文件名描述意图时，先尝试精确匹配，
+     * 再尝试模糊匹配。匹配到多个时返回 null，由调用方提示用户补充信息。
+     */
+    public KnowledgeDoc findSingleDocByName(Integer currentUserId, Integer departmentId, String name) {
+        if (currentUserId == null || name == null || name.isBlank()) {
+            return null;
+        }
+        String trimmed = name.trim();
+        List<KnowledgeDoc> all = findAuthorizedDocs(currentUserId, departmentId);
+
+        // 1. 精确匹配文件名
+        for (KnowledgeDoc doc : all) {
+            if (trimmed.equalsIgnoreCase(doc.getFileName())) {
+                return doc;
+            }
+        }
+
+        // 2. 包含匹配：文件名包含输入，或输入包含文件名
+        List<KnowledgeDoc> containsMatches = all.stream()
+                .filter(doc -> {
+                    String fileName = doc.getFileName() == null ? "" : doc.getFileName().toLowerCase();
+                    String lower = trimmed.toLowerCase();
+                    return fileName.contains(lower) || lower.contains(fileName);
+                })
+                .toList();
+
+        if (containsMatches.size() == 1) {
+            return containsMatches.get(0);
+        }
+
+        // 3. 模糊匹配
+        List<KnowledgeDoc> fuzzyMatches = searchDocsByKeyword(currentUserId, departmentId, trimmed);
+        if (fuzzyMatches.size() == 1) {
+            return fuzzyMatches.get(0);
+        }
+
+        return null;
+    }
+
+    /**
      * 重新处理单篇文档
      */
     @Transactional

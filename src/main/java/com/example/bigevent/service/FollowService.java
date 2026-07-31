@@ -53,6 +53,11 @@ public interface FollowService {
     List<UserSquareVO> getSquareUsers(Integer currentUserId, Integer limit, String sort);
 
     /**
+     * 搜索广场用户（按用户名/昵称模糊搜索）
+     */
+    List<UserSquareVO> searchSquareUsers(Integer currentUserId, String keyword, Integer page, Integer pageSize);
+
+    /**
      * 获取互相关注好友列表
      */
     List<UserSquareVO> getMutualFriends(Integer currentUserId, Integer limit);

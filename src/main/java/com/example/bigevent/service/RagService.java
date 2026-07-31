@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -46,40 +47,82 @@ public class RagService {
     private final OpenAiChatModel openAiChatModel;
     private final StreamingChatModel streamingChatModel;
     private final ChatMemoryProvider chatMemoryProvider;
-    private final ArticleTools articleTools;
     private final ConversationContextService conversationContextService;
     private final PromptBuilder promptBuilder;
+    private final BookTools bookTools;
 
     public RagService(KnowledgeDocService knowledgeDocService,
                       HybridSearchService hybridSearchService,
                       OpenAiChatModel openAiChatModel,
                       StreamingChatModel streamingChatModel,
                       ChatMemoryProvider chatMemoryProvider,
-                      ArticleTools articleTools,
                       ConversationContextService conversationContextService,
-                      PromptBuilder promptBuilder) {
+                      PromptBuilder promptBuilder,
+                      BookTools bookTools) {
         this.knowledgeDocService = knowledgeDocService;
         this.hybridSearchService = hybridSearchService;
         this.openAiChatModel = openAiChatModel;
         this.streamingChatModel = streamingChatModel;
         this.chatMemoryProvider = chatMemoryProvider;
-        this.articleTools = articleTools;
         this.conversationContextService = conversationContextService;
         this.promptBuilder = promptBuilder;
+        this.bookTools = bookTools;
     }
 
     /**
-     * RAG Agent 聊天：通过自然语言操作图书（文章）。
+     * RAG Agent 聊天：通过自然语言操作图书/文档。
      *
      * @param message        用户自然语言指令
      * @param userId         当前用户ID
+     * @param departmentId   当前用户部门ID
      * @param conversationId 会话ID，为空时不保留历史记忆
      * @return AI 回答
      */
-    public String agentChat(String message, Integer userId, String conversationId) {
+    public String agentChat(String message, Integer userId, Integer departmentId, String conversationId) {
+        return buildAssistant(userId, departmentId, conversationId).chat(message);
+    }
+
+    /**
+     * RAG Agent 聊天（流式输出）：通过自然语言操作图书/文档。
+     *
+     * @param message        用户自然语言指令
+     * @param userId         当前用户ID
+     * @param departmentId   当前用户部门ID
+     * @param conversationId 会话ID，为空时不保留历史记忆
+     * @return 流式 AI 回答
+     */
+    public Flux<String> agentChatStream(String message, Integer userId, Integer departmentId, String conversationId) {
+        return Flux.<String>create(sink -> {
+                    try {
+                        RagAgentAssistant assistant = buildAssistant(userId, departmentId, conversationId);
+                        assistant.chatStream(message)
+                                .doOnNext(sink::next)
+                                .doOnError(error -> {
+                                    log.error("AI 图书助手流式响应内部失败, userId={}, message={}", userId, message, error);
+                                    sink.error(error);
+                                })
+                                .doOnComplete(sink::complete)
+                                .subscribe();
+                    } catch (Exception e) {
+                        log.error("AI 图书助手启动流式响应失败, userId={}, message={}", userId, message, e);
+                        sink.error(e);
+                    }
+                }, reactor.core.publisher.FluxSink.OverflowStrategy.BUFFER)
+                .timeout(Duration.ofSeconds(25),
+                        Flux.just("\n【系统错误】响应超时，请稍后重试。"));
+    }
+
+    /**
+     * 构建挂载了图书工具的 Agent Assistant，同时配置同步/流式模型。
+     * <p>
+     * BookTools 本身是 Spring 单例 Bean，通过 {@link dev.langchain4j.agent.tool.ToolMemoryId}
+     * 在运行时获取 conversationId，再查询会话得到用户上下文，无需每次 new 实例。
+     */
+    private RagAgentAssistant buildAssistant(Integer userId, Integer departmentId, String conversationId) {
         var builder = AiServices.builder(RagAgentAssistant.class)
                 .chatModel(openAiChatModel)
-                .tools(articleTools);
+                .streamingChatModel(streamingChatModel)
+                .tools(bookTools);
 
         // 只有在传了 conversationId 时才挂载记忆，避免所有无会话的 Agent 聊天共用同一份历史
         if (conversationId != null && !conversationId.isBlank()) {
@@ -87,8 +130,7 @@ public class RagService {
             builder.chatMemory(chatMemory);
         }
 
-        RagAgentAssistant assistant = builder.build();
-        return assistant.chat(message);
+        return builder.build();
     }
 
     /**

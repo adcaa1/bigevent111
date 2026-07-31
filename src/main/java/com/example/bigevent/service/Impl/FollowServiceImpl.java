@@ -141,6 +141,29 @@ public class FollowServiceImpl implements FollowService {
     }
 
     /**
+     * 搜索广场用户（按用户名/昵称模糊搜索）
+     */
+    @Override
+    public List<UserSquareVO> searchSquareUsers(Integer currentUserId, String keyword, Integer page, Integer pageSize) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return List.of();
+        }
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = 20;
+        }
+        if (pageSize > 100) {
+            pageSize = 100;
+        }
+        int offset = (page - 1) * pageSize;
+        List<UserSquareVO> users = usermapper.searchSquareUsers(currentUserId, keyword.trim(), offset, pageSize);
+        fillFollowedStatus(currentUserId, users);
+        return users;
+    }
+
+    /**
      * 获取互相关注好友列表
      */
     @Override

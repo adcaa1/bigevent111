@@ -141,10 +141,35 @@ public class ChatMessageController {
             return Result.error("群不存在");
         }
 
-        // 仅群主和管理员可以邀请
-        // 这里简化：任何人都可以邀请（后续可按需加权限）
-        chatService.addGroupMember(groupId, userId, 0);
-        return Result.success();
+        // 至少要是群成员才能邀请；严格场景可限制为群主/管理员
+        if (!chatService.isGroupMember(groupId, currentUserId)) {
+            return Result.error("您不在该群中，无法邀请成员");
+        }
+
+        try {
+            chatService.addGroupMember(groupId, userId);
+            return Result.success();
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 设置群成员角色（0-普通成员 1-管理员），仅群主可操作
+     */
+    @PutMapping("/group/{groupId}/member/{userId}/role")
+    public Result setGroupMemberRole(@PathVariable Integer groupId,
+                                     @PathVariable Integer userId,
+                                     @RequestParam Integer role) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) claims.get("id");
+
+        try {
+            chatService.setGroupMemberRole(groupId, userId, role, currentUserId);
+            return Result.success();
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
     }
 
     /**
@@ -157,6 +182,56 @@ public class ChatMessageController {
 
         try {
             chatService.removeGroupMember(groupId, userId, currentUserId);
+            return Result.success();
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 当前用户主动退群
+     */
+    @DeleteMapping("/group/{groupId}/quit")
+    public Result quitGroup(@PathVariable Integer groupId) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) claims.get("id");
+
+        try {
+            chatService.quitGroup(groupId, currentUserId);
+            return Result.success();
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 解散群聊（仅群主）
+     */
+    @DeleteMapping("/group/{groupId}")
+    public Result dissolveGroup(@PathVariable Integer groupId) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) claims.get("id");
+
+        try {
+            chatService.dissolveGroup(groupId, currentUserId);
+            return Result.success();
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 修改群信息（群名/头像，仅群主/管理员）
+     */
+    @PutMapping("/group/{groupId}")
+    public Result updateGroup(@PathVariable Integer groupId,
+                              @RequestParam(required = false) String name,
+                              @RequestParam(required = false) String avatar) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) claims.get("id");
+
+        try {
+            chatService.updateGroup(groupId, name, avatar, currentUserId);
             return Result.success();
         } catch (RuntimeException e) {
             return Result.error(e.getMessage());

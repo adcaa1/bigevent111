@@ -7,11 +7,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Map;
 //用这个拦截器还要配合webmvc
+@Slf4j
 @Component
     public class LoginInterceptor implements HandlerInterceptor {
        @Autowired
@@ -22,14 +24,12 @@ import java.util.Map;
             //令牌验证
             String token = request.getHeader("Authorization");
             String uri = request.getRequestURI();
-            System.out.println("\n=== 请求信息 ===");
-            System.out.println("路径: " + uri);
-            System.out.println("Token: " + (token != null ? "有" : "无"));
+            log.debug("=== 请求信息 === 路径: {}, Token: {}", uri, token != null ? "有" : "无");
             //验证token
             try {
                 Map<String,Object> claims = JwtUtil.parseToken(token);
                 String requestURI = request.getRequestURI();
-                System.out.println("拦截器拦截的请求: " + requestURI);
+                log.debug("拦截器拦截的请求: {}", requestURI);
 
                 //把业务数据存储到ThreadLocal中
                 ThreadLocalUtil.set(claims);

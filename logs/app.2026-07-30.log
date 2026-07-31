@@ -1,0 +1,1104 @@
+2026-07-30 15:56:32.781 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-30 15:56:32.818 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 8196 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-30 15:56:32.820 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-30 15:56:34.203 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-30 15:56:34.205 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-30 15:56:34.235 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 15 ms. Found 0 Redis repository interfaces.
+2026-07-30 15:56:36.196 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-30 15:56:36.208 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-30 15:56:36.211 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-30 15:56:36.211 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-30 15:56:36.434 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-30 15:56:36.436 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3570 ms
+2026-07-30 15:56:37.988 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-30 15:56:40.291 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-07-30 15:56:40.799 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 15:56:40.812 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 15:56:42.719 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-07-30 15:56:43.612 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-30 15:56:43.640 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-30 15:56:44.245 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-07-30 15:56:44.355 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#44ac94c2:0/SimpleConnection@56a69c47 [delegate=amqp://guest@127.0.0.1:5672/, localPort=59700]
+2026-07-30 15:56:44.470 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 12.15 seconds (process running for 13.096)
+2026-07-30 15:56:44.702 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-07-30 15:56:44.717 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-07-30 15:56:44.724 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-07-30 15:57:52.738 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-30 15:57:52.738 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-30 15:57:52.740 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-07-30 15:57:52.825 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTM5MTI2OX0.w0lJ3TcoeTeLMVgFiI22gpqs3OwP82-ywtRMZzBPVLQ
+2026-07-30 15:57:52.859 [http-nio-8080-exec-4] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-07-30 15:57:52.866 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-07-30 15:57:59.260 [http-nio-8080-exec-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-30 15:57:59.795 [http-nio-8080-exec-5] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@49e4be8
+2026-07-30 15:57:59.802 [http-nio-8080-exec-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-30 15:58:00.422 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 15:58:00.461 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 15:59:33.091 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 群聊消息已发送到RabbitMQ: senderId=74, groupId=1
+2026-07-30 15:59:33.122 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  c.e.b.service.ChatMessageConsumer - [RabbitMQ Consumer] 收到群聊消息: senderId=74, groupId=1, tempId=msg_1785398373053_ma2ccx_74
+2026-07-30 15:59:33.156 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  c.e.b.service.ChatMessageConsumer - [RabbitMQ Consumer] 群聊消息已保存到数据库, messageId=14293
+2026-07-30 16:06:25.585 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:06:26.625 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:06:26.637 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:06:58.544 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:06:59.328 [http-nio-8080-exec-8] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:06:59.336 [http-nio-8080-exec-8] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:23:23.526 [http-nio-8080-exec-5] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:23:24.071 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:23:24.078 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:24:37.543 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:24:38.005 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:24:38.022 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:24:47.530 [http-nio-8080-exec-8] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:24:48.003 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:24:48.012 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:25:15.524 [http-nio-8080-exec-5] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:25:15.986 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:25:15.993 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:25:30.532 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:25:30.999 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:25:31.008 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:25:49.542 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:25:50.010 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:25:50.017 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:26:32.537 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:26:32.969 [http-nio-8080-exec-5] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:26:32.980 [http-nio-8080-exec-5] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:27:32.528 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:27:33.005 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:27:33.014 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:43:25.544 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:43:26.144 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:43:26.149 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:44:35.544 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:44:36.066 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:44:36.076 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:46:25.639 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:46:26.248 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:46:26.256 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:47:39.542 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:47:40.232 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:47:40.250 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:48:17.541 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:48:18.041 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:48:18.049 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:48:50.538 [http-nio-8080-exec-5] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:48:50.973 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:48:50.978 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:49:32.533 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:49:33.135 [http-nio-8080-exec-5] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:49:33.141 [http-nio-8080-exec-5] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:50:00.538 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:50:01.490 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:50:01.498 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:51:26.577 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:51:27.204 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:51:27.211 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:52:24.523 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:52:24.967 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:52:24.972 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:52:46.561 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:52:47.255 [http-nio-8080-exec-8] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:52:47.261 [http-nio-8080-exec-8] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:53:20.533 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:53:20.965 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:53:20.968 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:53:56.583 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:53:57.313 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:53:57.321 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 16:54:32.556 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 16:54:33.299 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 16:54:33.306 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 18:22:57.546 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 18:22:58.283 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ0MTQ3OX0.FTkbt7esgJNrv6z6kDaXNjJJghG9ycWSrqhY2mk_HGQ
+2026-07-30 18:22:58.287 [http-nio-8080-exec-7] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-07-30 18:22:58.288 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-07-30 18:32:00.000 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1MDcxOX0.UfovPu8gOZ5ZzSnDOGJ0qnDcCVFxPw-rP9OGhZ4De6M
+2026-07-30 18:32:00.007 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:39:20.560 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-30 19:39:20.563 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-30 19:39:21.446 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-30 19:39:21.469 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-30 19:39:21.698 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-30 19:39:21.703 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-30 19:39:21.713 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=java.nio.channels.ClosedChannelException
+java.io.IOException: java.nio.channels.ClosedChannelException
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:321)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:257)
+	at org.apache.tomcat.websocket.WsSession.sendCloseMessage(WsSession.java:718)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:587)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.nio.channels.ClosedChannelException: null
+	at org.apache.tomcat.util.net.NioChannel$1.write(NioChannel.java:269)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper$NioOperationState.run(NioEndpoint.java:1635)
+	at org.apache.tomcat.util.net.SocketWrapperBase$OperationState.start(SocketWrapperBase.java:1051)
+	at org.apache.tomcat.util.net.SocketWrapperBase.vectoredOperation(SocketWrapperBase.java:1440)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1366)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1337)
+	at org.apache.tomcat.websocket.server.WsRemoteEndpointImplServer.doWrite(WsRemoteEndpointImplServer.java:165)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.writeMessagePart(WsRemoteEndpointImplBase.java:516)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:308)
+	... 37 common frames omitted
+2026-07-30 19:39:21.718 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=null
+java.lang.reflect.InvocationTargetException: null
+	at jdk.internal.reflect.GeneratedMethodAccessor137.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.tomcat.websocket.pojo.PojoEndpointBase.onClose(PojoEndpointBase.java:101)
+	at org.apache.tomcat.websocket.WsSession.fireEndpointOnClose(WsSession.java:662)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:588)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.assertStarted(LettuceConnectionFactory.java:1402)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:999)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.RedisTemplate.doWithKeys(RedisTemplate.java:785)
+	at org.springframework.data.redis.core.RedisTemplate.delete(RedisTemplate.java:588)
+	at com.example.bigevent.websocket.ChatWebSocketServer.onClose(ChatWebSocketServer.java:155)
+	... 40 common frames omitted
+2026-07-30 19:39:52.965 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-30 19:39:52.996 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 28436 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-30 19:39:52.997 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-30 19:39:56.495 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-30 19:39:56.497 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-30 19:39:56.533 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 16 ms. Found 0 Redis repository interfaces.
+2026-07-30 19:39:57.483 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-30 19:39:57.505 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-30 19:39:57.510 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-30 19:39:57.511 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-30 19:39:57.623 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-30 19:39:57.623 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4592 ms
+2026-07-30 19:39:58.262 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-30 19:39:59.221 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-07-30 19:39:59.538 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 19:39:59.545 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 19:40:00.066 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-07-30 19:40:00.423 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-30 19:40:00.433 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-30 19:40:00.571 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-30 19:40:00.571 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-30 19:40:00.572 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-07-30 19:40:00.614 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1MDcxOX0.UfovPu8gOZ5ZzSnDOGJ0qnDcCVFxPw-rP9OGhZ4De6M
+2026-07-30 19:40:00.685 [http-nio-8080-exec-1] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-07-30 19:40:00.691 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-07-30 19:40:00.694 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-07-30 19:40:00.769 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#6d7d0946:0/SimpleConnection@6385b07d [delegate=amqp://guest@127.0.0.1:5672/, localPort=59469]
+2026-07-30 19:40:00.855 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 8.337 seconds (process running for 9.427)
+2026-07-30 19:40:00.868 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-07-30 19:40:01.070 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-07-30 19:40:01.076 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-07-30 19:40:04.502 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1MDcxOX0.UfovPu8gOZ5ZzSnDOGJ0qnDcCVFxPw-rP9OGhZ4De6M
+2026-07-30 19:40:04.505 [http-nio-8080-exec-3] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-07-30 19:40:04.505 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-07-30 19:40:08.513 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1MDcxOX0.UfovPu8gOZ5ZzSnDOGJ0qnDcCVFxPw-rP9OGhZ4De6M
+2026-07-30 19:40:08.517 [http-nio-8080-exec-2] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-07-30 19:40:08.517 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-07-30 19:40:11.672 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1MDcxOX0.UfovPu8gOZ5ZzSnDOGJ0qnDcCVFxPw-rP9OGhZ4De6M
+2026-07-30 19:40:11.684 [http-nio-8080-exec-6] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-07-30 19:40:11.684 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-07-30 19:40:13.323 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1MDcxOX0.UfovPu8gOZ5ZzSnDOGJ0qnDcCVFxPw-rP9OGhZ4De6M
+2026-07-30 19:40:13.327 [http-nio-8080-exec-4] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-07-30 19:40:13.327 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-07-30 19:40:18.959 [http-nio-8080-exec-3] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-30 19:40:19.440 [http-nio-8080-exec-3] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@769f77a4
+2026-07-30 19:40:19.442 [http-nio-8080-exec-3] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-30 19:40:19.761 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:40:19.768 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:45:37.221 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-30 19:45:37.224 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-30 19:45:37.399 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-30 19:45:37.399 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-30 19:45:37.560 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-30 19:45:37.573 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-30 19:45:37.584 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=java.nio.channels.ClosedChannelException
+java.io.IOException: java.nio.channels.ClosedChannelException
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:321)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:257)
+	at org.apache.tomcat.websocket.WsSession.sendCloseMessage(WsSession.java:718)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:587)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.nio.channels.ClosedChannelException: null
+	at org.apache.tomcat.util.net.NioChannel$1.write(NioChannel.java:269)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper$NioOperationState.run(NioEndpoint.java:1635)
+	at org.apache.tomcat.util.net.SocketWrapperBase$OperationState.start(SocketWrapperBase.java:1051)
+	at org.apache.tomcat.util.net.SocketWrapperBase.vectoredOperation(SocketWrapperBase.java:1440)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1366)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1337)
+	at org.apache.tomcat.websocket.server.WsRemoteEndpointImplServer.doWrite(WsRemoteEndpointImplServer.java:165)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.writeMessagePart(WsRemoteEndpointImplBase.java:516)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:308)
+	... 37 common frames omitted
+2026-07-30 19:45:37.587 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=null
+java.lang.reflect.InvocationTargetException: null
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.tomcat.websocket.pojo.PojoEndpointBase.onClose(PojoEndpointBase.java:101)
+	at org.apache.tomcat.websocket.WsSession.fireEndpointOnClose(WsSession.java:662)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:588)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.assertStarted(LettuceConnectionFactory.java:1402)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:999)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.RedisTemplate.doWithKeys(RedisTemplate.java:785)
+	at org.springframework.data.redis.core.RedisTemplate.delete(RedisTemplate.java:588)
+	at com.example.bigevent.websocket.ChatWebSocketServer.onClose(ChatWebSocketServer.java:155)
+	... 41 common frames omitted
+2026-07-30 19:45:40.717 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-30 19:45:40.772 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 29404 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-30 19:45:40.773 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-30 19:45:41.879 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-30 19:45:41.880 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-30 19:45:41.905 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2026-07-30 19:45:42.743 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-30 19:45:42.751 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-30 19:45:42.753 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-30 19:45:42.753 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-30 19:45:42.839 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-30 19:45:42.840 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2002 ms
+2026-07-30 19:45:43.516 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-30 19:45:44.415 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-07-30 19:45:44.615 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 19:45:44.645 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 19:45:45.043 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-07-30 19:45:45.382 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-30 19:45:45.392 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-30 19:45:45.627 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-07-30 19:45:45.672 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#52a605c3:0/SimpleConnection@615f61ec [delegate=amqp://guest@127.0.0.1:5672/, localPort=58549]
+2026-07-30 19:45:45.732 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 5.612 seconds (process running for 6.78)
+2026-07-30 19:45:45.743 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-07-30 19:45:45.803 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-07-30 19:45:45.809 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-07-30 19:45:46.558 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-30 19:45:46.558 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-30 19:45:46.560 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-07-30 19:45:46.593 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:45:46.658 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:46:02.838 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 19:46:03.087 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:46:03.094 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:46:03.203 [http-nio-8080-exec-3] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-30 19:46:03.644 [http-nio-8080-exec-3] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@679d1632
+2026-07-30 19:46:03.648 [http-nio-8080-exec-3] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-30 19:51:26.574 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 19:51:27.633 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:51:27.643 [http-nio-8080-exec-4] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:55:18.559 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 19:55:19.577 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:55:19.596 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:55:32.548 [http-nio-8080-exec-6] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 19:55:33.033 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:55:33.040 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:55:41.539 [http-nio-8080-exec-5] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 19:55:42.011 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:55:42.018 [http-nio-8080-exec-9] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:55:54.546 [http-nio-8080-exec-3] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 19:55:55.219 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:55:55.226 [http-nio-8080-exec-7] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 19:56:01.561 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=74, 当前在线=0
+2026-07-30 19:56:02.441 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 19:56:02.451 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 23:06:25.855 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-30 23:06:25.857 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-30 23:06:26.036 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-30 23:06:26.672 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-30 23:06:27.041 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-30 23:06:27.053 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-30 23:06:27.080 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=java.nio.channels.ClosedChannelException
+java.io.IOException: java.nio.channels.ClosedChannelException
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:321)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:257)
+	at org.apache.tomcat.websocket.WsSession.sendCloseMessage(WsSession.java:718)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:587)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.nio.channels.ClosedChannelException: null
+	at org.apache.tomcat.util.net.NioChannel$1.write(NioChannel.java:269)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper$NioOperationState.run(NioEndpoint.java:1635)
+	at org.apache.tomcat.util.net.SocketWrapperBase$OperationState.start(SocketWrapperBase.java:1051)
+	at org.apache.tomcat.util.net.SocketWrapperBase.vectoredOperation(SocketWrapperBase.java:1440)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1366)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1337)
+	at org.apache.tomcat.websocket.server.WsRemoteEndpointImplServer.doWrite(WsRemoteEndpointImplServer.java:165)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.writeMessagePart(WsRemoteEndpointImplBase.java:516)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:308)
+	... 37 common frames omitted
+2026-07-30 23:06:27.090 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=null
+java.lang.reflect.InvocationTargetException: null
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.tomcat.websocket.pojo.PojoEndpointBase.onClose(PojoEndpointBase.java:101)
+	at org.apache.tomcat.websocket.WsSession.fireEndpointOnClose(WsSession.java:662)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:588)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.assertStarted(LettuceConnectionFactory.java:1402)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:999)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.RedisTemplate.doWithKeys(RedisTemplate.java:785)
+	at org.springframework.data.redis.core.RedisTemplate.delete(RedisTemplate.java:588)
+	at com.example.bigevent.websocket.ChatWebSocketServer.onClose(ChatWebSocketServer.java:155)
+	... 41 common frames omitted
+2026-07-30 23:06:34.997 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-30 23:06:35.050 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 29044 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-30 23:06:35.052 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-30 23:06:36.334 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-30 23:06:36.338 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-30 23:06:36.374 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 22 ms. Found 0 Redis repository interfaces.
+2026-07-30 23:06:37.270 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-30 23:06:37.280 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-30 23:06:37.282 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-30 23:06:37.282 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-30 23:06:37.359 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-30 23:06:37.359 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2245 ms
+2026-07-30 23:06:38.135 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-30 23:06:39.171 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-07-30 23:06:39.419 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 23:06:39.424 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 23:06:39.937 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-07-30 23:06:40.302 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-30 23:06:40.313 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-30 23:06:40.554 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-07-30 23:06:40.621 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#981d9d2:0/SimpleConnection@1ca55d5 [delegate=amqp://guest@127.0.0.1:5672/, localPort=59879]
+2026-07-30 23:06:40.736 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 6.283 seconds (process running for 7.28)
+2026-07-30 23:06:40.873 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-07-30 23:06:40.878 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-07-30 23:06:40.885 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-07-30 23:07:23.898 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-30 23:07:23.898 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-30 23:07:23.903 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 5 ms
+2026-07-30 23:07:26.004 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ1NDgxOX0.kada8rSOp_5k0qiKGnGZp-lZa1N-wJsJREMnKoaKkvM
+2026-07-30 23:07:26.010 [http-nio-8080-exec-2] WARN  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 认证失败，关闭连接
+2026-07-30 23:07:26.020 [http-nio-8080-exec-2] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 断开: userId=null, 当前在线=0
+2026-07-30 23:07:26.021 [http-nio-8080-exec-2] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=null, error=你的主机中的软件中止了一个已建立的连接。
+java.io.IOException: 你的主机中的软件中止了一个已建立的连接。
+	at java.base/sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:46)
+	at java.base/sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:330)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:296)
+	at java.base/sun.nio.ch.IOUtil.read(IOUtil.java:259)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:417)
+	at org.apache.tomcat.util.net.NioChannel.read(NioChannel.java:143)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1294)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1184)
+	at org.apache.tomcat.websocket.server.WsFrameServer.onDataAvailable(WsFrameServer.java:74)
+	at org.apache.tomcat.websocket.server.WsFrameServer.doOnDataAvailable(WsFrameServer.java:184)
+	at org.apache.tomcat.websocket.server.WsFrameServer.notifyDataAvailable(WsFrameServer.java:164)
+	at org.apache.tomcat.websocket.server.WsHttpUpgradeHandler.upgradeDispatch(WsHttpUpgradeHandler.java:152)
+	at org.apache.coyote.http11.upgrade.UpgradeProcessorInternal.dispatch(UpgradeProcessorInternal.java:60)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:57)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2026-07-30 23:07:31.498 [http-nio-8080-exec-8] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-30 23:07:31.982 [http-nio-8080-exec-8] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@41fe0f35
+2026-07-30 23:07:31.984 [http-nio-8080-exec-8] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-30 23:07:32.340 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ2NzI1Mn0.CFKoFy4NsYtiuN2jYya4HTToaL3vHe8o4s_fYF6v3Dw
+2026-07-30 23:07:32.355 [http-nio-8080-exec-10] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 23:10:04.239 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-30 23:10:04.242 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Waiting for workers to finish.
+2026-07-30 23:10:04.316 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#1-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-30 23:10:04.316 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  o.s.a.r.l.SimpleMessageListenerContainer - Successfully waited for workers to finish.
+2026-07-30 23:10:04.471 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-30 23:10:04.485 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-30 23:10:04.495 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=java.nio.channels.ClosedChannelException
+java.io.IOException: java.nio.channels.ClosedChannelException
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:321)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:257)
+	at org.apache.tomcat.websocket.WsSession.sendCloseMessage(WsSession.java:718)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:587)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.nio.channels.ClosedChannelException: null
+	at org.apache.tomcat.util.net.NioChannel$1.write(NioChannel.java:269)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper$NioOperationState.run(NioEndpoint.java:1635)
+	at org.apache.tomcat.util.net.SocketWrapperBase$OperationState.start(SocketWrapperBase.java:1051)
+	at org.apache.tomcat.util.net.SocketWrapperBase.vectoredOperation(SocketWrapperBase.java:1440)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1366)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:1337)
+	at org.apache.tomcat.websocket.server.WsRemoteEndpointImplServer.doWrite(WsRemoteEndpointImplServer.java:165)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.writeMessagePart(WsRemoteEndpointImplBase.java:516)
+	at org.apache.tomcat.websocket.WsRemoteEndpointImplBase.sendMessageBlock(WsRemoteEndpointImplBase.java:308)
+	... 37 common frames omitted
+2026-07-30 23:10:04.497 [SpringApplicationShutdownHook] ERROR c.e.b.websocket.ChatWebSocketServer - WebSocket 错误: userId=74, error=null
+java.lang.reflect.InvocationTargetException: null
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.apache.tomcat.websocket.pojo.PojoEndpointBase.onClose(PojoEndpointBase.java:101)
+	at org.apache.tomcat.websocket.WsSession.fireEndpointOnClose(WsSession.java:662)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:588)
+	at org.apache.tomcat.websocket.WsSession.doClose(WsSession.java:554)
+	at org.apache.tomcat.websocket.WsSession.close(WsSession.java:542)
+	at org.apache.tomcat.websocket.WsWebSocketContainer.destroy(WsWebSocketContainer.java:1019)
+	at org.apache.tomcat.websocket.server.WsContextListener.contextDestroyed(WsContextListener.java:46)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4482)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5109)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1348)
+	at org.apache.catalina.core.ContainerBase$StopChild.call(ContainerBase.java:1337)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.stopInternal(ContainerBase.java:931)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardService.stopInternal(StandardService.java:496)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.core.StandardServer.stopInternal(StandardServer.java:969)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:242)
+	at org.apache.catalina.startup.Tomcat.stop(Tomcat.java:498)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.stopTomcat(TomcatWebServer.java:297)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.destroy(TomcatWebServer.java:370)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:177)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1090)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.assertStarted(LettuceConnectionFactory.java:1402)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:999)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.RedisTemplate.doWithKeys(RedisTemplate.java:785)
+	at org.springframework.data.redis.core.RedisTemplate.delete(RedisTemplate.java:588)
+	at com.example.bigevent.websocket.ChatWebSocketServer.onClose(ChatWebSocketServer.java:155)
+	... 41 common frames omitted
+2026-07-30 23:10:09.990 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-30 23:10:10.039 [main] INFO  c.e.bigevent.BigeventApplication - Starting BigeventApplication using Java 17.0.4 with PID 11284 (D:\ideaproject\bigevent\target\classes started by 田成龙 in D:\ideaproject\bigevent)
+2026-07-30 23:10:10.041 [main] INFO  c.e.bigevent.BigeventApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-30 23:10:11.077 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-30 23:10:11.079 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-30 23:10:11.115 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 20 ms. Found 0 Redis repository interfaces.
+2026-07-30 23:10:11.969 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-30 23:10:11.978 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-30 23:10:11.980 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-30 23:10:11.980 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-07-30 23:10:12.051 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-30 23:10:12.052 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1946 ms
+2026-07-30 23:10:12.706 [main] INFO  c.e.b.config.RedisEmbeddingConfig - Redis 向量索引 'embedding-index' 已存在，跳过创建
+2026-07-30 23:10:13.655 [main] INFO  org.redisson.Version - Redisson 3.27.1
+2026-07-30 23:10:13.899 [redisson-netty-4-5] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 23:10:13.906 [redisson-netty-4-8] INFO  o.r.connection.ConnectionsHolder - 2 connections initialized for localhost/127.0.0.1:6379
+2026-07-30 23:10:14.362 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-07-30 23:10:14.721 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-30 23:10:14.759 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-30 23:10:14.990 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2026-07-30 23:10:15.036 [main] INFO  o.s.a.r.c.CachingConnectionFactory - Created new connection: rabbitConnectionFactory#4d145177:0/SimpleConnection@5128efc [delegate=amqp://guest@127.0.0.1:5672/, localPort=62274]
+2026-07-30 23:10:15.084 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-30 23:10:15.084 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-30 23:10:15.086 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-07-30 23:10:15.112 [main] INFO  c.e.bigevent.BigeventApplication - Started BigeventApplication in 5.662 seconds (process running for 6.596)
+2026-07-30 23:10:15.117 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - [WebSocket] 收到连接请求: ws://localhost:8080/ws/chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOnsiaWQiOjc0LCJ1c2VybmFtZSI6ImRkZGRkIn0sImV4cCI6MTc4NTQ2NzI1Mn0.CFKoFy4NsYtiuN2jYya4HTToaL3vHe8o4s_fYF6v3Dw
+2026-07-30 23:10:15.124 [main] INFO  c.e.b.i.BloomFilterInitializer - [BloomFilter] 已有数据，跳过预热
+2026-07-30 23:10:15.184 [http-nio-8080-exec-1] INFO  c.e.b.websocket.ChatWebSocketServer - WebSocket 连接成功: userId=74, 当前在线=1
+2026-07-30 23:10:15.199 [main] INFO  c.e.b.c.RagElasticsearchIndexInitializer - Elasticsearch 索引 [document_chunk_index] 已存在，跳过初始化
+2026-07-30 23:10:15.207 [main] INFO  c.e.b.c.ChatHistoryElasticsearchIndexInitializer - Elasticsearch 索引 [chat_history_vector] 已存在，跳过初始化
+2026-07-30 23:10:43.178 [http-nio-8080-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-30 23:10:43.634 [http-nio-8080-exec-2] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4ae612a4
+2026-07-30 23:10:43.637 [http-nio-8080-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-30 23:10:44.085 [http-nio-8080-exec-2] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "查询文章"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "articleId", "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "pageNum", "pageSize", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  } ]
+}
+
+2026-07-30 23:10:45.188 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: 149aaae8-0f85-96d0-bce8-02abb3e26f27], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 630], [req-arrive-time: 1785424244963], [resp-start-time: 1785424245593], [x-envoy-upstream-service-time: 586], [date: Thu, 30 Jul 2026 15:10:45 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-30 23:10:46.528 [LangChain4j-OpenAI-1] WARN  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - !!!
+Performing asynchronous handling through the default Spring MVC SimpleAsyncTaskExecutor.
+This executor is not suitable for production use under load.
+Please, configure an AsyncTaskExecutor through the WebMvc config.
+-------------------------------
+!!!
+2026-07-30 23:10:46.983 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP request:
+- method: POST
+- url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+- headers: [Authorization: Beare...3f], [User-Agent: langchain4j-openai], [Content-Type: application/json]
+- body: {
+  "model" : "qwen3.7-plus",
+  "messages" : [ {
+    "role" : "user",
+    "content" : "查询文章"
+  }, {
+    "role" : "assistant",
+    "content" : "我来帮您查询所有文章。\n\n",
+    "tool_calls" : [ {
+      "id" : "call_601bc2eebb1148868833e5fc",
+      "type" : "function",
+      "function" : {
+        "name" : "listAllArticles",
+        "arguments" : "{}"
+      }
+    } ]
+  }, {
+    "role" : "tool",
+    "tool_call_id" : "call_601bc2eebb1148868833e5fc",
+    "content" : "查询文章失败: Cannot invoke \"java.util.Map.get(Object)\" because \"claims\" is null"
+  } ],
+  "stream" : true,
+  "stream_options" : {
+    "include_usage" : true
+  },
+  "tools" : [ {
+    "type" : "function",
+    "function" : {
+      "name" : "listAllArticles",
+      "description" : "查询所有文章的列表",
+      "parameters" : {
+        "type" : "object",
+        "properties" : { },
+        "required" : [ ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "getArticleById",
+      "description" : "根据文章ID查询文章的详细信息",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "deleteArticle",
+      "description" : "根据文章ID删除文章",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "articleId" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "updateArticle",
+      "description" : "更新文章信息。需要提供文章ID，以及要更新的字段(标题、内容、封面图片URL、分类ID、状态)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "articleId" : {
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "articleId", "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "queryArticles",
+      "description" : "分页查询文章，支持按分类ID和状态筛选。参数：页码(pageNum)、每页大小(pageSize)、分类ID(categoryId，可选)、状态(state，可选)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "pageNum" : {
+            "type" : "integer"
+          },
+          "pageSize" : {
+            "type" : "integer"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "pageNum", "pageSize", "categoryId", "state" ]
+      }
+    }
+  }, {
+    "type" : "function",
+    "function" : {
+      "name" : "addArticle",
+      "description" : "添加一篇新文章。需要提供标题、内容、封面图片URL、分类ID和状态(已发布/草稿)",
+      "parameters" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "coverImg" : {
+            "type" : "string"
+          },
+          "categoryId" : {
+            "type" : "integer"
+          },
+          "state" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "content", "coverImg", "categoryId", "state" ]
+      }
+    }
+  } ]
+}
+
+2026-07-30 23:10:47.934 [LangChain4j-OpenAI-1] INFO  d.l.h.client.log.LoggingHttpClient - HTTP response:
+- status code: 200
+- headers: [vary: Origin], [content-type: text/event-stream;charset=utf-8], [x-request-id: e4429202-1470-9873-bde7-9445f96401ed], [x-dashscope-call-gateway: true], [x-dashscope-timeout: 3600], [x-dashscope-finished: false], [req-cost-time: 851], [req-arrive-time: 1785424247440], [resp-start-time: 1785424248291], [x-envoy-upstream-service-time: 831], [date: Thu, 30 Jul 2026 15:10:48 GMT], [server: istio-envoy], [transfer-encoding: chunked]
+- body: null
+
+2026-07-30 23:10:49.812 [LangChain4j-OpenAI-1] WARN  d.l.h.c.s.ServerSentEventListenerUtils - An exception occurred during the invocation of the SSE listener. This exception has been ignored.
+java.lang.RuntimeException: com.fasterxml.jackson.core.JsonParseException: Unexpected character (',' (code 44)): expected a valid value (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: (String)"{"pageNum": 1, "pageSize": 10, "categoryId": , "state": ""}"; line: 1, column: 47]
+	at dev.langchain4j.internal.JacksonJsonCodec.fromJson(JacksonJsonCodec.java:170)
+	at dev.langchain4j.internal.Json.fromJson(Json.java:94)
+	at dev.langchain4j.service.tool.ToolExecutionRequestUtil.argumentsAsMap(ToolExecutionRequestUtil.java:61)
+	at dev.langchain4j.service.tool.DefaultToolExecutor.execute(DefaultToolExecutor.java:70)
+	at dev.langchain4j.service.AiServiceStreamingResponseHandler.onCompleteResponse(AiServiceStreamingResponseHandler.java:90)
+	at dev.langchain4j.model.chat.StreamingChatModel$1.onCompleteResponse(StreamingChatModel.java:54)
+	at dev.langchain4j.model.openai.OpenAiStreamingChatModel.lambda$doChat$1(OpenAiStreamingChatModel.java:138)
+	at dev.langchain4j.model.openai.internal.StreamingRequestExecutor$2.onClose(StreamingRequestExecutor.java:120)
+	at dev.langchain4j.http.client.log.LoggingHttpClient$1.onClose(LoggingHttpClient.java:80)
+	at dev.langchain4j.http.client.sse.ServerSentEventListenerUtils.ignoringExceptions(ServerSentEventListenerUtils.java:14)
+	at dev.langchain4j.http.client.spring.restclient.SpringRestClient.lambda$execute$3(SpringRestClient.java:114)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchangeInternal(DefaultRestClient.java:471)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchange(DefaultRestClient.java:444)
+	at org.springframework.web.client.RestClient$RequestHeadersSpec.exchange(RestClient.java:561)
+	at dev.langchain4j.http.client.spring.restclient.SpringRestClient.lambda$execute$6(SpringRestClient.java:94)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: com.fasterxml.jackson.core.JsonParseException: Unexpected character (',' (code 44)): expected a valid value (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: (String)"{"pageNum": 1, "pageSize": 10, "categoryId": , "state": ""}"; line: 1, column: 47]
+	at com.fasterxml.jackson.core.JsonParser._constructError(JsonParser.java:2477)
+	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportError(ParserMinimalBase.java:750)
+	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportUnexpectedChar(ParserMinimalBase.java:674)
+	at com.fasterxml.jackson.core.json.ReaderBasedJsonParser._handleOddValue(ReaderBasedJsonParser.java:2085)
+	at com.fasterxml.jackson.core.json.ReaderBasedJsonParser.nextFieldName(ReaderBasedJsonParser.java:1029)
+	at com.fasterxml.jackson.databind.deser.std.MapDeserializer._readAndBindStringKeyMap(MapDeserializer.java:608)
+	at com.fasterxml.jackson.databind.deser.std.MapDeserializer.deserialize(MapDeserializer.java:449)
+	at com.fasterxml.jackson.databind.deser.std.MapDeserializer.deserialize(MapDeserializer.java:32)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:323)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4825)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3772)
+	at dev.langchain4j.internal.JacksonJsonCodec.fromJson(JacksonJsonCodec.java:168)
+	... 17 common frames omitted

@@ -15,54 +15,60 @@ public interface ChatMessageMapper {
     /**
      * 保存消息
      */
-    @Insert("INSERT INTO chat_message(sender_id, receiver_id, group_id, content, type, is_read, temp_id, create_time) " +
-            "VALUES(#{senderId}, #{receiverId}, #{groupId}, #{content}, #{type}, #{isRead}, #{tempId}, #{createTime})")
+    @Insert("INSERT INTO chat_message(sender_id, receiver_id, group_id, conversation_id, content, type, is_read, temp_id, create_time) " +
+            "VALUES(#{senderId}, #{receiverId}, #{groupId}, #{conversationId}, #{content}, #{type}, #{isRead}, #{tempId}, #{createTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(ChatMessage message);
 
     /**
      * 查询单聊历史消息（全量，兼容旧调用）
+     * 直接按 conversation_id 查询，命中 (conversation_id, create_time) 索引。
      */
     @Select("SELECT * FROM chat_message " +
-            "WHERE type = 0 AND ((sender_id = #{userId} AND receiver_id = #{friendId}) OR (sender_id = #{friendId} AND receiver_id = #{userId})) " +
+            "WHERE conversation_id = #{conversationId} AND type = 0 " +
             "ORDER BY create_time DESC")
-    List<ChatMessage> findPrivateMessages(@Param("userId") Integer userId, @Param("friendId") Integer friendId);
+    List<ChatMessage> findPrivateMessages(@Param("conversationId") String conversationId);
 
     /**
      * 查询单聊历史消息（分页）
      */
     @Select("SELECT * FROM chat_message " +
-            "WHERE type = 0 AND ((sender_id = #{userId} AND receiver_id = #{friendId}) OR (sender_id = #{friendId} AND receiver_id = #{userId})) " +
+            "WHERE conversation_id = #{conversationId} AND type = 0 " +
             "ORDER BY create_time DESC LIMIT #{limit} OFFSET #{offset}")
-    List<ChatMessage> findPrivateMessagesPage(@Param("userId") Integer userId, @Param("friendId") Integer friendId,
+    List<ChatMessage> findPrivateMessagesPage(@Param("conversationId") String conversationId,
                                               @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * 统计单聊消息总数
      */
     @Select("SELECT COUNT(*) FROM chat_message " +
-            "WHERE type = 0 AND ((sender_id = #{userId} AND receiver_id = #{friendId}) OR (sender_id = #{friendId} AND receiver_id = #{userId}))")
-    long countPrivateMessages(@Param("userId") Integer userId, @Param("friendId") Integer friendId);
+            "WHERE conversation_id = #{conversationId} AND type = 0")
+    long countPrivateMessages(@Param("conversationId") String conversationId);
 
     /**
      * 查询群聊历史消息（全量，兼容旧调用）
+     * 直接按 conversation_id 查询，命中 (conversation_id, create_time) 索引。
      */
-    @Select("SELECT * FROM chat_message WHERE type = 1 AND group_id = #{groupId} ORDER BY create_time DESC")
-    List<ChatMessage> findGroupMessages(Integer groupId);
+    @Select("SELECT * FROM chat_message " +
+            "WHERE conversation_id = #{conversationId} AND type = 1 " +
+            "ORDER BY create_time DESC")
+    List<ChatMessage> findGroupMessages(@Param("conversationId") String conversationId);
 
     /**
      * 查询群聊历史消息（分页）
      */
-    @Select("SELECT * FROM chat_message WHERE type = 1 AND group_id = #{groupId} " +
+    @Select("SELECT * FROM chat_message " +
+            "WHERE conversation_id = #{conversationId} AND type = 1 " +
             "ORDER BY create_time DESC LIMIT #{limit} OFFSET #{offset}")
-    List<ChatMessage> findGroupMessagesPage(@Param("groupId") Integer groupId,
+    List<ChatMessage> findGroupMessagesPage(@Param("conversationId") String conversationId,
                                             @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * 统计群聊消息总数
      */
-    @Select("SELECT COUNT(*) FROM chat_message WHERE type = 1 AND group_id = #{groupId}")
-    long countGroupMessages(Integer groupId);
+    @Select("SELECT COUNT(*) FROM chat_message " +
+            "WHERE conversation_id = #{conversationId} AND type = 1")
+    long countGroupMessages(@Param("conversationId") String conversationId);
 
     /**
      * 标记单聊消息为已读

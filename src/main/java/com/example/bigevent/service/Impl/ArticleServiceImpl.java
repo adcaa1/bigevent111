@@ -39,8 +39,14 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void addarticle(Article article) {
 //        添加文章肯定在用户登录时，所以可以获得用户id来插入文章
-        Map<String,Object> claims = ThreadLocalUtil.get();
-        Integer id = (Integer) claims.get("id");
+        Integer id = article.getCreateUser();
+        if (id == null) {
+            Map<String,Object> claims = ThreadLocalUtil.get();
+            id = claims != null ? (Integer) claims.get("id") : null;
+        }
+        if (id == null) {
+            throw new IllegalArgumentException("无法获取当前用户ID");
+        }
         article.setCreateUser(id);
         articleMapper.addarticle(article);
         // 已发布文章同步递增冗余计数
@@ -80,6 +86,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<Article> findarticle(Integer userId) {
+        return articleMapper.findarticle(userId);
+    }
+
+    @Override
     public PageBean<Article> fenyearticle(Integer pageNum,
                                           Integer pageSize,
                                           Integer categoryId,
@@ -97,6 +108,22 @@ public class ArticleServiceImpl implements ArticleService {
 
         pageBean.setTotal(page.getTotal());// 总记录条数
         pageBean.setItems(page.getResult());// 当前页数据
+        return pageBean;
+    }
+
+    @Override
+    public PageBean<Article> fenyearticle(Integer userId,
+                                          Integer pageNum,
+                                          Integer pageSize,
+                                          Integer categoryId,
+                                          String state)
+    {
+        PageBean<Article> pageBean = new PageBean<>();
+        PageHelper.startPage(pageNum, pageSize);
+        List<Article> article = articleMapper.fenyearticle(userId, categoryId, state);
+        Page<Article> page = (Page<Article>) article;
+        pageBean.setTotal(page.getTotal());
+        pageBean.setItems(page.getResult());
         return pageBean;
     }
 

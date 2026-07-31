@@ -85,14 +85,34 @@ public interface ChatService {
     ChatGroup createGroup(String name, Integer creatorId, List<Integer> memberIds);
 
     /**
-     * 添加群成员
+     * 添加群成员（默认普通成员 role=0）
      */
-    void addGroupMember(Integer groupId, Integer userId, Integer role);
+    void addGroupMember(Integer groupId, Integer userId);
+
+    /**
+     * 设置群成员角色（仅群主可操作，用于提拔/取消管理员）
+     */
+    void setGroupMemberRole(Integer groupId, Integer userId, Integer role, Integer operatorId);
 
     /**
      * 移除群成员
      */
     void removeGroupMember(Integer groupId, Integer userId, Integer operatorId);
+
+    /**
+     * 当前用户主动退群
+     */
+    void quitGroup(Integer groupId, Integer userId);
+
+    /**
+     * 解散群聊（仅群主）
+     */
+    void dissolveGroup(Integer groupId, Integer operatorId);
+
+    /**
+     * 更新群聊信息（仅群主/管理员）
+     */
+    void updateGroup(Integer groupId, String name, String avatar, Integer operatorId);
 
     /**
      * 获取用户加入的群列表

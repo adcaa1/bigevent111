@@ -1,9 +1,12 @@
 package com.example.bigevent.util;
 
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Slf4j
 public class Md5Util {
     /**
      * 默认的密码字符串组合，用来将字节转换成 16 进制表示的字符,apache校验下载的文件的正确性用的就是默认的这个组合
@@ -16,8 +19,7 @@ public class Md5Util {
         try {
             messagedigest = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException nsaex) {
-            System.err.println(Md5Util.class.getName() + "初始化失败，MessageDigest不支持MD5Util。");
-            nsaex.printStackTrace();
+            log.error("Md5Util 初始化失败，MessageDigest 不支持 MD5", nsaex);
         }
     }
 

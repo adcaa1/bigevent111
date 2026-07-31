@@ -33,6 +33,11 @@ public class WsMessageVO {
     private Integer groupId;
 
     /**
+     * 会话ID：private:小:大 或 group:群ID
+     */
+    private String conversationId;
+
+    /**
      * 消息内容
      */
     private String content;

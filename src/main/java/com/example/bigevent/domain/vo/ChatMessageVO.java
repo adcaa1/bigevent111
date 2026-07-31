@@ -15,6 +15,7 @@ public class ChatMessageVO {
     private String senderAvatar;
     private Integer receiverId;
     private Integer groupId;
+    private String conversationId;
     private String groupName;
     private String content;
     private Integer type;       // 0-单聊 1-群聊

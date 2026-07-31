@@ -6,6 +6,7 @@ import com.example.bigevent.domain.Result;
 import com.example.bigevent.domain.vo.ArticleVO;
 import com.example.bigevent.service.ArticleService;
 import com.example.bigevent.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/article")
 public class Articlecontroller {
@@ -78,7 +80,7 @@ public class Articlecontroller {
             @RequestParam(required = false) String state
     )
         {
-            System.out.println("分页请求参数: pageNum=" + pageNum + ", pageSize=" + pageSize + ", categoryId=" + categoryId + ", state=" + state);
+            log.debug("分页请求参数: pageNum={}, pageSize={}, categoryId={}, state={}", pageNum, pageSize, categoryId, state);
         PageBean<Article> pageBean = articleservice.fenyearticle(pageNum,pageSize,categoryId,state);
         return Result.success(pageBean);
     }

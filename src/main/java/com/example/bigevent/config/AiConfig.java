@@ -25,16 +25,16 @@ import java.util.Map;
 
 @Configuration
 public class AiConfig {
-    
+
     /**
      * AI Service 说明：
-     * 
+     *
      * 1. RagAiService - RAG专用，不使用tools（通过@AiService自动创建）
      * 2. AiArticleService - 文章管理，使用tools（通过articleToolExecutors关联）
      * 3. Aiservice - 通用AI服务
      * 4. FluxAiservice - 流式输出AI服务
      */
-    
+
     @Autowired
     private RedisChatMemoryStore redisChatMemoryStore;
 
@@ -43,7 +43,7 @@ public class AiConfig {
     private RedisEmbeddingStore redisEmbeddingStore;
     @Autowired
     private EmbeddingModel embeddingModel;
-    
+
     @Autowired
     private ArticleTools articleTools;
 
@@ -97,7 +97,7 @@ public class AiConfig {
     @Bean
     public Map<String, ToolExecutor> articleToolExecutors() {
         Map<String, ToolExecutor> executors = new HashMap<>();
-        
+
         // 注册所有ArticleTools中的@Tool方法
         for (Method method : ArticleTools.class.getDeclaredMethods()) {
             if (method.isAnnotationPresent(dev.langchain4j.agent.tool.Tool.class)) {
@@ -105,7 +105,7 @@ public class AiConfig {
                 executors.put(toolName, new DefaultToolExecutor(articleTools, method));
             }
         }
-        
+
         return executors;
     }
 

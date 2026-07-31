@@ -90,6 +90,8 @@ public class AiChatOrchestratorService {
      * AI 文章管理工具聊天（保留 LangChain4j 工具能力）。
      * <p>
      * 该接口不直接走通用 PromptBuilder，而是复用 {@link AiArticleService} 中的 @AiService 工具定义。
+     * 工具方法通过 {@link dev.langchain4j.agent.tool.ToolMemoryId} 获取会话 ID，
+     * 再查询 {@link AiConversationService} 得到当前用户 ID，避免 ThreadLocal 在线程池中失效。
      * 它会先确保会话存在，让 LangChain4j 自动管理短期记忆。
      *
      * @param userId         当前用户 ID

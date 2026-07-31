@@ -39,9 +39,6 @@ public class ChatController {
     //    rag功能
     @Autowired
     private RagService ragService;
-    //    AI文章管理服务（支持工具调用）
-    @Autowired
-    private AiArticleService aiArticleService;
     //    知识库文档管理
     @Autowired
     private KnowledgeDocService knowledgeDocService;
@@ -217,23 +214,6 @@ public class ChatController {
     }
 
     /**
-     * RAG Agent 聊天：通过自然语言操作图书（文章）。
-     *
-     * @param message        用户自然语言指令
-     * @param conversationId 可选的会话 ID
-     */
-    @PostMapping("/rag/agent/chat")
-    public Result<String> ragAgentChat(@RequestParam String message,
-                                       @RequestParam(required = false) String conversationId) {
-        Integer currentUserId = getCurrentUserId();
-        if (currentUserId == null) {
-            return Result.error("请先登录");
-        }
-        String answer = ragService.agentChat(message, currentUserId, conversationId);
-        return Result.success(answer);
-    }
-
-    /**
      * RAG 问答（流式输出）
      *
      * @param question       用户问题
@@ -293,23 +273,6 @@ public class ChatController {
         }
         knowledgeDocService.reprocessDoc(id, currentUserId);
         return Result.success("重新处理任务已提交");
-    }
-
-    /**
-     * AI 文章管理工具聊天（流式输出）。
-     * <p>
-     * 保留 LangChain4j 工具执行能力，会话由 conversationId 隔离。
-     *
-     * @param userId         用户 ID
-     * @param conversationId 可选的会话 ID
-     * @param message        用户问题
-     * @return 流式 AI 回复
-     */
-    @GetMapping(value = "/chat/article", produces = "text/plain;charset=utf-8")
-    public Flux<String> chatWithArticleTools(@RequestParam Integer userId,
-                                             @RequestParam(required = false) String conversationId,
-                                             @RequestParam String message) {
-        return aiChatOrchestratorService.chatWithArticleTools(userId, conversationId, message);
     }
 
     /**

@@ -7,12 +7,14 @@ import com.example.bigevent.service.Userservice;
 import com.example.bigevent.util.ThreadLocalUtil;
 import com.example.bigevent.websocket.WsSessionManager;
 import jakarta.websocket.Session;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Slf4j
 @Service
 public class UserserviceImpl implements Userservice {
 
@@ -90,7 +92,7 @@ public class UserserviceImpl implements Userservice {
             try {
                 session.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("[注销账号] 关闭 WebSocket 会话失败, userId={}", userId, e);
             }
         }
 
